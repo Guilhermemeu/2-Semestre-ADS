@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aula 01 — Conceitos de modelagem de banco de dados relacional. Curso Superior de Análise e Desenvolvimento de Sistemas.">
+<title>Aula 01 — Conceitos de Modelagem de Banco de Dados Relacional | ADS</title>
+
+<!-- Prism.js (syntax highlighting) via CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+<style>
+  :root{
+    --bg:          #f7f9fc;
+    --texto:       #1f2933;
+    --texto-suave: #3e4c59;
+    --primaria:    #0b5394;
+    --primaria-escura: #073763;
+    --superficie:  #ffffff;
+    --borda:       #d9e2ec;
+    --dica-bg:     #e6f4ea;  --dica-borda: #1e7e34;  --dica-texto: #14532d;
+    --alerta-bg:   #fff4e0;  --alerta-borda:#b45309; --alerta-texto:#7c3a04;
+    --erro-bg:     #fdecea;  --erro-borda:  #b3261e; --erro-texto:  #7f1d1d;
+    --pense-bg:    #eef2ff;  --pense-borda: #4338ca; --pense-texto: #312e81;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--texto);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.4em;          /* regra de acessibilidade tipográfica */
+    line-height: 1.8;
+  }
+
+  .container{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 4rem;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  header.topo{
+    background: linear-gradient(135deg, var(--primaria-escura), var(--primaria));
+    color: #ffffff;
+    padding: 2rem 1.25rem;
+  }
+  header.topo .container{ padding-top: 0; padding-bottom: 0; }
+  header.topo .curso{
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: .62em;
+    opacity: .92;
+    margin: 0 0 .4rem;
+  }
+  header.topo h1{
+    font-size: 1.55em;
+    line-height: 1.35;
+    margin: 0 0 .5rem;
+  }
+  header.topo .meta{
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.25rem;
+    font-size: .68em;
+    margin-top: .8rem;
+  }
+  header.topo .meta span{
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    padding: .15rem .8rem;
+  }
+
+  /* ---------- Títulos ---------- */
+  h2{
+    color: var(--primaria-escura);
+    border-bottom: 3px solid var(--primaria);
+    padding-bottom: .35rem;
+    margin-top: 2.8rem;
+    font-size: 1.25em;
+  }
+  h3{
+    color: var(--primaria);
+    margin-top: 2.2rem;
+    font-size: 1.05em;
+  }
+  h4{ color: var(--texto-suave); margin-top: 1.6rem; font-size: .92em; }
+
+  p{ margin: .9rem 0; }
+
+  section{ margin-bottom: 1rem; }
+
+  /* ---------- Caixas de destaque ---------- */
+  .caixa{
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin: 1.4rem 0;
+    border-left: 8px solid;
+  }
+  .caixa strong.rotulo{ display:block; margin-bottom:.35rem; font-size:.95em; }
+  .dica    { background: var(--dica-bg);   border-color: var(--dica-borda);   color: var(--dica-texto); }
+  .alerta  { background: var(--alerta-bg); border-color: var(--alerta-borda); color: var(--alerta-texto); }
+  .erro    { background: var(--erro-bg);   border-color: var(--erro-borda);   color: var(--erro-texto); }
+  .pense   { background: var(--pense-bg);  border-color: var(--pense-borda);  color: var(--pense-texto); }
+  .pense ol{ margin:.5rem 0 .2rem; }
+
+  .objetivos{
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-left: 8px solid var(--primaria);
+  }
+
+  /* ---------- Tabelas ---------- */
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.3rem 0;
+    font-size: .85em;
+    background: var(--superficie);
+  }
+  caption{
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    padding-bottom: .4rem;
+    color: var(--texto-suave);
+  }
+  th, td{
+    border: 1px solid var(--borda);
+    padding: .55rem .75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th{ background: #eaf1f8; color: var(--primaria-escura); }
+  tr:nth-child(even) td{ background: #f4f8fc; }
+
+  /* ---------- Blocos de código (regras obrigatórias) ---------- */
+  pre{
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+    margin: 1.2rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  }
+  pre[class*="language-"]{ padding: 1.2rem; }
+  pre code, code[class*="language-"]{
+    font-size: 1rem;          /* legível diante do body 1.4em */
+    line-height: 1.7;
+    white-space: pre;
+    font-family: "Cascadia Code", Consolas, "Fira Code", monospace;
+  }
+  code.inline{
+    background: #e5edf5;
+    color: #073763;
+    padding: .08rem .45rem;
+    border-radius: 5px;
+    font-size: .85em;
+    font-family: Consolas, monospace;
+  }
+
+  .saida{
+    background: #0f172a;
+    color: #d1fae5;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-family: Consolas, monospace;
+    font-size: .95rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 1rem 0;
+    white-space: pre;
+  }
+  .saida .rotulo-saida{
+    display:block;
+    color:#94a3b8;
+    font-size:.8em;
+    margin-bottom:.4rem;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  /* ---------- Figuras SVG ---------- */
+  figure{
+    margin: 1.8rem 0;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  figure svg{ width: 100%; height: auto; display: block; }
+  figcaption{
+    font-size: .72em;
+    color: var(--texto-suave);
+    margin-top: .6rem;
+    text-align: center;
+  }
+
+  /* ---------- Glossário ---------- */
+  dl.glossario dt{
+    font-weight: 700;
+    color: var(--primaria-escura);
+    margin-top: 1rem;
+  }
+  dl.glossario dd{ margin: .15rem 0 .6rem 1.2rem; color: var(--texto-suave); }
+
+  footer{
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--borda);
+    font-size: .75em;
+    color: var(--texto-suave);
+  }
+
+  a{ color: var(--primaria); }
+
+  /* ---------- Responsividade ---------- */
+  @media (max-width: 640px){
+    body{ font-size: 1.25em; }
+    pre code, code[class*="language-"]{
+      white-space: pre-wrap;   /* evita colapso/rolagem infinita no celular */
+      word-break: break-word;
+    }
+    header.topo h1{ font-size: 1.25em; }
+    table{ font-size: .78em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="container">
+    <p class="curso">Análise e Desenvolvimento de Sistemas &bull; Ensino Superior</p>
+    <h1>Aula 01 — Conceitos de Modelagem de Banco de Dados Relacional</h1>
+    <p style="margin:0; font-size:.85em;">Disciplina: Modelagem de Banco de Dados Relacional e NoSQL</p>
+    <div class="meta">
+      <span>Duração: 100 minutos</span>
+      <span>Pré-requisitos: nenhum (aula inaugural)</span>
+      <span>Tecnologia: SQL / SQL Server</span>
+      <span>Nível: introdutório</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ============================================================== -->
+  <!-- (a) OBJETIVOS E CONEXÃO COM AULA ANTERIOR                       -->
+  <!-- ============================================================== -->
+  <section id="objetivos" aria-labelledby="titulo-objetivos">
+    <h2 id="titulo-objetivos">Objetivos de Aprendizagem e Conexão com Aulas Anteriores</h2>
+
+    <div class="caixa objetivos">
+      <strong class="rotulo">Conexão com a aula anterior</strong>
+      <p style="margin:.3rem 0;">
+        Esta é a <strong>primeira aula da disciplina</strong> — portanto, não há pré-requisitos.
+        Partimos do absoluto zero conceitual: se você nunca escreveu uma linha de SQL ou nunca ouviu
+        falar em “chave primária”, este material foi escrito exatamente para você. Ao final da aula,
+        você terá o vocabulário e a base teórica que sustentarão todas as demais aulas do semestre,
+        inclusive as de bancos NoSQL.
+      </p>
+    </div>
+
+    <div class="caixa objetivos">
+      <strong class="rotulo">Ao final desta aula, você será capaz de:</strong>
+      <ol>
+        <li><strong>Compreender</strong> os conceitos fundamentais do modelo relacional (relação, tupla, atributo, domínio, esquema) e diferenciá-los de planilhas eletrônicas.</li>
+        <li><strong>Identificar</strong> os tipos de chaves (primária, estrangeira, candidata, composta) e explicar as três formas de integridade (entidade, referencial e domínio).</li>
+        <li><strong>Distinguir</strong> os três níveis de modelagem — conceitual, lógica e física — e o papel do Modelo Entidade-Relacionamento (MER) em cada um.</li>
+        <li><strong>Aplicar</strong> os conceitos de cardinalidade (1:1, 1:N, N:M) na leitura e interpretação de diagramas ER.</li>
+        <li><strong>Analisar</strong> anomalias de inserção, atualização e exclusão e <strong>aplicar</strong> as três primeiras Formas Normais (1FN, 2FN, 3FN) na reestruturação de uma tabela.</li>
+      </ol>
+    </div>
+
+    <h3>Plano de voo da aula (100 minutos)</h3>
+    <table>
+      <tr><th>Bloco</th><th>Conteúdo</th><th>Tempo</th></tr>
+      <tr><td>1</td><td>Por que bancos de dados existem? Sistemas de arquivos vs. SGBD</td><td>15 min</td></tr>
+      <tr><td>2</td><td>O Modelo Relacional: anatomia de uma relação e chaves</td><td>20 min</td></tr>
+      <tr><td>3</td><td>Níveis de abstração e Modelo Entidade-Relacionamento</td><td>25 min</td></tr>
+      <tr><td>4</td><td>Normalização: 1FN, 2FN e 3FN</td><td>20 min</td></tr>
+      <tr><td>5</td><td>Prática em SQL Server: criando tabelas com integridade</td><td>15 min</td></tr>
+      <tr><td>6</td><td>Mercado de trabalho, glossário e fechamento</td><td>5 min</td></tr>
+    </table>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (b) INTRODUÇÃO                                                  -->
+  <!-- ============================================================== -->
+  <section id="introducao" aria-labelledby="titulo-intro">
+    <h2 id="titulo-intro">Introdução: Por Que Modelar Dados?</h2>
+
+    <p>
+      Toda aplicação que você já usou — o aplicativo do banco, o sistema de matrícula da faculdade,
+      o carrinho de uma loja virtual — depende de uma pergunta aparentemente simples:
+      <em>onde e como as informações ficam guardadas?</em> A resposta profissional para essa pergunta
+      é: em um <strong>banco de dados</strong>, gerenciado por um <strong>Sistema Gerenciador de
+      Banco de Dados (SGBD)</strong>, e — crucialmente — <strong>modelado antes de ser construído</strong>.
+    </p>
+
+    <h3>Do caos dos arquivos à ordem do SGBD</h3>
+    <p>
+      Nos primórdios da informática (décadas de 1950 e 1960), cada programa mantinha seus próprios
+      arquivos de dados. O sistema da folha de pagamento tinha um arquivo de funcionários; o sistema
+      de RH tinha outro. Resultado? O mesmo funcionário aparecia com endereço diferente nos dois
+      sistemas, e ninguém sabia qual era o verdadeiro. Esse problema clássico recebe o nome de
+      <strong>redundância</strong> (dados duplicados) e <strong>inconsistência</strong> (dados
+      duplicados que divergem entre si).
+    </p>
+    <p>
+      Para piorar, havia o <strong>isolamento de dados</strong>: como cada programa definia seu
+      próprio formato de arquivo, gerar um relatório que cruzasse informações de dois sistemas exigia
+      escrever código novo toda vez. Se um programa fosse corrompido, não havia garantia de que os
+      arquivos continuassem válidos — ausência total de <strong>atomicidade</strong> e
+      <strong>recuperação a falhas</strong>.
+    </p>
+    <p>
+      Os SGBDs surgiram para resolver exatamente essa lista de problemas. Um SGBD é um software que
+      centraliza os dados e oferece, de forma padronizada: controle de redundância, isolamento lógico
+      entre programas e dados, integridade, controle de concorrência (duas pessoas alterando ao mesmo
+      tempo), segurança de acesso e backup. Exemplos que você conhecerá a fundo na disciplina:
+      <strong>SQL Server</strong> (nosso SGBD de trabalho), Oracle, MySQL, PostgreSQL e MongoDB.
+    </p>
+
+    <div class="caixa dica">
+      <strong class="rotulo">💡 Dica de vocabulário</strong>
+      <p style="margin:.3rem 0;">
+        Não confunda <strong>banco de dados</strong> (o conjunto organizado de dados) com
+        <strong>SGBD</strong> (o software que o gerencia). Quando alguém diz “banco SQL Server”,
+        está usando um atalho coloquial: SQL Server é o SGBD; os bancos são os objetos criados dentro dele.
+      </p>
+    </div>
+
+    <h3>Um marco histórico: Edgar Codd e 1970</h3>
+    <p>
+      Antes do modelo relacional, dominavam os modelos <strong>hierárquico</strong> (como o IMS da
+      IBM, em que os dados formavam árvores) e <strong>em rede</strong> (padrão CODASYL, em que os
+      dados formavam grafos). Eram poderosos, mas obrigavam o programador a conhecer os “caminhos”
+      físicos de navegação entre registros — qualquer mudança na estrutura derrubava programas inteiros.
+    </p>
+    <p>
+      Em 1970, o pesquisador <strong>Edgar Frank (Ted) Codd</strong>, da IBM, publicou o artigo
+      <em>“A Relational Model of Data for Large Shared Data Banks”</em> na revista
+      <em>Communications of the ACM</em>. A ideia revolucionária: descrever os dados como
+      <strong>simples tabelas (relações)</strong> e deixar o SGBD cuidar de como eles são
+      fisicamente armazenados e acessados. O programador passou a dizer <em>“quero os pedidos do
+      cliente Maria”</em> (o quê) em vez de <em>“siga o ponteiro 0x3F até o bloco 12”</em> (como).
+      Esse salto — do acesso navegacional para a <strong>declaração</strong> — é a raiz da linguagem SQL
+      e de praticamente tudo que veremos no semestre.
+    </p>
+
+    <div class="caixa alerta">
+      <strong class="rotulo">⚠️ Alerta de contexto de mercado</strong>
+      <p style="margin:.3rem 0;">
+        Embora o artigo seja de 1970, o modelo relacional segue dominante no mercado corporativo mais
+        de meio século depois — sistemas bancários, fiscais, ERPs e e-commerges dependem dele.
+        Os bancos NoSQL (que estudaremos na segunda metade da disciplina) <em>complementam</em> o
+        relacional em cenários específicos; eles não o “substituíram”. Guarde isso: no mercado, a
+        pergunta certa nunca é “qual é melhor?”, e sim <em>“qual modelo atende melhor este requisito?”</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (c) DESENVOLVIMENTO TEÓRICO                                     -->
+  <!-- ============================================================== -->
+  <section id="teoria" aria-labelledby="titulo-teoria">
+    <h2 id="titulo-teoria">Desenvolvimento Teórico</h2>
+
+    <!-- ======================= 2.1 ======================= -->
+    <h3>2.1 — O Modelo Relacional: a anatomia de uma relação</h3>
+
+    <p>
+      No modelo relacional, tudo gira em torno do conceito matemático de <strong>relação</strong>,
+      que na prática visualizamos como uma <strong>tabela</strong>. Mas atenção: uma relação
+      relacional <strong>não é uma planilha</strong>. Vejamos o vocabulário formal e sua tradução prática:
+    </p>
+
+    <table>
+      <caption>Termos do modelo relacional e suas traduções</caption>
+      <tr><th>Termo formal</th><th>Sinônimo prático</th><th>Definição</th></tr>
+      <tr><td><strong>Relação</strong></td><td>Tabela</td><td>Conjunto de tuplas com a mesma estrutura (mesmas colunas).</td></tr>
+      <tr><td><strong>Tupla</strong></td><td>Linha / registro</td><td>Um elemento da relação; representa um fato sobre uma entidade.</td></tr>
+      <tr><td><strong>Atributo</strong></td><td>Coluna / campo</td><td>Uma propriedade nomeada que descreve as tuplas (ex.: <code class="inline">nome</code>).</td></tr>
+      <tr><td><strong>Domínio</strong></td><td>Tipo de dado</td><td>Conjunto de valores permitidos para um atributo (ex.: datas válidas, inteiros).</td></tr>
+      <tr><td><strong>Esquema</strong></td><td>Estrutura</td><td>Definição estática: nome da relação e seus atributos. Ex.: <code class="inline">Cliente(id_cliente, nome, email)</code>.</td></tr>
+      <tr><td><strong>Instância</strong></td><td>Conteúdo / “foto”</td><td>Conjunto de tuplas armazenado em um dado instante — muda a cada INSERT.</td></tr>
+      <tr><td><strong>Grau</strong></td><td>Nº de colunas</td><td>Quantidade de atributos da relação.</td></tr>
+      <tr><td><strong>Cardinalidade</strong></td><td>Nº de linhas</td><td>Quantidade de tuplas da relação (não confundir com a cardinalidade de relacionamentos ER, vista adiante).</td></tr>
+    </table>
+
+    <figure>
+      <svg viewBox="0 0 860 380" role="img" aria-label="Diagrama da anatomia de uma relação relacional: colunas são atributos e linhas são tuplas">
+        <title>Anatomia de uma relação: atributos são as colunas e tuplas são as linhas</title>
+        <rect x="0" y="0" width="860" height="380" fill="#ffffff"/>
+        <text x="430" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#073763">Relação CLIENTE (grau = 3)</text>
+
+        <!-- Cabeçalho -->
+        <rect x="140" y="55" width="180" height="46" fill="#0b5394"/>
+        <rect x="320" y="55" width="180" height="46" fill="#0b5394"/>
+        <rect x="500" y="55" width="180" height="46" fill="#0b5394"/>
+        <text x="230" y="84" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">id_cliente</text>
+        <text x="410" y="84" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">nome</text>
+        <text x="590" y="84" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">email</text>
+
+        <!-- Tuplas -->
+        <rect x="140" y="101" width="540" height="46" fill="#eaf1f8" stroke="#d9e2ec"/>
+        <text x="230" y="130" text-anchor="middle" font-size="15" fill="#1f2933">1</text>
+        <text x="410" y="130" text-anchor="middle" font-size="15" fill="#1f2933">Maria Silva</text>
+        <text x="590" y="130" text-anchor="middle" font-size="15" fill="#1f2933">maria@email.com</text>
+
+        <rect x="140" y="147" width="540" height="46" fill="#fff4e0" stroke="#b45309" stroke-width="2"/>
+        <text x="230" y="176" text-anchor="middle" font-size="15" fill="#7c3a04">2</text>
+        <text x="410" y="176" text-anchor="middle" font-size="15" fill="#7c3a04">João Souza</text>
+        <text x="590" y="176" text-anchor="middle" font-size="15" fill="#7c3a04">joao@email.com</text>
+
+        <rect x="140" y="193" width="540" height="46" fill="#eaf1f8" stroke="#d9e2ec"/>
+        <text x="230" y="222" text-anchor="middle" font-size="15" fill="#1f2933">3</text>
+        <text x="410" y="222" text-anchor="middle" font-size="15" fill="#1f2933">Ana Lima</text>
+        <text x="590" y="222" text-anchor="middle" font-size="15" fill="#1f2933">ana@email.com</text>
+
+        <!-- Seta tupla -->
+        <line x1="700" y1="170" x2="745" y2="170" stroke="#b45309" stroke-width="3"/>
+        <polygon points="700,170 712,164 712,176" fill="#b45309" transform="rotate(180 706 170)"/>
+        <text x="750" y="164" font-size="15" fill="#b45309" font-weight="bold">Tupla</text>
+        <text x="750" y="184" font-size="13" fill="#b45309">(linha / registro)</text>
+
+        <!-- Seta atributo -->
+        <line x1="410" y1="40" x2="410" y2="12" stroke="#1e7e34" stroke-width="3"/>
+        <text x="430" y="24" font-size="15" fill="#1e7e34" font-weight="bold">Atributo (coluna / campo)</text>
+
+        <!-- Base teórica -->
+        <rect x="140" y="265" width="540" height="80" rx="10" fill="#e6f4ea" stroke="#1e7e34"/>
+        <text x="410" y="295" text-anchor="middle" font-size="14" fill="#14532d">Regras do modelo: (1) cada célula contém um único valor (domínio atômico);</text>
+        <text x="410" y="317" text-anchor="middle" font-size="14" fill="#14532d">(2) colunas têm nomes únicos na relação; (3) a ordem das linhas é logicamente irrelevante.</text>
+      </svg>
+      <figcaption>Figura 1 — Anatomia de uma relação: atributos são as colunas; tuplas são as linhas.</figcaption>
+    </figure>
+
+    <p>
+      Três propriedades decorrem da base matemática do modelo e merecem atenção, pois caem em
+      entrevista técnica com frequência:
+    </p>
+    <ul>
+      <li><strong>Atomicidade dos valores:</strong> cada célula guarda um único valor do domínio. “Rua X, 123, apto 4” em uma célula só é aceitável apenas se tratarmos endereço como um todo; se precisarmos filtrar por cidade, o atributo deve ser decomposto. Esse é exatamente o critério da <strong>1ª Forma Normal</strong>, que veremos na seção 2.5.</li>
+      <li><strong>Irrelevância da ordem das tuplas:</strong> como uma relação é um <em>conjunto</em>, não existe “primeira linha”. Qualquer ordenação visível em tela é resultado de um <code class="inline">ORDER BY</code>, nunca uma propriedade da tabela.</li>
+      <li><strong>Unicidade de tuplas:</strong> não podem existir duas linhas idênticas em todos os atributos — e é essa exigência que nos leva ao conceito de chave.</li>
+    </ul>
+
+    <div class="caixa pense">
+      <strong class="rotulo">🧠 Pare e Pense #1</strong>
+      <p style="margin:.3rem 0;">Uma planilha Excel e uma tabela relacional <em>parecem</em> iguais. Liste três diferenças conceituais entre elas, pensando em: células com múltiplos valores, linhas duplicadas e ordem das linhas. Depois, compare com a resposta:</p>
+      <details>
+        <summary style="cursor:pointer; font-weight:600;">Ver resposta comentada</summary>
+        <p>
+          (1) Na planilha, uma célula pode conter listas, fórmulas e valores heterogêneos; na relação,
+          cada célula deve conter valor único do domínio declarado. (2) A planilha aceita linhas
+          duplicadas sem reclamar; a relação exige que alguma combinação de atributos identifique cada
+          tupla (chave). (3) Na planilha a ordem física das linhas é manipulada pelo usuário e pode
+          carregar significado; na relação, a ordem é logicamente irrelevante — conjuntos não têm ordem.
+        </p>
+      </details>
+    </div>
+
+    <!-- ======================= 2.2 ======================= -->
+    <h3>2.2 — Chaves: a espinha dorsal do modelo relacional</h3>
+
+    <p>
+      Se duas tuplas fossem idênticas em tudo, como saberíamos qual é qual? Como atualizar “o pedido
+      nº 1024” sem risco de atingir outro registro? A resposta são as <strong>chaves</strong> —
+      atributos (ou conjuntos deles) que identificam tuplas de forma unívoca.
+    </p>
+
+    <table>
+      <caption>Tipos de chaves no modelo relacional</caption>
+      <tr><th>Chave</th><th>Definição</th><th>Exemplo em <code class="inline">Cliente</code></th></tr>
+      <tr>
+        <td><strong>Superchave</strong></td>
+        <td>Qualquer conjunto de atributos que identifique univocamente cada tupla (pode conter atributos “extras”).</td>
+        <td>{id_cliente, nome} — identifica, mas o nome é desnecessário.</td>
+      </tr>
+      <tr>
+        <td><strong>Chave candidata</strong></td>
+        <td>Superchave <em>minimal</em>: nenhum atributo pode ser removido sem perder a identificação.</td>
+        <td>{id_cliente}, {cpf}, {email} — cada uma, sozinha, já identifica.</td>
+      </tr>
+      <tr>
+        <td><strong>Chave primária (PK)</strong></td>
+        <td>A chave candidata <em>escolhida</em> pelo projetista como identificador oficial. Não pode ser nula nem duplicada.</td>
+        <td>{id_cliente} — curta, numérica e imutável: excelente PK.</td>
+      </tr>
+      <tr>
+        <td><strong>Chave alternativa</strong></td>
+        <td>Chaves candidatas não escolhidas como primária. Devem continuar únicas (restrição <code class="inline">UNIQUE</code>).</td>
+        <td>{cpf} e {email} com restrição UNIQUE.</td>
+      </tr>
+      <tr>
+        <td><strong>Chave estrangeira (FK)</strong></td>
+        <td>Atributo(s) de uma tabela que referencia(m) a chave (primária ou candidata) de outra tabela. É o “cimento” entre tabelas.</td>
+        <td>Pedido.id_cliente → Cliente.id_cliente.</td>
+      </tr>
+      <tr>
+        <td><strong>Chave composta</strong></td>
+        <td>Chave formada por dois ou mais atributos em conjunto.</td>
+        <td>Matricula(id_aluno, id_disciplina) — nenhum atributo sozinho basta.</td>
+      </tr>
+    </table>
+
+    <div class="caixa dica">
+      <strong class="rotulo">💡 Dica de projeto: chave substituta (surrogate key)</strong>
+      <p style="margin:.3rem 0;">
+        Note o padrão usado acima: criamos um <code class="inline">id_cliente</code> numérico gerado
+        pelo banco (<code class="inline">IDENTITY</code>) em vez de usar CPF como chave primária.
+        Chaves “de negócio” (CPF, e-mail, placa) podem mudar — pessoas casam, trocam de e-mail,
+        corrigem documentos. Uma PK artificial, curta e imutável evita cascatas de atualização e
+        deixa índices menores e mais rápidos. As chaves de negócio continuam no modelo, mas como
+        restrições <code class="inline">UNIQUE</code>.
+      </p>
+    </div>
+
+    <h4>As três integridades que o SGBD garante para você</h4>
+    <ul>
+      <li><strong>Integridade de domínio:</strong> todo valor armazenado deve pertencer ao domínio declarado (ex.: idade não pode ser “abc” nem -5, se houver restrição de verificação). No SQL Server, manifesta-se nos tipos de dados e nas restrições <code class="inline">CHECK</code> e <code class="inline">DEFAULT</code>.</li>
+      <li><strong>Integridade de entidade:</strong> a chave primária nunca pode ser <code class="inline">NULL</code> — se não há identificador, a tupla “não existe” para o modelo. Garantida automaticamente ao declararmos <code class="inline">PRIMARY KEY</code>.</li>
+      <li><strong>Integridade referencial:</strong> uma chave estrangeira só pode conter um valor que efetivamente exista na tabela referenciada (ou ser nula, quando o relacionamento é opcional). É o que impede “pedidos órfãos” de clientes inexistentes.</li>
+    </ul>
+
+    <div class="caixa erro">
+      <strong class="rotulo">🛑 Erro comum de iniciante</strong>
+      <p style="margin:.3rem 0;">
+        Criar a tabela “filha” (Pedido) antes da tabela “pai” (Cliente), ou inserir pedidos antes de
+        clientes. O SGBD rejeitará a tabela/inserção porque a FK aponta para algo que não existe.
+        Regra prática: <strong>cria-se de cima para baixo no diagrama (pai primeiro) e insere-se na mesma ordem</strong>.
+      </p>
+    </div>
+
+    <h4>E quando o filho “morre”? Ações referenciais</h4>
+    <p>
+      O que deve acontecer com os pedidos de um cliente que foi excluído do sistema? O SQL permite
+      declarar a política: <code class="inline">ON DELETE CASCADE</code> (exclui os pedidos junto),
+      <code class="inline">ON DELETE SET NULL</code> (anula a FK, se permitida), ou o comportamento
+      padrão de <strong>bloquear</strong> a exclusão enquanto houver dependentes. Definir essa política
+      é uma decisão de <em>regra de negócio</em>, não de sintaxe — conversaremos mais sobre isso na
+      prática da seção 3.
+    </p>
+
+    <!-- ======================= 2.3 ======================= -->
+    <h3>2.3 — Os três níveis de modelagem: do negócio ao disco</h3>
+
+    <p>
+      Modelar um banco é um processo <strong>progressivo de refinamento</strong>, em três níveis de
+      abstração. Pense na construção de uma casa: primeiro o croqui com o cliente (o que a casa deve
+      ter), depois a planta técnica do arquiteto (paredes, medidas, instalações) e, por fim, o
+      projeto executivo do engenheiro (materiais, fiação, canos). Com dados é igual:
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 880 250" role="img" aria-label="Fluxo dos três níveis de modelagem de dados: conceitual, lógico e físico, com exemplos de artefatos em cada nível">
+        <title>Níveis de modelagem: conceitual (entidades e regras), lógico (tabelas e chaves) e físico (DDL, índices e particionamento)</title>
+        <rect x="0" y="0" width="880" height="250" fill="#ffffff"/>
+
+        <rect x="20" y="70" width="250" height="120" rx="12" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+        <text x="145" y="100" text-anchor="middle" font-weight="bold" font-size="18" fill="#312e81">1. Conceitual</text>
+        <text x="145" y="128" text-anchor="middle" font-size="13" fill="#312e81">Diagrama ER (Chen)</text>
+        <text x="145" y="150" text-anchor="middle" font-size="13" fill="#312e81">Entidades, relacionamentos,</text>
+        <text x="145" y="172" text-anchor="middle" font-size="13" fill="#312e81">regras de negócio</text>
+
+        <rect x="315" y="70" width="250" height="120" rx="12" fill="#e6f4ea" stroke="#1e7e34" stroke-width="2"/>
+        <text x="440" y="100" text-anchor="middle" font-weight="bold" font-size="18" fill="#14532d">2. Lógico</text>
+        <text x="440" y="128" text-anchor="middle" font-size="13" fill="#14532d">Tabelas, colunas, tipos</text>
+        <text x="440" y="150" text-anchor="middle" font-size="13" fill="#14532d">abstratos, PK/FK,</text>
+        <text x="440" y="172" text-anchor="middle" font-size="13" fill="#14532d">normalização</text>
+
+        <rect x="610" y="70" width="250" height="120" rx="12" fill="#fff4e0" stroke="#b45309" stroke-width="2"/>
+        <text x="735" y="100" text-anchor="middle" font-weight="bold" font-size="18" fill="#7c3a04">3. Físico</text>
+        <text x="735" y="128" text-anchor="middle" font-size="13" fill="#7c3a04">DDL em SQL Server:</text>
+        <text x="735" y="150" text-anchor="middle" font-size="13" fill="#7c3a04">CREATE TABLE, índices,</text>
+        <text x="735" y="172" text-anchor="middle" font-size="13" fill="#7c3a04">partições, storage</text>
+
+        <line x1="270" y1="130" x2="315" y2="130" stroke="#334155" stroke-width="3"/>
+        <polygon points="315,130 302,123 302,137" fill="#334155"/>
+        <line x1="565" y1="130" x2="610" y2="130" stroke="#334155" stroke-width="3"/>
+        <polygon points="610,130 597,123 597,137" fill="#334155"/>
+
+        <text x="145" y="45" text-anchor="middle" font-size="13" fill="#475569">Público: cliente / especialista de negócio</text>
+        <text x="440" y="45" text-anchor="middle" font-size="13" fill="#475569">Público: modelador / analista</text>
+        <text x="735" y="45" text-anchor="middle" font-size="13" fill="#475569">Público: DBA / desenvolvedor</text>
+
+        <text x="440" y="228" text-anchor="middle" font-size="13" font-style="italic" fill="#64748b">Cada nível acrescenta detalhes técnicos e reduz a ambiguidade do anterior</text>
+      </svg>
+      <figcaption>Figura 2 — Os três níveis de modelagem: conceitual, lógico e físico.</figcaption>
+    </figure>
+
+    <ul>
+      <li><strong>Modelo conceitual:</strong> descreve <em>o quê</em> o sistema precisa armazenar, na linguagem do negócio. Usa o <strong>Modelo Entidade-Relacionamento (MER)</strong>: entidades (CLIENTE, PEDIDO), atributos e relacionamentos com suas cardinalidades. É independente de qualquer SGBD e serve como contrato de entendimento com o cliente.</li>
+      <li><strong>Modelo lógico:</strong> traduz o conceitual para o paradigma escolhido (aqui, o relacional): entidades viram tabelas; atributos viram colunas com tipos lógicos; identificadores viram PKs; relacionamentos viram FKs ou tabelas associativas. Ainda é independente do produto, mas já é relacional.</li>
+      <li><strong>Modelo físico:</strong> a implementação concreta em um SGBD específico — no nosso caso, SQL Server. Aqui entram tipos físicos (<code class="inline">INT</code>, <code class="inline">VARCHAR(100)</code>, <code class="inline">DATETIME2</code>), índices, partições e parâmetros de armazenamento. É o nível das otimizações que estudaremos mais adiante na disciplina.</li>
+    </ul>
+
+    <div class="caixa alerta">
+      <strong class="rotulo">⚠️ Por que não pular direto para o CREATE TABLE?</strong>
+      <p style="margin:.3rem 0;">
+        Pular o modelo conceitual é a principal causa de retrabalho em projetos: descobre-se tarde que
+        faltava uma entidade (“ah, também existem pessoas jurídicas!”), que uma cardinalidade estava
+        errada ou que uma regra de negócio não foi capturada. Corrigir um retângulo em um diagrama
+        custa minutos; corrigir uma tabela com 40 milhões de linhas em produção custa semanas — ou a
+        cabeça do projeto. Modelar é, essencialmente, <strong>gerenciar risco barato</strong>.
+      </p>
+    </div>
+
+    <!-- ======================= 2.4 ======================= -->
+    <h3>2.4 — Modelo Entidade-Relacionamento (MER)</h3>
+
+    <p>
+      Proposto por <strong>Peter Chen em 1976</strong>, o MER é a notação padrão para o nível
+      conceitual. Seus elementos essenciais:
+    </p>
+
+    <table>
+      <caption>Elementos do MER na notação de Chen</caption>
+      <tr><th>Elemento</th><th>Símbolo</th><th>Significado</th><th>Exemplo</th></tr>
+      <tr><td><strong>Entidade</strong></td><td>Retângulo</td><td>Conjunto de objetos do negócio sobre os quais queremos guardar informação.</td><td>CLIENTE, PRODUTO, PEDIDO.</td></tr>
+      <tr><td><strong>Ocorrência</strong></td><td>(conceito)</td><td>Cada objeto individual do conjunto.</td><td>A cliente “Maria Silva” é uma ocorrência de CLIENTE.</td></tr>
+      <tr><td><strong>Atributo</strong></td><td>Elipse</td><td>Propriedade que descreve a entidade ou o relacionamento.</td><td>nome, email, data_pedido.</td></tr>
+      <tr><td><strong>Relacionamento</strong></td><td>Losango</td><td>Associação significativa entre entidades.</td><td>CLIENTE <em>realiza</em> PEDIDO.</td></tr>
+      <tr><td><strong>Cardinalidade</strong></td><td>Números 1 / N nas extremidades</td><td>Mínimo e máximo de ocorrências de uma entidade associadas à outra.</td><td>Um cliente realiza 0..N pedidos; cada pedido pertence a exatamente 1 cliente.</td></tr>
+      <tr><td><strong>Entidade fraca</strong></td><td>Retângulo duplo</td><td>Entidade que só existe em função de outra (sua “forte”); sua identidade depende dela.</td><td>ITEM_PEDIDO só existe dentro de um PEDIDO.</td></tr>
+    </table>
+
+    <h4>Cardinalidades: as três formas canônicas</h4>
+    <ul>
+      <li><strong>1:1 (um-para-um):</strong> cada ocorrência de A liga-se a no máximo uma de B, e vice-versa. Ex.: PESSOA física ↔ CNH (modelo didático). Na prática, 1:1 frequentemente indica que as entidades poderiam ser a mesma tabela — avalie sempre se a separação tem motivo (segurança, opcionalidade, desempenho).</li>
+      <li><strong>1:N (um-para-muitos):</strong> a forma mais comum. Um CLIENTE realiza vários PEDIDOS, mas cada PEDIDO pertence a um único CLIENTE. Regra de tradução para o modelo lógico: <em>a chave primária do lado “1” vira chave estrangeira no lado “N”</em>. Simples assim.</li>
+      <li><strong>N:M (muitos-para-muitos):</strong> um PRODUTO aparece em muitos PEDIDOS e um PEDIDO contém muitos PRODUTOS. O modelo relacional <strong>não implementa N:M diretamente</strong>: criamos uma <strong>tabela associativa</strong> (ex.: ITEM_PEDIDO) com FKs para os dois lados, decompondo o N:M em dois 1:N. Nessa tabela associativa nascem os atributos do relacionamento — quantidade, preço unitário praticado etc.</li>
+    </ul>
+
+    <figure>
+      <svg viewBox="0 0 880 360" role="img" aria-label="Diagrama entidade-relacionamento na notação de Chen mostrando a entidade CLIENTE com cardinalidade 1 ligada pelo relacionamento realiza, cardinalidade N, à entidade PEDIDO">
+        <title>Diagrama ER (Chen): CLIENTE (1) realiza (N) PEDIDO, com atributos</title>
+        <rect x="0" y="0" width="880" height="360" fill="#ffffff"/>
+
+        <!-- CLIENTE -->
+        <rect x="60" y="150" width="160" height="60" fill="#0b5394"/>
+        <text x="140" y="187" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold">CLIENTE</text>
+
+        <!-- Atributos de cliente -->
+        <ellipse cx="90" cy="70" rx="70" ry="26" fill="#eaf1f8" stroke="#0b5394"/>
+        <text x="90" y="76" text-anchor="middle" font-size="13" fill="#073763">id_cliente (PK)</text>
+        <line x1="110" y1="94" x2="135" y2="150" stroke="#0b5394"/>
+        <ellipse cx="240" cy="60" rx="60" ry="26" fill="#eaf1f8" stroke="#0b5394"/>
+        <text x="240" y="66" text-anchor="middle" font-size="13" fill="#073763">nome</text>
+        <line x1="225" y1="85" x2="165" y2="150" stroke="#0b5394"/>
+        <ellipse cx="95" cy="280" rx="60" ry="26" fill="#eaf1f8" stroke="#0b5394"/>
+        <text x="95" y="286" text-anchor="middle" font-size="13" fill="#073763">email</text>
+        <line x1="115" y1="256" x2="135" y2="210" stroke="#0b5394"/>
+
+        <!-- Relacionamento -->
+        <polygon points="440,140 530,180 440,220 350,180" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+        <text x="440" y="186" text-anchor="middle" font-size="16" font-weight="bold" fill="#312e81">realiza</text>
+
+        <!-- Linhas e cardinalidades -->
+        <line x1="220" y1="180" x2="350" y2="180" stroke="#334155" stroke-width="2.5"/>
+        <text x="255" y="168" font-size="18" font-weight="bold" fill="#b3261e">1</text>
+        <line x1="530" y1="180" x2="660" y2="180" stroke="#334155" stroke-width="2.5"/>
+        <text x="610" y="168" font-size="18" font-weight="bold" fill="#b3261e">N</text>
+
+        <!-- PEDIDO -->
+        <rect x="660" y="150" width="160" height="60" fill="#1e7e34"/>
+        <text x="740" y="187" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold">PEDIDO</text>
+
+        <!-- Atributos de pedido -->
+        <ellipse cx="720" cy="60" rx="72" ry="26" fill="#e6f4ea" stroke="#1e7e34"/>
+        <text x="720" y="66" text-anchor="middle" font-size="13" fill="#14532d">id_pedido (PK)</text>
+        <line x1="735" y1="85" x2="740" y2="150" stroke="#1e7e34"/>
+        <ellipse cx="790" cy="280" rx="70" ry="26" fill="#e6f4ea" stroke="#1e7e34"/>
+        <text x="790" y="286" text-anchor="middle" font-size="13" fill="#14532d">data_pedido</text>
+        <line x1="775" y1="256" x2="745" y2="210" stroke="#1e7e34"/>
+
+        <!-- Atributo do relacionamento -->
+        <ellipse cx="440" cy="290" rx="70" ry="26" fill="#fff4e0" stroke="#b45309"/>
+        <text x="440" y="296" text-anchor="middle" font-size="13" fill="#7c3a04">canal_venda</text>
+        <line x1="440" y1="264" x2="440" y2="220" stroke="#b45309"/>
+
+        <text x="440" y="340" text-anchor="middle" font-size="13" font-style="italic" fill="#64748b">Leitura: “um CLIENTE realiza nenhum ou muitos PEDIDOS; cada PEDIDO é realizado por exatamente um CLIENTE”.</text>
+      </svg>
+      <figcaption>Figura 3 — Diagrama ER (notação de Chen): relacionamento 1:N entre CLIENTE e PEDIDO.</figcaption>
+    </figure>
+
+    <div class="caixa pense">
+      <strong class="rotulo">🧠 Pare e Pense #2</strong>
+      <p style="margin:.3rem 0;">No diagrama acima, a cardinalidade do lado CLIENTE é <strong>1</strong> e do lado PEDIDO é <strong>N</strong>. Se a regra de negócio mudasse para “um pedido pode ser feito por vários clientes (compra coletiva) e um cliente participa de vários pedidos”:</p>
+      <ol>
+        <li>Qual seria a nova cardinalidade do relacionamento?</li>
+        <li>Como essa mudança seria traduzida no modelo lógico relacional?</li>
+      </ol>
+      <details>
+        <summary style="cursor:pointer; font-weight:600;">Ver resposta comentada</summary>
+        <p>
+          (1) O relacionamento passaria a <strong>N:M</strong>. (2) No modelo lógico, criaríamos uma
+          tabela associativa — por exemplo, <code class="inline">PARTICIPANTE_PEDIDO(id_pedido, id_cliente)</code> —
+          com chave primária composta pelos dois identificadores e FKs para PEDIDO e CLIENTE,
+          decompondo o N:M em dois relacionamentos 1:N. Qualquer atributo do relacionamento
+          (papel do participante, percentual de pagamento) migraria para essa nova tabela.
+        </p>
+      </details>
+    </div>
+
+    <!-- ======================= 2.5 ======================= -->
+    <h3>2.5 — Normalização: projetando tabelas sem anomalias</h3>
+
+    <p>
+      A <strong>normalização</strong> é um conjunto de regras formais (as chamadas
+      <strong>Formas Normais</strong>) que nos ajuda a organizar as tabelas para eliminar
+      <strong>redundância</strong> e, com ela, três <strong>anomalias</strong> clássicas:
+    </p>
+    <ul>
+      <li><strong>Anomalia de inserção:</strong> não consigo registrar um fato sem registrar outro junto (ex.: não consigo cadastrar uma disciplina enquanto nenhum aluno se matricular nela).</li>
+      <li><strong>Anomalia de atualização:</strong> uma informação está repetida em várias linhas; ao atualizar uma, esqueço as outras e gero inconsistência (ex.: trocar o nome do professor em 200 linhas de matrículas).</li>
+      <li><strong>Anomalia de exclusão:</strong> ao apagar uma linha, perco uma informação que não tinha nada a ver com ela (ex.: excluir o último aluno matriculado e, com ele, perder o cadastro da disciplina).</li>
+    </ul>
+
+    <p>Considere esta tabela <strong>não normalizada</strong>, que guarda matrículas de alunos:</p>
+
+    <table>
+      <caption>Tabela MATRICULA antes da normalização</caption>
+      <tr><th>id_matricula</th><th>aluno</th><th>disciplinas</th><th>professor</th><th>nota</th></tr>
+      <tr><td>1</td><td>Maria</td><td>BD, LP1</td><td>Prof. Ana; Prof. Carlos</td><td>8,5; 7,0</td></tr>
+      <tr><td>2</td><td>João</td><td>BD</td><td>Prof. Ana</td><td>9,0</td></tr>
+      <tr><td>3</td><td>Ana Lima</td><td>LP1</td><td>Prof. Carlos</td><td>6,5</td></tr>
+    </table>
+
+    <p>
+      Ela viola praticamente tudo que vimos: células com múltiplos valores, dados de disciplina
+      repetidos a cada aluno e dependências estranhas (o professor depende da disciplina, não da matrícula).
+      Vamos corrigi-la, forma normal por forma normal.
+    </p>
+
+    <h4>1ª Forma Normal (1FN) — atomicidade</h4>
+    <p>
+      <strong>Regra:</strong> todos os atributos devem conter valores <strong>atômicos</strong>
+      (indivisíveis para o propósito do modelo) e não deve haver grupos repetidos.
+      Elimine listas dentro de células — decomponha em linhas (ou, em casos específicos, em outra tabela).
+    </p>
+
+    <table>
+      <caption>Após a 1FN: cada célula com valor único</caption>
+      <tr><th>id_matricula</th><th>aluno</th><th>disciplina</th><th>professor</th><th>nota</th></tr>
+      <tr><td>1</td><td>Maria</td><td>BD</td><td>Prof. Ana</td><td>8,5</td></tr>
+      <tr><td>1</td><td>Maria</td><td>LP1</td><td>Prof. Carlos</td><td>7,0</td></tr>
+      <tr><td>2</td><td>João</td><td>BD</td><td>Prof. Ana</td><td>9,0</td></tr>
+      <tr><td>3</td><td>Ana Lima</td><td>LP1</td><td>Prof. Carlos</td><td>6,5</td></tr>
+    </table>
+
+    <h4>2ª Forma Normal (2FN) — dependência total da chave</h4>
+    <p>
+      <strong>Regra:</strong> a tabela deve estar na 1FN e todo atributo não-chave deve depender da
+      <strong>chave inteira</strong> — não apenas de parte dela. Isso só se aplica a chaves compostas.
+      Aqui, a chave seria (id_matricula, disciplina): mas <code class="inline">aluno</code> depende só
+      de id_matricula, e <code class="inline">professor</code> depende só de disciplina. Separamos:
+    </p>
+
+    <table>
+      <caption>Após a 2FN: ALUNO, DISCIPLINA e MATRICULA separadas</caption>
+      <tr><th colspan="2">ALUNO</th><th colspan="2">DISCIPLINA</th><th colspan="3">MATRICULA</th></tr>
+      <tr><th>id_aluno</th><th>nome</th><th>cod_disc</th><th>professor</th><th>id_aluno</th><th>cod_disc</th><th>nota</th></tr>
+      <tr><td>1</td><td>Maria</td><td>BD</td><td>Prof. Ana</td><td>1</td><td>BD</td><td>8,5</td></tr>
+      <tr><td>2</td><td>João</td><td>LP1</td><td>Prof. Carlos</td><td>1</td><td>LP1</td><td>7,0</td></tr>
+      <tr><td>3</td><td>Ana Lima</td><td></td><td></td><td>2</td><td>BD</td><td>9,0</td></tr>
+      <tr><td></td><td></td><td></td><td></td><td>3</td><td>LP1</td><td>6,5</td></tr>
+    </table>
+
+    <h4>3ª Forma Normal (3FN) — nada de dependência transitiva</h4>
+    <p>
+      <strong>Regra:</strong> a tabela deve estar na 2FN e nenhum atributo não-chave pode depender de
+      <strong>outro atributo não-chave</strong> (a chamada dependência transitiva). Na tabela DISCIPLINA,
+      suponha que exista <code class="inline">cod_curso</code> e <code class="inline">nome_curso</code>:
+      o nome do curso depende do código do curso, não da disciplina. Solução: criar a tabela CURSO.
+      Frase mnemônica clássica: <em>“cada atributo não-chave deve depender da chave, de toda a chave,
+      e somente da chave”</em>.
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 880 200" role="img" aria-label="Fluxo da normalização mostrando a evolução de uma tabela não normalizada passando pela primeira, segunda e terceira formas normais">
+        <title>Fluxo da normalização: da tabela não normalizada até a 3FN</title>
+        <rect x="0" y="0" width="880" height="200" fill="#ffffff"/>
+        <rect x="20" y="60" width="190" height="80" rx="10" fill="#fdecea" stroke="#b3261e" stroke-width="2"/>
+        <text x="115" y="95" text-anchor="middle" font-size="15" font-weight="bold" fill="#7f1d1d">Não normalizada</text>
+        <text x="115" y="118" text-anchor="middle" font-size="12" fill="#7f1d1d">Listas em células</text>
+
+        <rect x="245" y="60" width="190" height="80" rx="10" fill="#fff4e0" stroke="#b45309" stroke-width="2"/>
+        <text x="340" y="95" text-anchor="middle" font-size="15" font-weight="bold" fill="#7c3a04">1FN</text>
+        <text x="340" y="118" text-anchor="middle" font-size="12" fill="#7c3a04">Valores atômicos</text>
+
+        <rect x="470" y="60" width="190" height="80" rx="10" fill="#e6f4ea" stroke="#1e7e34" stroke-width="2"/>
+        <text x="565" y="95" text-anchor="middle" font-size="15" font-weight="bold" fill="#14532d">2FN</text>
+        <text x="565" y="118" text-anchor="middle" font-size="12" fill="#14532d">Dependência total da chave</text>
+
+        <rect x="695" y="60" width="165" height="80" rx="10" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+        <text x="777" y="95" text-anchor="middle" font-size="15" font-weight="bold" fill="#312e81">3FN</text>
+        <text x="777" y="118" text-anchor="middle" font-size="12" fill="#312e81">Sem dependência transitiva</text>
+
+        <line x1="210" y1="100" x2="245" y2="100" stroke="#334155" stroke-width="3"/>
+        <polygon points="245,100 233,93 233,107" fill="#334155"/>
+        <line x1="435" y1="100" x2="470" y2="100" stroke="#334155" stroke-width="3"/>
+        <polygon points="470,100 458,93 458,107" fill="#334155"/>
+        <line x1="660" y1="100" x2="695" y2="100" stroke="#334155" stroke-width="3"/>
+        <polygon points="695,100 683,93 683,107" fill="#334155"/>
+
+        <text x="440" y="35" text-anchor="middle" font-size="14" fill="#475569">Cada passo elimina redundância e anomalias de inserção, atualização e exclusão</text>
+        <text x="440" y="175" text-anchor="middle" font-size="13" font-style="italic" fill="#64748b">Existem formas normais superiores (FNBC, 4FN, 5FN), mas 3FN resolve a grande maioria dos projetos</text>
+      </svg>
+      <figcaption>Figura 4 — Progressão da normalização até a 3ª Forma Normal.</figcaption>
+    </figure>
+
+    <div class="caixa alerta">
+      <strong class="rotulo">⚠️ Normalização não é dogma: preview da desnormalização</strong>
+      <p style="margin:.3rem 0;">
+        Normalizar demais gera muitas tabelas e consultas com vários <code class="inline">JOIN</code>s,
+        o que pode custar desempenho. Por isso existe a <strong>desnormalização controlada</strong> —
+        tema de aula futura — que reintroduz redundância <em>consciente e monitorada</em> para ganhar
+        velocidade de leitura (ex.: guardar “nome_do_produto” já preenchido na linha do pedido para um
+        relatório que roda milhões de vezes). A regra de ouro do mercado: <strong>primeiro normalize
+        para garantir integridade; desnormalize apenas com medição de desempenho que justifique</strong>.
+      </p>
+    </div>
+
+    <div class="caixa pense">
+      <strong class="rotulo">🧠 Pare e Pense #3</strong>
+      <p style="margin:.3rem 0;">Considere uma tabela <code class="inline">PEDIDO(id_pedido, id_cliente, nome_cliente, cidade_cliente, total_pedido)</code>. Ela está na 1FN e na 2FN (chave simples), mas viola a 3FN. Por quê? Quais tabelas você criaria para corrigir, e qual anomalia de atualização esse redesign elimina?</p>
+      <details>
+        <summary style="cursor:pointer; font-weight:600;">Ver resposta comentada</summary>
+        <p>
+          <code class="inline">nome_cliente</code> e <code class="inline">cidade_cliente</code>
+          dependem de <code class="inline">id_cliente</code> (um atributo não-chave de PEDIDO), e não
+          de <code class="inline">id_pedido</code> — uma dependência transitiva. A correção: criar a
+          tabela CLIENTE(id_cliente, nome, cidade) e manter em PEDIDO apenas a FK id_cliente.
+          Anomalia eliminada: se a cliente Maria mudar de cidade, bastará atualizar <strong>uma</strong>
+          linha em CLIENTE, e não todos os pedidos que ela já fez.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (d) EXEMPLOS PRÁTICOS / CÓDIGO                                  -->
+  <!-- ============================================================== -->
+  <section id="pratica" aria-labelledby="titulo-pratica">
+    <h2 id="titulo-pratica">Aplicação Prática: Materializando o Modelo no SQL Server</h2>
+
+    <p>
+      Hora de descer ao <strong>nível físico</strong>. Vamos implementar o modelo que discutimos
+      (CLIENTE 1:N PEDIDO) em SQL Server, usando Transact-SQL (T-SQL). Cada restrição declarada abaixo
+      é a tradução direta de um conceito teórico da aula: <code class="inline">PRIMARY KEY</code> =
+      integridade de entidade; <code class="inline">FOREIGN KEY</code> = integridade referencial;
+      <code class="inline">UNIQUE</code>/<code class="inline">CHECK</code> = integridade de domínio e
+      chaves alternativas.
+    </p>
+
+    <h3>Passo 1 — Criar o banco e as tabelas (com comentários linha a linha)</h3>
+
+<pre><code class="language-sql">-- =========================================================
+-- Aula 01: Modelo físico do mini-caso "Loja Virtual"
+-- SGBD: SQL Server (Transact-SQL)
+-- =========================================================
+
+-- Cria o banco de dados didático
+CREATE DATABASE LojaVirtual;
+GO                         -- GO encerra o lote e envia ao servidor
+
+USE LojaVirtual;           -- passa a executar comandos neste banco
+GO
+
+-- TABELA CLIENTE (nível físico da entidade CLIENTE)
+CREATE TABLE Cliente (
+    id_cliente    INT IDENTITY(1,1)          -- chave substituta, auto-incremental
+                    CONSTRAINT PK_Cliente PRIMARY KEY,  -- integridade de entidade
+    nome          VARCHAR(100)  NOT NULL,    -- domínio: texto até 100 chars, obrigatório
+    email         VARCHAR(120)  NOT NULL
+                    CONSTRAINT UQ_Cliente_email UNIQUE, -- chave alternativa
+    cpf           CHAR(11)      NOT NULL
+                    CONSTRAINT UQ_Cliente_cpf UNIQUE,   -- outra chave alternativa
+    data_cadastro DATETIME2     NOT NULL
+                    CONSTRAINT DF_Cliente_cadastro DEFAULT GETDATE()
+                                             -- domínio: data/hora, valor padrão = agora
+);
+GO
+
+-- TABELA PEDIDO (lado "N" do relacionamento 1:N)
+CREATE TABLE Pedido (
+    id_pedido   INT IDENTITY(1,1)
+                  CONSTRAINT PK_Pedido PRIMARY KEY,
+    id_cliente  INT NOT NULL,                -- FK NÃO pode ser nula:
+                                             -- todo pedido pertence a um cliente
+    data_pedido DATETIME2 NOT NULL
+                  CONSTRAINT DF_Pedido_data DEFAULT GETDATE(),
+    status      VARCHAR(20) NOT NULL
+                  CONSTRAINT DF_Pedido_status DEFAULT 'PENDENTE',
+    total       DECIMAL(10,2) NOT NULL
+                  CONSTRAINT CK_Pedido_total CHECK (total &gt;= 0), -- integridade de domínio
+
+    -- Integridade referencial: id_cliente deve EXISTIR em Cliente
+    CONSTRAINT FK_Pedido_Cliente
+        FOREIGN KEY (id_cliente)
+        REFERENCES Cliente (id_cliente)
+);
+GO</code></pre>
+
+    <div class="caixa dica">
+      <strong class="rotulo">💡 Dica: por que nomear as restrições (CONSTRAINT PK_..., FK_...)?</strong>
+      <p style="margin:.3rem 0;">
+        Se você não nomear, o SQL Server gera nomes automáticos como <code class="inline">PK__Cliente__8A...</code>.
+        Quando uma violação ocorrer em produção, a mensagem de erro citará esse nome — com nomes
+        legíveis e padronizados (PK_, FK_, UQ_, CK_, DF_), sua equipe localiza a regra violada em
+        segundos. Nomear restrições é <strong>Clean Code aplicado a banco de dados</strong>.
+      </p>
+    </div>
+
+    <h3>Passo 2 — Inserir dados respeitando a ordem (pai antes do filho)</h3>
+
+<pre><code class="language-sql">-- 1) Primeiro o CLIENTE (lado "1" do relacionamento)
+INSERT INTO Cliente (nome, email, cpf)
+VALUES ('Maria Silva', 'maria@email.com', '12345678901');
+
+-- O IDENTITY gerou id_cliente = 1 para a Maria.
+
+-- 2) Depois os PEDIDOS (lado "N"), referenciando o cliente existente
+INSERT INTO Pedido (id_cliente, status, total) VALUES (1, 'CONFIRMADO', 250.00);
+INSERT INTO Pedido (id_cliente, status, total) VALUES (1, 'ENTREGUE',   89.90);
+-- A cliente Maria agora possui 2 pedidos: cardinalidade 1:N na prática.</code></pre>
+
+    <h3>Passo 3 — Ver a integridade funcionando (entradas e saídas esperadas)</h3>
+
+    <p><strong>Tentativa A</strong> — inserir pedido para cliente inexistente (violação de integridade referencial):</p>
+
+<pre><code class="language-sql">INSERT INTO Pedido (id_cliente, status, total)
+VALUES (999, 'PENDENTE', 10.00);   -- cliente 999 NÃO existe!</code></pre>
+
+    <div class="saida"><span class="rotulo-saida">Saída esperada no SQL Server Management Studio (SSMS):</span>Msg 547, Level 16, State 0, Line 1
+The INSERT statement conflicted with the FOREIGN KEY constraint
+"FK_Pedido_Cliente". The conflict occurred in database "LojaVirtual",
+table "dbo.Cliente", column 'id_cliente'.
+The statement has been terminated.</div>
+
+    <p><strong>Tentativa B</strong> — total negativo (violação de integridade de domínio via <code class="inline">CHECK</code>):</p>
+
+<pre><code class="language-sql">INSERT INTO Pedido (id_cliente, status, total)
+VALUES (1, 'PENDENTE', -5.00);     -- CHECK (total &gt;= 0) bloqueia</code></pre>
+
+    <div class="saida"><span class="rotulo-saida">Saída esperada:</span>Msg 547, Level 16, State 0, Line 1
+The INSERT statement conflicted with the CHECK constraint
+"CK_Pedido_total". The conflict occurred in database "LojaVirtual",
+table "dbo.Pedido".
+The statement has been terminated.</div>
+
+    <p><strong>Tentativa C</strong> — e-mail duplicado (violação de chave alternativa <code class="inline">UNIQUE</code>):</p>
+
+<pre><code class="language-sql">INSERT INTO Cliente (nome, email, cpf)
+VALUES ('Maria Duplicada', 'maria@email.com', '99999999999');</code></pre>
+
+    <div class="saida"><span class="rotulo-saida">Saída esperada:</span>Msg 2627, Level 14, State 1, Line 1
+Violation of UNIQUE KEY constraint 'UQ_Cliente_email'.
+Cannot insert duplicate key in object 'dbo.Cliente'.
+The duplicate key value is (maria@email.com).
+The statement has been terminated.</div>
+
+    <div class="caixa erro">
+      <strong class="rotulo">🛑 Erro comum: “o banco está travando meus INSERTs”</strong>
+      <p style="margin:.3rem 0;">
+        Iniciantes frequentemente interpretam o Msg 547 como “bug” do banco. Ele é exatamente o
+        oposto: <strong>a modelagem funcionando</strong>. O SGBD rejeitou o dado inválido na porta de
+        entrada, evitando que lixo chegasse a relatórios, dashboards e decisões de negócio. Quando vir
+        um erro de constraint, pergunte: <em>qual regra de negócio esta constraint protege?</em>
+      </p>
+    </div>
+
+    <h3>Passo 4 — Consultar o relacionamento com JOIN</h3>
+
+<pre><code class="language-sql">-- Une CLIENTE (lado 1) e PEDIDO (lado N) pela chave estrangeira
+SELECT c.nome,
+       p.id_pedido,
+       p.status,
+       p.total
+FROM   Cliente c
+INNER JOIN Pedido p
+        ON p.id_cliente = c.id_cliente   -- condição do relacionamento 1:N
+ORDER BY c.nome, p.id_pedido;</code></pre>
+
+    <div class="saida"><span class="rotulo-saida">Saída esperada (considerando as inserções válidas acima):</span>nome         id_pedido   status       total
+------------ ----------- ------------ --------
+Maria Silva      1       CONFIRMADO   250.00
+Maria Silva      2       ENTREGUE      89.90
+
+(2 rows)</div>
+
+    <p>
+      Observe o ciclo completo: o <strong>diagrama ER</strong> (conceitual) virou
+      <strong>tabelas com PK/FK</strong> (lógico), que viraram <strong>DDL em T-SQL</strong> (físico),
+      e o SGBD agora <strong>fiscaliza as regras de negócio automaticamente</strong> — 24 horas por
+      dia, para qualquer aplicação que escreva nesse banco.
+    </p>
+
+    <div class="caixa dica">
+      <strong class="rotulo">💡 Dica de ferramenta</strong>
+      <p style="margin:.3rem 0;">
+        Para praticar este código, você pode instalar o <strong>SQL Server Express</strong> (gratuito)
+        com o <strong>SQL Server Management Studio (SSMS)</strong>, ou usar alternativas leves como
+        <strong>Azure Data Studio</strong> e <strong>DBeaver</strong>. Para desenhar os diagramas ER
+        da próxima aula, boas opções gratuitas são o <strong>brModelo</strong> (muito usado em
+        disciplinas introdutórias no Brasil), o <strong>MySQL Workbench</strong> e o <strong>draw.io</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (e) APLICAÇÃO NO MERCADO DE TRABALHO                            -->
+  <!-- ============================================================== -->
+  <section id="mercado" aria-labelledby="titulo-mercado">
+    <h2 id="titulo-mercado">Aplicação no Mercado de Trabalho de TI</h2>
+
+    <p>
+      O que você aprendeu hoje não é “teoria de sala”: é o núcleo de diversas carreiras reais e bem
+      remuneradas em TI. Veja como cada conceito desta aula aparece no dia a dia profissional:
+    </p>
+
+    <table>
+      <caption>Conceitos da aula e onde eles vivem no mercado</caption>
+      <tr><th>Conceito da aula</th><th>Onde aparece na prática profissional</th></tr>
+      <tr>
+        <td>Modelagem ER / conceitual</td>
+        <td><strong>Analista de dados / Modelador de dados:</strong> conduz entrevistas com áreas de negócio, levanta regras e desenha o diagrama antes de qualquer linha de código. Em fábricas de software, esse artefato é item obrigatório de revisão em projetos novos.</td>
+      </tr>
+      <tr>
+        <td>Chaves e integridade</td>
+        <td><strong>Desenvolvedor(a) back-end:</strong> define migrações (migrations) com PKs/FKs corretas; investiga erros de constraint em produção; evita “dados órfãos” que quebram APIs e relatórios.</td>
+      </tr>
+      <tr>
+        <td>Normalização</td>
+        <td><strong>Engenheiro(a) de dados / DBA:</strong> projeta o <em>data warehouse</em> (onde modelos dimensionais — um “parente” da desnormalização — dominam) e revisa schemas de sistemas legados para reduzir anomalias.</td>
+      </tr>
+      <tr>
+        <td>DDL e constraints em SQL Server</td>
+        <td><strong>DBA SQL Server:</strong> mantém ambientes corporativos; o SQL Server segue entre os SGBDs relacionais mais usados em empresas de grande porte no Brasil (bancos, varejo, governo).</td>
+      </tr>
+      <tr>
+        <td>Visão relacional vs. NoSQL</td>
+        <td><strong>Arquiteto(a) de software:</strong> decide quando usar relacional (transações financeiras, consistência forte) e quando usar NoSQL (catálogos flexíveis, alta escala de leitura) — competência 4 da nossa ementa.</td>
+      </tr>
+    </table>
+
+    <div class="caixa dica">
+      <strong class="rotulo">💡 Dica de carreira</strong>
+      <p style="margin:.3rem 0;">
+        Em entrevistas para estágio e júnior em ADS, perguntas como <em>“explique a diferença entre
+        chave primária e estrangeira”</em>, <em>“o que é a terceira forma normal?”</em> e
+        <em>“como você modelaria um relacionamento N:M?”</em> são extremamente comuns. O conteúdo
+        desta primeira aula é, literalmente, <strong>material de entrevista</strong>. Monte um
+        portfólio: modele um mini-caso (uma locadora, um consultório, um e-commerce), publique o
+        diagrama ER e os scripts SQL no GitHub. Diferencial imediato no currículo.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (g) GLOSSÁRIO                                                   -->
+  <!-- ============================================================== -->
+  <section id="glossario" aria-labelledby="titulo-glossario">
+    <h2 id="titulo-glossario">Glossário da Aula</h2>
+    <dl class="glossario">
+      <dt>Atributo</dt>
+      <dd>Coluna de uma relação; propriedade nomeada com domínio associado (ex.: <code class="inline">email</code>).</dd>
+      <dt>Cardinalidade (ER)</dt>
+      <dd>Mínimo e máximo de ocorrências de uma entidade que se associam a uma ocorrência da entidade relacionada (1:1, 1:N, N:M).</dd>
+      <dt>Chave candidata</dt>
+      <dd>Superchave minimal: identifica cada tupla sem atributos dispensáveis.</dd>
+      <dt>Chave composta</dt>
+      <dd>Chave formada por dois ou mais atributos atuando em conjunto.</dd>
+      <dt>Chave estrangeira (FK)</dt>
+      <dd>Atributo que referencia a chave de outra tabela, materializando o relacionamento e a integridade referencial.</dd>
+      <dt>Chave primária (PK)</dt>
+      <dd>Chave candidata escolhida como identificador oficial; nunca nula, nunca duplicada.</dd>
+      <dt>Chave substituta (surrogate key)</dt>
+      <dd>Identificador artificial (geralmente numérico e auto-incremental) criado para servir de PK no lugar de chaves de negócio.</dd>
+      <dt>Desnormalização</dt>
+      <dd>Reintrodução deliberada de redundância no modelo físico para ganhar desempenho de leitura, com controle e monitoramento.</dd>
+      <dt>Domínio</dt>
+      <dd>Conjunto de valores válidos para um atributo (ex.: inteiros positivos, datas, textos até N caracteres).</dd>
+      <dt>Esquema × Instância</dt>
+      <dd>Esquema é a estrutura estática da relação; instância é o conjunto de tuplas armazenado em um dado momento.</dd>
+      <dt>Forma Normal</dt>
+      <dd>Conjunto de critérios (1FN, 2FN, 3FN...) que atestam o grau de organização de uma relação contra redundância e anomalias.</dd>
+      <dt>MER (Modelo Entidade-Relacionamento)</dt>
+      <dd>Notação conceitual (Chen, 1976) baseada em entidades, atributos e relacionamentos.</dd>
+      <dt>Modelagem conceitual / lógica / física</dt>
+      <dd>Níveis progressivos de abstração: do negócio (ER) ao paradigma (tabelas) e ao produto (DDL no SGBD).</dd>
+      <dt>Relação</dt>
+      <dd>Estrutura tabular do modelo relacional; conjunto de tuplas com o mesma estrutura.</dd>
+      <dt>SGBD</dt>
+      <dd>Sistema Gerenciador de Banco de Dados: software que armazena, protege e disponibiliza os dados (ex.: SQL Server).</dd>
+      <dt>Tupla</dt>
+      <dd>Linha de uma relação; um fato individual sobre a entidade modelada.</dd>
+    </dl>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (h) CONCLUSÃO E RESUMO                                          -->
+  <!-- ============================================================== -->
+  <section id="conclusao" aria-labelledby="titulo-conclusao">
+    <h2 id="titulo-conclusao">Conclusão e Resumo</h2>
+
+    <p>
+      Nesta aula inaugural, construímos o alicerce conceitual de toda a disciplina. Recapitulando os
+      cinco pilares de hoje:
+    </p>
+    <ol>
+      <li><strong>Por quê:</strong> SGBDs existem para eliminar redundância, inconsistência e fragilidade dos sistemas de arquivos, centralizando dados com integridade, segurança e concorrência controladas.</li>
+      <li><strong>O modelo relacional:</strong> dados organizados como relações (tabelas) formadas por tuplas (linhas) e atributos (colunas), cada um com seu domínio; esquema é a estrutura, instância é o conteúdo.</li>
+      <li><strong>Chaves e integridade:</strong> PK identifica, FK conecta, UNIQUE protege alternativas e CHECK valida o domínio. Juntas, elas fazem o banco fiscalizar regras de negócio automaticamente.</li>
+      <li><strong>Modelagem em três níveis:</strong> conceitual (MER, com entidades e cardinalidades 1:1, 1:N e N:M), lógico (tabelas, PK/FK) e físico (DDL, índices). Pular níveis é comprar retrabalho.</li>
+      <li><strong>Normalização:</strong> 1FN atomicidade, 2FN dependência total da chave, 3FN sem dependências transitivas — o antídoto formal contra anomalias de inserção, atualização e exclusão.</li>
+    </ol>
+
+    <div class="caixa objetivos">
+      <strong class="rotulo">📌 Próxima aula</strong>
+      <p style="margin:.3rem 0;">
+        Aprofundaremos a <strong>Modelagem Entidade-Relacionamento</strong>: atributos compostos e
+        multivalorados, entidades fracas, generalização/especialização (herança), leitura e desenho de
+        diagramas completos em ferramenta gráfica, e a tradução sistemática MER → modelo lógico.
+        Traga o caso prático desta aula (LojaVirtual) revisitado em casa: tente desenhar o diagrama
+        CLIENTE–PEDIDO–PRODUTO com o relacionamento N:M entre PEDIDO e PRODUTO.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- (i) REFERÊNCIAS                                                 -->
+  <!-- ============================================================== -->
+  <section id="referencias" aria-labelledby="titulo-referencias">
+    <h2 id="titulo-referencias">Referências</h2>
+    <ul>
+      <li>CODD, E. F. A Relational Model of Data for Large Shared Data Banks. <em>Communications of the ACM</em>, v. 13, n. 6, p. 377–387, jun. 1970. DOI: 10.1145/362384.362685.</li>
+      <li>DATE, C. J. <em>Introdução a Sistemas de Bancos de Dados</em>. 8. ed. Rio de Janeiro: Elsevier/Campus, 2004.</li>
+      <li>ELMASRI, R.; NAVATHE, S. B. <em>Sistemas de Banco de Dados</em>. 7. ed. São Paulo: Pearson, 2019.</li>
+      <li>SILBERSCHATZ, A.; KORTH, H. F.; SUDARSHAN, S. <em>Sistema de Banco de Dados</em>. 7. ed. Rio de Janeiro: GEN/LTC, 2020.</li>
+      <li>HEUSER, C. A. <em>Projeto de Banco de Dados</em>. 6. ed. Porto Alegre: Bookman, 2010. (Série Livros Didáticos Informática UFRGS, v. 4).</li>
+      <li>MICROSOFT. <em>Documentação oficial do SQL Server e da linguagem Transact-SQL</em>. Microsoft Learn. Disponível em: https://learn.microsoft.com/sql/sql-server/. Acesso em: 18 ago. 2026.</li>
+    </ul>
+
+    <footer>
+      <p>
+        Material didático elaborado para a disciplina <strong>Modelagem de Banco de Dados Relacional
+        e NoSQL</strong> do curso de Análise e Desenvolvimento de Sistemas. Aula 01 — Conceitos de
+        modelagem de banco de dados relacional. Última revisão: 18 de agosto de 2026.
+      </p>
+    </footer>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 01 — Principais Conceitos de Redes de Computadores</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background-color: #f8f9fa;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            color: #ffffff;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        header p {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        h2 {
+            color: #0f3460;
+            font-size: 1.5em;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #e94560;
+        }
+
+        h3 {
+            color: #16213e;
+            font-size: 1.2em;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        h4 {
+            color: #0f3460;
+            font-size: 1.05em;
+            margin-top: 1.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .box-objetivos {
+            background: #e8f4fd;
+            border-left: 5px solid #2196f3;
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .box-dica {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .box-alerta {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .box-erro {
+            background: #fce4ec;
+            border-left: 5px solid #e91e63;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .box-pare-pense {
+            background: linear-gradient(135deg, #ede7f6 0%, #e1bee7 100%);
+            border: 2px solid #7b1fa2;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .box-pare-pense h4 {
+            color: #4a148c;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .box-pare-pense p {
+            color: #333;
+            font-style: italic;
+        }
+
+        .formula {
+            background: #263238;
+            color: #80cbc4;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            margin: 1rem 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        pre[class*="language-"] {
+            width: 100%;
+            font-size: 0.9em !important;
+            line-height: 1.7 !important;
+            padding: 1.2rem !important;
+            border-radius: 10px !important;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+        }
+
+        .inline-code {
+            background: #eceff1;
+            color: #d32f2f;
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 0.8rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: #0f3460;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .svg-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #fafafa;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .svg-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .referencias {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .referencias li {
+            margin-bottom: 0.8rem;
+            font-size: 0.9em;
+        }
+
+        .glossario dt {
+            font-weight: bold;
+            color: #0f3460;
+            margin-top: 1rem;
+        }
+
+        .glossario dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.2em;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            header h1 {
+                font-size: 1.4em;
+            }
+
+            pre[class*="language-"] {
+                font-size: 0.85em !important;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 1.1em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            h3 {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>Principais Conceitos de Redes de Computadores</h1>
+        <p><strong>Disciplina:</strong> Redes de Computadores e Sistemas Distribuídos</p>
+        <p><strong>Curso:</strong> Análise e Desenvolvimento de Sistemas — Ensino Superior</p>
+        <p><strong>Duração:</strong> 180 minutos | <strong>Aula 01</strong></p>
+    </header>
+
+    <!-- SEÇÃO A: OBJETIVOS -->
+    <section id="objetivos">
+        <h2>🎯 Objetivos de Aprendizagem</h2>
+        <p>Esta é a <strong>primeira aula</strong> da disciplina. Não há pré-requisitos de aulas anteriores. Ao final desta sessão de 180 minutos, você deverá ser capaz de:</p>
+        <div class="box-objetivos">
+            <ol>
+                <li><strong>Compreender</strong> a arquitetura fundamental da Internet e de redes de computadores, identificando os elementos de hardware e software que compõem a conectividade (sistemas finais, enlaces, comutadores de pacotes e ISPs).</li>
+                <li><strong>Analisar</strong> os diferentes tipos de atraso (processamento, fila, transmissão e propagação) que afetam o desempenho de uma rede de comutação de pacotes, aplicando as fórmulas quantitativas correspondentes.</li>
+                <li><strong>Comparar</strong> os conceitos de comutação de circuitos e comutação de pacotes, justificando por que a Internet adotou a comutação de pacotes como paradigma fundamental.</li>
+                <li><strong>Aplicar</strong> o conceito de vazão (throughput) para identificar enlaces de gargalo em topologias de rede simples e compostas.</li>
+                <li><strong>Interpretar</strong> a importância das redes de computadores no contexto do desenvolvimento de sistemas distribuídos e das aplicações modernas (web, mobile, IoT).</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- SEÇÃO B: INTRODUÇÃO -->
+    <section id="introducao">
+        <h2>📖 Introdução</h2>
+        <p>A Internet de hoje é, provavelmente, o maior sistema de engenharia já criado pela humanidade. São centenas de milhões de computadores conectados, links de comunicação e comutadores, além de bilhões de dispositivos — smartphones, sensores, webcams, consoles de jogos, eletrodomésticos — que se conectam de forma intermitente ou permanente. Diante dessa complexidade aparentemente caótica, surge a pergunta fundamental que guiará toda esta disciplina: <strong>existem princípios de orientação e estrutura que forneçam um fundamento para a compreensão de um sistema tão abrangente?</strong></p>
+        <p>A resposta é um retumbante <strong>SIM</strong>. E é exatamente isso que exploraremos nesta primeira aula. Nosso objetivo é pintar um quadro amplo que permita "ver a floresta por entre as árvores", cobrindo os elementos essenciais de uma rede de computadores sem perder de vista o quadro geral.</p>
+
+        <h3>O que é a Internet? Duas Perspectivas</h3>
+        <p>Podemos descrever a Internet de duas maneiras complementares, e ambas são essenciais para o profissional de ADS:</p>
+        <ul>
+            <li><strong>Perspectiva dos Componentes (Hardware/Software):</strong> A Internet é uma rede de computadores que interconecta milhares de dispositivos computacionais ao redor do mundo. Esses dispositivos são chamados de <strong>hospedeiros</strong> (hosts) ou <strong>sistemas finais</strong>. Eles são conectados por <strong>enlaces de comunicação</strong> e <strong>comutadores de pacotes</strong> (roteadores e switches).</li>
+            <li><strong>Perspectiva dos Serviços (Infraestrutura):</strong> A Internet é uma infraestrutura que fornece serviços a aplicações distribuídas. Quando você desenvolve uma aplicação em Python, Java ou Node.js que se comunica com um servidor remoto, está utilizando a API de transporte da Internet (sockets TCP/UDP).</li>
+        </ul>
+
+        <div class="box-dica">
+            <strong>💡 Analogia com o Serviço Postal:</strong> Assim como o serviço postal possui regras específicas (colocar a carta no envelope, escrever endereço completo, CEP, colar selo, depositar em caixa de correio), a Internet possui uma <strong>API</strong> — um conjunto de regras que o software emissor deve cumprir para que os dados sejam entregues ao destino. Essa analogia será fundamental para entender o conceito de protocolo.
+        </div>
+
+        <h3>Contexto Histórico Essencial</h3>
+        <p>Compreender a história da Internet não é mero exercício acadêmico — é entender <strong>por que</strong> as decisões de projeto foram tomadas, o que impacta diretamente o comportamento dos sistemas que você desenvolverá.</p>
+        <ul>
+            <li><strong>1961-1972:</strong> Desenvolvimento da comutação de pacotes. Leonard Kleinrock (MIT) publicou o primeiro trabalho sobre teoria de filas aplicada a redes de pacotes (1961). Paul Baran (Rand Institute) e Donald Davies (NPL, Inglaterra) desenvolveram conceitos similares de forma independente. Em 1969, a ARPAnet conectou quatro nós (UCLA, SRI, UCSB, Universidade de Utah).</li>
+            <li><strong>1972-1980:</strong> Surgem redes independentes (ALOHAnet, Telenet, Cyclades, SNA da IBM). Vinton Cerf e Robert Kahn criam o conceito de "internetting" — interconexão de redes. O protocolo TCP é desenvolvido.</li>
+            <li><strong>1980-1990:</strong> Proliferação de redes. Em 1º de janeiro de 1983, o TCP/IP substitui oficialmente o NCP na ARPAnet. A NSFNET conecta universidades. O DNS é criado.</li>
+            <li><strong>1990 em diante:</strong> Tim Berners-Lee inventa a World Wide Web no CERN (1989-1991). A Internet se comercializa e explode em crescimento.</li>
+        </ul>
+    </section>
+
+    <!-- SEÇÃO C: DESENVOLVIMENTO TEÓRICO -->
+    <section id="desenvolvimento">
+        <h2>📚 Desenvolvimento Teórico Completo</h2>
+
+        <h3>1.1 Elementos para Conectividade</h3>
+
+        <h4>1.1.1 Sistemas Finais (Hospedeiros)</h4>
+        <p>No jargão da Internet, todos os dispositivos conectados à rede são denominados <strong>hospedeiros</strong> ou <strong>sistemas finais</strong>. O termo "sistema final" é utilizado porque esses dispositivos se encontram na <strong>periferia</strong> da Internet. Em julho de 2008, havia aproximadamente 600 milhões de sistemas finais conectados — hoje, esse número ultrapassa dezenas de bilhões, considerando a Internet das Coisas (IoT).</p>
+        <p>Os sistemas finais incluem:</p>
+        <ul>
+            <li>Computadores de mesa (PCs, Macs, Linux Boxes)</li>
+            <li>Servidores (Web, e-mail, banco de dados, arquivos)</li>
+            <li>Dispositivos móveis (smartphones, tablets, laptops)</li>
+            <li>Dispositivos não-tradicionais: TVs inteligentes, consoles de jogos, webcams, sensores ambientais, sistemas de segurança, eletrodomésticos conectados, veículos</li>
+        </ul>
+        <p>Os sistemas finais são subdivididos em duas categorias funcionais:</p>
+        <ul>
+            <li><strong>Clientes:</strong> normalmente PCs, smartphones, tablets — solicitam e recebem serviços.</li>
+            <li><strong>Servidores:</strong> máquinas mais poderosas que armazenam e distribuem conteúdo (páginas Web, e-mails, vídeos).</li>
+        </ul>
+
+        <div class="box-alerta">
+            <strong>⚠️ Atenção:</strong> A distinção cliente/servidor é <strong>funcional</strong>, não de hardware. Um mesmo dispositivo pode atuar como cliente em um momento (ao acessar um site) e como servidor em outro (ao hospedar um serviço P2P como BitTorrent). Em aplicações peer-to-peer (P2P), os sistemas finais exercem ambas as funções simultaneamente.
+        </div>
+
+        <h4>1.1.2 Enlaces de Comunicação</h4>
+        <p>Os sistemas finais são conectados entre si por <strong>enlaces (links) de comunicação</strong>. Existem muitos tipos de enlaces, constituídos de diferentes meios físicos:</p>
+        <ul>
+            <li><strong>Cabos coaxiais</strong> — utilizados em redes de TV a cabo (HFC)</li>
+            <li><strong>Fios de cobre (par trançado)</strong> — o meio mais comum em LANs e acesso DSL</li>
+            <li><strong>Fibras ópticas</strong> — taxas de dezenas a centenas de Gbps, imunes a interferência eletromagnética</li>
+            <li><strong>Ondas de rádio</strong> — Wi-Fi, celular (3G/4G/5G), satélite, WiMAX</li>
+        </ul>
+        <p>Enlaces diferentes transmitem dados em taxas diferentes. A <strong>taxa de transmissão</strong> de um enlace é medida em <strong>bits por segundo (bps)</strong>. É fundamental que você, como futuro desenvolvedor, compreenda que a unidade de medida de rede é o <strong>bit</strong>, não o byte. Um enlace de 100 Mbps transfere 100.000.000 de bits por segundo — o que equivale a aproximadamente 12,5 MB/s (megabytes por segundo).</p>
+
+        <h4>1.1.3 Comutadores de Pacotes</h4>
+        <p>Quando um sistema final possui dados para enviar a outro, ele <strong>segmenta</strong> esses dados e adiciona bytes de cabeçalho a cada segmento. Os pacotes de informação resultantes são enviados através da rede ao destino, onde são reagregados.</p>
+        <p>Um <strong>comutador de pacotes</strong> recebe um pacote em um de seus enlaces de entrada e o encaminha para um de seus enlaces de saída. Os dois tipos mais proeminentes na Internet são:</p>
+        <ul>
+            <li><strong>Roteadores:</strong> utilizados principalmente no <strong>núcleo</strong> da rede. Operam na camada de rede (camada 3), utilizando endereços IP para tomar decisões de encaminhamento.</li>
+            <li><strong>Comutadores de camada de enlace (Switches):</strong> utilizados tipicamente em <strong>redes de acesso</strong> (LANs). Operam na camada de enlace (camada 2), utilizando endereços MAC.</li>
+        </ul>
+        <p>A sequência de enlaces e comutadores que um pacote percorre desde o remetente até o receptor é chamada de <strong>rota</strong> ou <strong>caminho</strong> através da rede.</p>
+
+        <div class="box-dica">
+            <strong>💡 Analogia com Transporte Rodoviário:</strong> Pense em uma fábrica que precisa transportar carga a um depósito a milhares de quilômetros. A carga é dividida e carregada em uma frota de caminhões. Cada caminhão viaja independentemente pela rede de rodovias até o destino. Nessa analogia: <strong>pacotes = caminhões</strong>, <strong>enlaces = rodovias</strong>, <strong>comutadores de pacotes = cruzamentos/entroncamentos</strong>, e <strong>sistemas finais = prédios (origem/destino)</strong>.
+        </div>
+
+        <h4>1.1.4 Provedores de Serviço de Internet (ISPs)</h4>
+        <p>Os sistemas finais acessam a Internet por meio de <strong>Provedores de Serviços de Internet (ISPs)</strong>. Cada ISP é uma rede de comutadores de pacotes e enlaces de comunicação. Existem diferentes níveis:</p>
+        <ul>
+            <li><strong>ISPs de acesso (nível mais baixo):</strong> conectam usuários finais (residenciais, corporativos, universidades). Exemplos: operadoras de telefonia, empresas de TV a cabo, ISPs locais.</li>
+            <li><strong>ISPs regionais/nacionais (nível 2):</strong> conectam ISPs de acesso e se conectam a ISPs de nível 1.</li>
+            <li><strong>ISPs de nível 1 (backbones):</strong> redes de alcance internacional com enlaces de altíssima velocidade (2,5 a 10 Gbps ou mais). Conectam-se diretamente entre si. Exemplos: AT&T, Sprint, Level3.</li>
+        </ul>
+        <p>A Internet é, portanto, uma <strong>rede de redes</strong> — uma hierarquia de ISPs interconectados. A estrutura topológica é complexa, consistindo em dezenas de ISPs de níveis 1 e 2 e milhares de ISPs de níveis mais baixos.</p>
+
+        <h4>1.1.5 Protocolos</h4>
+        <p>Os sistemas finais, comutadores e todas as demais peças da Internet executam <strong>protocolos</strong> que controlam o envio e o recebimento de informações. A definição formal é:</p>
+        <div class="box-dica">
+            <strong>📌 Definição de Protocolo:</strong> Um protocolo define o <strong>formato</strong> e a <strong>ordem</strong> das mensagens trocadas entre duas ou mais entidades comunicantes, bem como as <strong>ações</strong> realizadas na transmissão e/ou no recebimento de uma mensagem ou outro evento.
+        </div>
+        <p>Os dois protocolos mais importantes da Internet são:</p>
+        <ul>
+            <li><strong>TCP (Transmission Control Protocol):</strong> fornece serviço orientado à conexão com entrega garantida, controle de fluxo e controle de congestionamento.</li>
+            <li><strong>IP (Internet Protocol):</strong> especifica o formato dos pacotes (datagramas) enviados entre roteadores e sistemas finais.</li>
+        </ul>
+        <p>Os padrões da Internet são desenvolvidos pela <strong>IETF (Internet Engineering Task Force)</strong>, e os documentos padronizados são denominados <strong>RFCs (Request for Comments)</strong>. Atualmente, existem mais de 5.000 RFCs. O IEEE também especifica padrões, como o 802.3 (Ethernet) e o 802.11 (Wi-Fi).</p>
+
+        <h4>1.1.6 Redes de Acesso e Meios Físicos</h4>
+        <p>As redes de acesso são os enlaces físicos que conectam um sistema final ao primeiro roteador (roteador de borda). As principais tecnologias incluem:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tecnologia</th>
+                    <th>Meio Físico</th>
+                    <th>Taxa Típica</th>
+                    <th>Uso Principal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dial-up (discado)</td>
+                    <td>Par trançado (linha telefônica)</td>
+                    <td>Até 56 kbps</td>
+                    <td>Residencial (legado)</td>
+                </tr>
+                <tr>
+                    <td>DSL (ADSL)</td>
+                    <td>Par trançado (linha telefônica)</td>
+                    <td>1-100 Mbps downstream</td>
+                    <td>Residencial</td>
+                </tr>
+                <tr>
+                    <td>Cabo (HFC)</td>
+                    <td>Fibra + coaxial</td>
+                    <td>10-1000 Mbps</td>
+                    <td>Residencial</td>
+                </tr>
+                <tr>
+                    <td>FTTH (Fiber-to-the-Home)</td>
+                    <td>Fibra óptica</td>
+                    <td>10 Mbps - 10 Gbps</td>
+                    <td>Residencial/Corporativo</td>
+                </tr>
+                <tr>
+                    <td>Ethernet</td>
+                    <td>Par trançado / Fibra</td>
+                    <td>100 Mbps - 10 Gbps</td>
+                    <td>Corporativo/Universitário</td>
+                </tr>
+                <tr>
+                    <td>Wi-Fi (802.11)</td>
+                    <td>Ondas de rádio</td>
+                    <td>11 Mbps - 9,6 Gbps (Wi-Fi 6)</td>
+                    <td>LAN sem fio</td>
+                </tr>
+                <tr>
+                    <td>Celular (3G/4G/5G)</td>
+                    <td>Espectro de rádio</td>
+                    <td>1 Mbps - 20 Gbps (5G)</td>
+                    <td>Acesso móvel</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Os meios físicos se classificam em duas categorias:</p>
+        <ul>
+            <li><strong>Meios guiados:</strong> as ondas são dirigidas ao longo de um meio sólido (fibra óptica, par trançado, cabo coaxial).</li>
+            <li><strong>Meios não guiados:</strong> as ondas se propagam na atmosfera e no espaço (Wi-Fi, satélite, micro-ondas terrestres).</li>
+        </ul>
+
+        <h4>1.1.7 Comutação de Circuitos vs. Comutação de Pacotes</h4>
+        <p>Existem duas abordagens fundamentais para movimentar dados através de uma rede:</p>
+        <p><strong>Comutação de Circuitos:</strong> os recursos necessários ao longo de um caminho (buffers, taxa de transmissão) são <strong>reservados</strong> pelo período da sessão de comunicação. Exemplo clássico: a rede telefônica tradicional. A conexão é estabelecida antes da transmissão, e a largura de banda é garantida — mesmo que fique ociosa.</p>
+        <p><strong>Comutação de Pacotes:</strong> os recursos <strong>não são reservados</strong>. As mensagens usam os recursos por demanda e podem ter de esperar (entrar na fila) para acessar um enlace. A Internet é a quintessência das redes de comutação de pacotes.</p>
+
+        <div class="box-dica">
+            <strong>💡 Analogia com Restaurantes:</strong> Comutação de circuitos é como um restaurante que <strong>exige reserva</strong> — você precisa ligar antes, mas quando chega, é atendido imediatamente. Comutação de pacotes é como um restaurante <strong>sem reserva</strong> — você não precisa se dar ao trabalho de reservar, mas pode ter de esperar por uma mesa.
+        </div>
+
+        <p>A comutação de pacotes é mais eficiente porque utiliza <strong>multiplexação estatística</strong>: a capacidade de transmissão é compartilhada pacote por pacote somente entre usuários que têm pacotes para transmitir. Em um exemplo clássico: se 35 usuários compartilham um enlace de 1 Mbps, cada um ativo apenas 10% do tempo, a probabilidade de mais de 10 usuários estarem ativos simultaneamente é aproximadamente 0,0004. Assim, a comutação de pacotes atende 3,5 vezes mais usuários que a comutação de circuitos com o mesmo enlace.</p>
+
+        <h4>Diagrama: Componentes Fundamentais da Internet</h4>
+        <div class="svg-container">
+            <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagrama1-title diagrama1-desc">
+                <title id="diagrama1-title">Componentes Fundamentais da Internet</title>
+                <desc id="diagrama1-desc">Diagrama ilustrando sistemas finais conectados por enlaces de comunicação através de comutadores de pacotes (roteadores), organizados em periferia e núcleo da rede, com ISPs de diferentes níveis.</desc>
+                <!-- Fundo -->
+                <rect x="0" y="0" width="800" height="320" fill="#f0f4f8" rx="10"/>
+                <!-- Título -->
+                <text x="400" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f3460">Componentes Fundamentais da Internet</text>
+                <!-- Periferia Esquerda -->
+                <rect x="20" y="50" width="150" height="240" fill="#e3f2fd" stroke="#1976d2" stroke-width="1.5" rx="8"/>
+                <text x="95" y="70" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565c0">PERIFERIA (Origem)</text>
+                <!-- Hosts esquerda -->
+                <rect x="35" y="85" width="55" height="35" fill="#fff" stroke="#1976d2" rx="4"/>
+                <text x="62" y="107" text-anchor="middle" font-size="9" fill="#333">PC</text>
+                <rect x="100" y="85" width="55" height="35" fill="#fff" stroke="#1976d2" rx="4"/>
+                <text x="127" y="107" text-anchor="middle" font-size="9" fill="#333">Servidor</text>
+                <rect x="35" y="135" width="55" height="35" fill="#fff" stroke="#1976d2" rx="4"/>
+                <text x="62" y="157" text-anchor="middle" font-size="9" fill="#333">Smartphone</text>
+                <rect x="100" y="135" width="55" height="35" fill="#fff" stroke="#1976d2" rx="4"/>
+                <text x="127" y="157" text-anchor="middle" font-size="9" fill="#333">IoT</text>
+                <rect x="35" y="185" width="120" height="30" fill="#fff" stroke="#1976d2" rx="4"/>
+                <text x="95" y="205" text-anchor="middle" font-size="9" fill="#333">Rede de Acesso (DSL, Cabo, FTTH, WiFi)</text>
+                <!-- Núcleo -->
+                <rect x="220" y="50" width="360" height="240" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5" rx="8"/>
+                <text x="400" y="70" text-anchor="middle" font-size="11" font-weight="bold" fill="#e65100">NÚCLEO DA REDE</text>
+                <!-- Roteadores -->
+                <rect x="250" y="100" width="70" height="45" fill="#fff" stroke="#e65100" stroke-width="2" rx="6"/>
+                <text x="285" y="120" text-anchor="middle" font-size="9" fill="#333">Roteador</text>
+                <text x="285" y="133" text-anchor="middle" font-size="8" fill="#666">ISP Nível 2</text>
+                <rect x="370" y="90" width="70" height="45" fill="#fff" stroke="#e65100" stroke-width="2" rx="6"/>
+                <text x="405" y="110" text-anchor="middle" font-size="9" fill="#333">Roteador</text>
+                <text x="405" y="123" text-anchor="middle" font-size="8" fill="#666">ISP Nível 1</text>
+                <rect x="490" y="100" width="70" height="45" fill="#fff" stroke="#e65100" stroke-width="2" rx="6"/>
+                <text x="525" y="120" text-anchor="middle" font-size="9" fill="#333">Roteador</text>
+                <text x="525" y="133" text-anchor="middle" font-size="8" fill="#666">ISP Nível 2</text>
+                <!-- Enlaces -->
+                <line x1="320" y1="122" x2="370" y2="112" stroke="#e65100" stroke-width="2.5"/>
+                <line x1="440" y1="112" x2="490" y2="122" stroke="#e65100" stroke-width="2.5"/>
+                <!-- Switch -->
+                <rect x="340" y="180" width="120" height="40" fill="#fff" stroke="#388e3c" stroke-width="2" rx="6"/>
+                <text x="400" y="200" text-anchor="middle" font-size="9" fill="#333">Switch (Camada 2)</text>
+                <text x="400" y="213" text-anchor="middle" font-size="8" fill="#666">Rede de Acesso</text>
+                <!-- Enlaces verticais -->
+                <line x1="400" y1="135" x2="400" y2="180" stroke="#388e3c" stroke-width="2" stroke-dasharray="4,3"/>
+                <!-- Pacotes -->
+                <rect x="280" y="240" width="30" height="18" fill="#ff7043" rx="3"/>
+                <text x="295" y="253" text-anchor="middle" font-size="7" fill="#fff">P1</text>
+                <rect x="350" y="250" width="30" height="18" fill="#ff7043" rx="3"/>
+                <text x="365" y="263" text-anchor="middle" font-size="7" fill="#fff">P2</text>
+                <rect x="430" y="240" width="30" height="18" fill="#ff7043" rx="3"/>
+                <text x="445" y="253" text-anchor="middle" font-size="7" fill="#fff">P3</text>
+                <text x="400" y="280" text-anchor="middle" font-size="9" fill="#666">Pacotes trafegam de forma independente (comutação de pacotes)</text>
+                <!-- Periferia Direita -->
+                <rect x="630" y="50" width="150" height="240" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5" rx="8"/>
+                <text x="705" y="70" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">PERIFERIA (Destino)</text>
+                <rect x="645" y="90" width="55" height="35" fill="#fff" stroke="#388e3c" rx="4"/>
+                <text x="672" y="112" text-anchor="middle" font-size="9" fill="#333">PC</text>
+                <rect x="710" y="90" width="55" height="35" fill="#fff" stroke="#388e3c" rx="4"/>
+                <text x="737" y="112" text-anchor="middle" font-size="9" fill="#333">Servidor</text>
+                <rect x="645" y="140" width="120" height="30" fill="#fff" stroke="#388e3c" rx="4"/>
+                <text x="705" y="160" text-anchor="middle" font-size="9" fill="#333">Rede de Acesso</text>
+                <!-- Conexões periferia-núcleo -->
+                <line x1="170" y1="170" x2="220" y2="170" stroke="#1976d2" stroke-width="2.5"/>
+                <line x1="580" y1="170" x2="630" y2="170" stroke="#388e3c" stroke-width="2.5"/>
+            </svg>
+        </div>
+
+        <h3>1.2 Performance e Importância das Redes</h3>
+
+        <h4>1.2.1 Visão Geral: Atraso, Perda e Vazão</h4>
+        <p>De modo ideal, gostaríamos que a Internet transferisse dados instantaneamente, sem perdas e com vazão ilimitada. Infelizmente, isso é inatingível. As redes de computadores <strong>necessariamente</strong>:</p>
+        <ul>
+            <li>Restringem a <strong>vazão</strong> (quantidade de dados por segundo)</li>
+            <li>Apresentam <strong>atrasos</strong> entre origem e destino</li>
+            <li>Podem <strong>perder pacotes</strong></li>
+        </ul>
+        <p>As leis da física impõem essas restrições. Como profissionais de TI, precisamos compreendê-las para dimensionar sistemas, diagnosticar problemas e tomar decisões arquiteturais informadas.</p>
+
+        <h4>1.2.2 Os Quatro Tipos de Atraso Nodal</h4>
+        <p>Quando um pacote viaja de um nó (sistema final ou roteador) ao nó subsequente, ele sofre diversos tipos de atraso. Os quatro componentes que formam o <strong>atraso nodal total</strong> são:</p>
+
+        <div class="formula">
+            d_nodal = d_proc + d_fila + d_trans + d_prop
+        </div>
+
+        <p><strong>1) Atraso de Processamento (d_proc):</strong></p>
+        <p>É o tempo requerido para examinar o cabeçalho do pacote, verificar erros de bits e determinar o enlace de saída. Em roteadores de alta velocidade, esse atraso é da ordem de <strong>microssegundos ou menos</strong>. Após o processamento, o roteador direciona o pacote à fila do enlace de saída.</p>
+
+        <p><strong>2) Atraso de Fila (d_fila):</strong></p>
+        <p>É o tempo que o pacote espera no buffer (fila) até ser transmitido. Diferentemente dos outros três atrasos, o atraso de fila <strong>varia de pacote para pacote</strong> e depende da intensidade e natureza do tráfego. Se a fila estiver vazia, o atraso é zero. Se o tráfego estiver pesado, pode ser significativo (microssegundos a milissegundos).</p>
+        <p>A <strong>intensidade de tráfego</strong> é definida como:</p>
+        <div class="formula">
+            Intensidade de Tráfego = L × a / R
+        </div>
+        <p>Onde: <span class="inline-code">L</span> = tamanho do pacote (bits), <span class="inline-code">a</span> = taxa média de chegada de pacotes (pacotes/s), <span class="inline-code">R</span> = taxa de transmissão do enlace (bps). Se <span class="inline-code">La/R > 1</span>, a fila tende a crescer sem limite. Se <span class="inline-code">La/R ≈ 1</span>, pequenos aumentos na intensidade causam aumentos enormes no atraso médio.</p>
+
+        <div class="box-erro">
+            <strong>🚨 Erro Comum:</strong> Muitos estudantes confundem atraso de fila com atraso de transmissão. Lembre-se: o atraso de fila é o tempo de <strong>espera</strong> antes da transmissão começar. O atraso de transmissão é o tempo para <strong>efetivamente empurrar</strong> todos os bits para o enlace. São conceitos distintos!
+        </div>
+
+        <p><strong>3) Atraso de Transmissão (d_trans):</strong></p>
+        <p>É o tempo necessário para empurrar todos os bits do pacote para o enlace. Depende do tamanho do pacote e da taxa de transmissão do enlace, mas <strong>NÃO depende da distância</strong> entre os roteadores.</p>
+        <div class="formula">
+            d_trans = L / R
+        </div>
+        <p>Onde: <span class="inline-code">L</span> = comprimento do pacote (bits), <span class="inline-code">R</span> = taxa de transmissão (bps). Exemplo: um pacote de 1.500 bytes (12.000 bits) em um enlace de 100 Mbps tem atraso de transmissão de 12.000 / 100.000.000 = 0,00012 s = 120 μs.</p>
+
+        <p><strong>4) Atraso de Propagação (d_prop):</strong></p>
+        <p>É o tempo que um bit leva para se propagar fisicamente pelo meio de um roteador ao próximo. Depende da distância e da velocidade de propagação do meio, mas <strong>NÃO depende do tamanho do pacote nem da taxa de transmissão</strong>.</p>
+        <div class="formula">
+            d_prop = d / s
+        </div>
+        <p>Onde: <span class="inline-code">d</span> = distância entre os roteadores (metros), <span class="inline-code">s</span> = velocidade de propagação (m/s). A velocidade de propagação está na faixa de 2×10⁸ a 3×10⁸ m/s (velocidade da luz ou um pouco menor). Em redes WAN, os atrasos de propagação são da ordem de <strong>milissegundos</strong>.</p>
+
+        <div class="box-dica">
+            <strong>💡 Analogia do Pedágio (Comboio de Carros):</strong> Imagine uma rodovia com pedágios a cada 100 km. Dez carros viajam em comboio (o comboio = um pacote; cada carro = um bit). O pedágio libera um carro a cada 12 segundos. O tempo para todo o comboio passar pelo pedágio (10 carros × 12s = 2 minutos) é análogo ao <strong>atraso de transmissão</strong>. O tempo para um carro percorrer os 100 km até o próximo pedágio (100km ÷ 100km/h = 1 hora) é análogo ao <strong>atraso de propagação</strong>.
+        </div>
+
+        <h4>Diagrama: Os Quatro Atrasos Nodais</h4>
+        <div class="svg-container">
+            <svg viewBox="0 0 780 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagrama2-title diagrama2-desc">
+                <title id="diagrama2-title">Os Quatro Tipos de Atraso Nodal</title>
+                <desc id="diagrama2-desc">Diagrama mostrando o fluxo de um pacote do Nó A ao Nó B, passando pelas etapas de processamento, fila, transmissão e propagação, com fórmulas correspondentes a cada etapa.</desc>
+                <rect x="0" y="0" width="780" height="280" fill="#fafafa" rx="10"/>
+                <text x="390" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f3460">Atraso Nodal Total: d_nodal = d_proc + d_fila + d_trans + d_prop</text>
+                <!-- Nó A -->
+                <rect x="30" y="80" width="90" height="100" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="8"/>
+                <text x="75" y="115" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565c0">Nó A</text>
+                <text x="75" y="135" text-anchor="middle" font-size="9" fill="#555">(Roteador)</text>
+                <text x="75" y="155" text-anchor="middle" font-size="8" fill="#777">Pacote chega</text>
+                <!-- Seta 1: Processamento -->
+                <line x1="120" y1="130" x2="170" y2="130" stroke="#e91e63" stroke-width="2" marker-end="url(#arrow1)"/>
+                <defs><marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#e91e63"/></marker></defs>
+                <rect x="130" y="60" width="110" height="40" fill="#fce4ec" stroke="#e91e63" rx="5"/>
+                <text x="185" y="78" text-anchor="middle" font-size="9" font-weight="bold" fill="#c2185b">1. Processamento</text>
+                <text x="185" y="93" text-anchor="middle" font-size="8" fill="#555">d_proc ≈ μs</text>
+                <!-- Fila -->
+                <rect x="180" y="110" width="100" height="50" fill="#fff9c4" stroke="#f57f17" stroke-width="2" rx="5"/>
+                <text x="230" y="130" text-anchor="middle" font-size="9" font-weight="bold" fill="#e65100">2. Fila (Buffer)</text>
+                <text x="230" y="147" text-anchor="middle" font-size="8" fill="#555">d_fila = variável</text>
+                <!-- Seta 2: Transmissão -->
+                <line x1="280" y1="130" x2="340" y2="130" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow2)"/>
+                <defs><marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#388e3c"/></marker></defs>
+                <rect x="290" y="60" width="120" height="40" fill="#e8f5e9" stroke="#388e3c" rx="5"/>
+                <text x="350" y="78" text-anchor="middle" font-size="9" font-weight="bold" fill="#2e7d32">3. Transmissão</text>
+                <text x="350" y="93" text-anchor="middle" font-size="8" fill="#555">d_trans = L/R</text>
+                <!-- Enlace -->
+                <rect x="350" y="120" width="200" height="20" fill="#e0e0e0" stroke="#616161" rx="3"/>
+                <text x="450" y="134" text-anchor="middle" font-size="8" fill="#333">Enlace de comunicação (meio físico)</text>
+                <!-- Seta 3: Propagação -->
+                <rect x="420" y="160" width="130" height="40" fill="#e1f5fe" stroke="#0288d1" rx="5"/>
+                <text x="485" y="178" text-anchor="middle" font-size="9" font-weight="bold" fill="#01579b">4. Propagação</text>
+                <text x="485" y="193" text-anchor="middle" font-size="8" fill="#555">d_prop = d/s</text>
+                <!-- Nó B -->
+                <rect x="610" y="80" width="90" height="100" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" rx="8"/>
+                <text x="655" y="115" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Nó B</text>
+                <text x="655" y="135" text-anchor="middle" font-size="9" fill="#555">(Roteador)</text>
+                <text x="655" y="155" text-anchor="middle" font-size="8" fill="#777">Pacote chega</text>
+                <!-- Seta final -->
+                <line x1="550" y1="130" x2="610" y2="130" stroke="#0288d1" stroke-width="2" marker-end="url(#arrow3)"/>
+                <defs><marker id="arrow3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#0288d1"/></marker></defs>
+                <!-- Legenda -->
+                <text x="390" y="240" text-anchor="middle" font-size="9" fill="#555">Transmissão: empurrar bits para o enlace (depende de L e R, NÃO da distância)</text>
+                <text x="390" y="258" text-anchor="middle" font-size="9" fill="#555">Propagação: bit viaja pelo meio físico (depende da distância, NÃO de L nem R)</text>
+            </svg>
+        </div>
+
+        <h4>1.2.3 Perda de Pacotes</h4>
+        <p>A capacidade da fila que precede um enlace é <strong>finita</strong>. Quando um pacote chega e encontra a fila completamente cheia, sem espaço para armazená-lo, o roteador <strong>descarta</strong> esse pacote — ele é perdido. Do ponto de vista do sistema final de origem, é como se o pacote tivesse sido transmitido para a rede, mas nunca tivesse emergido no destino.</p>
+        <p>A fração de pacotes perdidos aumenta com o aumento da intensidade de tráfego. Um pacote perdido pode ser <strong>retransmitido</strong> fim a fim (mecanismo do TCP) para garantir que todos os dados sejam finalmente entregues.</p>
+
+        <h4>1.2.4 Vazão (Throughput)</h4>
+        <p>Além do atraso e da perda, outra medida fundamental de desempenho é a <strong>vazão fim a fim</strong>. A vazão instantânea é a taxa (em bits/s) na qual o receptor está recebendo dados. A vazão média é o total de bits transferidos dividido pelo tempo total de transferência.</p>
+        <p>Em uma rede com múltiplos enlaces em série entre origem e destino, a vazão é limitada pelo <strong>enlace de gargalo</strong> — o enlace com a menor taxa de transmissão no caminho:</p>
+        <div class="formula">
+            Vazão = min{R₁, R₂, ..., Rₙ}
+        </div>
+        <p><strong>Exemplo prático:</strong> Suponha que você está baixando um arquivo MP3 de 32 milhões de bits. O servidor tem um enlace de 2 Mbps, e seu enlace de acesso é de 1 Mbps. A vazão será min{2 Mbps, 1 Mbps} = 1 Mbps, e o tempo de download será 32.000.000 / 1.000.000 = <strong>32 segundos</strong>.</p>
+        <p>Na Internet atual, o núcleo da rede é superabastecido com enlaces de alta velocidade. Portanto, o fator limitante para a vazão é, normalmente, o <strong>acesso à rede</strong> (o enlace do usuário final).</p>
+
+        <h4>1.2.5 Atraso Fim a Fim</h4>
+        <p>Generalizando para uma rota com N-1 roteadores entre origem e destino (N enlaces), e assumindo ausência de congestionamento:</p>
+        <div class="formula">
+            d_fim_a_fim = N × (d_proc + d_trans + d_prop)
+        </div>
+
+        <h4>1.2.6 Importância das Redes no Contexto de ADS</h4>
+        <p>Para o profissional de Análise e Desenvolvimento de Sistemas, compreender redes não é opcional — é <strong>essencial</strong>. As aplicações modernas são, por natureza, distribuídas:</p>
+        <ul>
+            <li>Uma aplicação web (frontend + backend + banco de dados) já envolve comunicação em rede.</li>
+            <li>Arquiteturas de microsserviços multiplicam a comunicação entre serviços via rede.</li>
+            <li>APIs REST e gRPC dependem diretamente de protocolos de transporte (TCP/UDP).</li>
+            <li>A Internet das Coisas (IoT) conecta bilhões de dispositivos com restrições de banda, latência e energia.</li>
+            <li>Sistemas distribuídos (blockchain, computação em nuvem, CDNs) são fundamentalmente sistemas de rede.</li>
+        </ul>
+        <p>Ignorar a camada de rede ao desenvolver software é como construir um prédio sem entender as fundações. Problemas de timeout, retry, idempotência, serialização e latência são todos problemas de rede que impactam diretamente o design do software.</p>
+
+        <h4>Diagrama: Vazão e Enlace de Gargalo</h4>
+        <div class="svg-container">
+            <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagrama3-title diagrama3-desc">
+                <title id="diagrama3-title">Vazão e Enlace de Gargalo</title>
+                <desc id="diagrama3-desc">Diagrama mostrando um servidor conectado a um cliente através de dois enlaces com taxas diferentes, evidenciando que a vazão fim a fim é limitada pelo enlace mais lento (gargalo).</desc>
+                <rect x="0" y="0" width="700" height="200" fill="#fafafa" rx="10"/>
+                <text x="350" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f3460">Vazão Fim a Fim = min{R₁, R₂}</text>
+                <!-- Servidor -->
+                <rect x="40" y="70" width="100" height="70" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="8"/>
+                <text x="90" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565c0">Servidor</text>
+                <text x="90" y="120" text-anchor="middle" font-size="9" fill="#555">R₁ = 10 Mbps</text>
+                <!-- Enlace 1 -->
+                <line x1="140" y1="105" x2="280" y2="105" stroke="#1976d2" stroke-width="4"/>
+                <text x="210" y="90" text-anchor="middle" font-size="9" fill="#1976d2" font-weight="bold">10 Mbps</text>
+                <!-- Roteador -->
+                <rect x="280" y="80" width="80" height="50" fill="#fff8e1" stroke="#f57f17" stroke-width="2" rx="8"/>
+                <text x="320" y="110" text-anchor="middle" font-size="10" font-weight="bold" fill="#e65100">Roteador</text>
+                <!-- Enlace 2 (gargalo) -->
+                <line x1="360" y1="105" x2="520" y2="105" stroke="#d32f2f" stroke-width="4"/>
+                <text x="440" y="90" text-anchor="middle" font-size="9" fill="#d32f2f" font-weight="bold">1 Mbps ← GARGALO</text>
+                <!-- Cliente -->
+                <rect x="520" y="70" width="100" height="70" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" rx="8"/>
+                <text x="570" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Cliente</text>
+                <text x="570" y="120" text-anchor="middle" font-size="9" fill="#555">R₂ = 1 Mbps</text>
+                <!-- Resultado -->
+                <rect x="150" y="155" width="400" height="35" fill="#fce4ec" stroke="#e91e63" rx="6"/>
+                <text x="350" y="177" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2185b">Vazão efetiva = min{10 Mbps, 1 Mbps} = 1 Mbps</text>
+            </svg>
+        </div>
+    </section>
+
+    <!-- SEÇÃO D: EXEMPLOS PRÁTICOS / CÓDIGO -->
+    <section id="pratica">
+        <h2>💻 Exemplos de Aplicação Prática</h2>
+
+        <h3>Exemplo 1: Calculando Atrasos em Python</h3>
+        <p>O script abaixo calcula os quatro tipos de atraso para um cenário específico, permitindo que você visualize a aplicação prática das fórmulas estudadas:</p>
+
+        <pre><code class="language-python"># calculo_atrasos.py
+# Cálculo dos quatro tipos de atraso nodal em redes de comutação de pacotes
+# Baseado em: KUROSE, J.F.; ROSS, K.W. Redes de Computadores e a Internet. Cap. 1.
+
+def calcular_atrasos(
+    tamanho_pacote_bits: float,
+    taxa_transmissao_bps: float,
+    distancia_metros: float,
+    velocidade_propagacao_mps: float = 2.5e8,
+    atraso_processamento_s: float = 0.000002
+) -> dict:
+    """
+    Calcula os quatro componentes do atraso nodal.
+
+    Parâmetros:
+        tamanho_pacote_bits: tamanho do pacote em bits (L)
+        taxa_transmissao_bps: taxa de transmissão do enlace em bps (R)
+        distancia_metros: distância entre os nós em metros (d)
+        velocidade_propagacao_mps: velocidade de propagação no meio (s)
+        atraso_processamento_s: atraso de processamento do roteador
+
+    Retorna:
+        dict com os quatro atrasos e o atraso total
+    """
+    # Atraso de processamento (tipicamente microssegundos)
+    d_proc = atraso_processamento_s
+
+    # Atraso de transmissão: tempo para empurrar todos os bits para o enlace
+    # Fórmula: d_trans = L / R
+    d_trans = tamanho_pacote_bits / taxa_transmissao_bps
+
+    # Atraso de propagação: tempo para o bit viajar pelo meio físico
+    # Fórmula: d_prop = d / s
+    d_prop = distancia_metros / velocidade_propagacao_mps
+
+    # Atraso de fila: neste exemplo simplificado, assumimos fila vazia
+    # Na prática, depende da intensidade de tráfego (La/R)
+    d_fila = 0.0
+
+    # Atraso nodal total
+    d_nodal = d_proc + d_fila + d_trans + d_prop
+
+    return {
+        "d_processamento_ms": d_proc * 1000,
+        "d_fila_ms": d_fila * 1000,
+        "d_transmissao_ms": d_trans * 1000,
+        "d_propagacao_ms": d_prop * 1000,
+        "d_nodal_total_ms": d_nodal * 1000
+    }
+
+
+def calcular_vazao(taxas_enlaces_bps: list) -> float:
+    """
+    Calcula a vazão fim a fim como o mínimo das taxas dos enlaces.
+    A vazão é limitada pelo enlace de gargalo.
+
+    Parâmetros:
+        taxas_enlaces_bps: lista com as taxas de cada enlace no caminho
+
+    Retorna:
+        Vazão fim a fim em bps
+    """
+    return min(taxas_enlaces_bps)
+
+
+# === EXEMPLO PRÁTICO ===
+if __name__ == "__main__":
+    # Cenário: pacote de 1500 bytes em enlace de 100 Mbps,
+    # distância de 5000 km (5.000.000 metros)
+    resultado = calcular_atrasos(
+        tamanho_pacote_bits=1500 * 8,       # 1500 bytes = 12.000 bits
+        taxa_transmissao_bps=100_000_000,   # 100 Mbps
+        distancia_metros=5_000_000          # 5.000 km
+    )
+
+    print("=" * 50)
+    print("CÁLCULO DE ATRASOS NODAIS")
+    print("=" * 50)
+    print(f"Pacote: 1500 bytes (12.000 bits)")
+    print(f"Enlace: 100 Mbps | Distância: 5.000 km")
+    print("-" * 50)
+    print(f"Atraso de Processamento: {resultado['d_processamento_ms']:.4f} ms")
+    print(f"Atraso de Fila:          {resultado['d_fila_ms']:.4f} ms")
+    print(f"Atraso de Transmissão:   {resultado['d_transmissao_ms']:.4f} ms")
+    print(f"Atraso de Propagação:    {resultado['d_propagacao_ms']:.4f} ms")
+    print("-" * 50)
+    print(f"ATRASO NODAL TOTAL:      {resultado['d_nodal_total_ms']:.4f} ms")
+    print("=" * 50)
+
+    # Exemplo de vazão com enlace de gargalo
+    print("\n" + "=" * 50)
+    print("CÁLCULO DE VAZÃO (ENLACE DE GARGALO)")
+    print("=" * 50)
+    enlaces = [10_000_000, 1_000_000, 100_000_000]  # 10 Mbps, 1 Mbps, 100 Mbps
+    vazao = calcular_vazao(enlaces)
+    print(f"Taxas dos enlaces: {[f'{r/1_000_000:.0f} Mbps' for r in enlaces]}")
+    print(f"Vazão fim a fim:   {vazao/1_000_000:.0f} Mbps (gargalo)")
+    print(f"Tempo p/ 32 Mb:    {32_000_000 / vazao:.1f} segundos")
+    print("=" * 50)
+</code></pre>
+
+        <p><strong>Saída esperada:</strong></p>
+        <pre><code class="language-text">==================================================
+CÁLCULO DE ATRASOS NODAIS
+==================================================
+Pacote: 1500 bytes (12.000 bits)
+Enlace: 100 Mbps | Distância: 5.000 km
+--------------------------------------------------
+Atraso de Processamento: 0.0020 ms
+Atraso de Fila:          0.0000 ms
+Atraso de Transmissão:   0.1200 ms
+Atraso de Propagação:    20.0000 ms
+--------------------------------------------------
+ATRASO NODAL TOTAL:      20.1220 ms
+==================================================
+
+==================================================
+CÁLCULO DE VAZÃO (ENLACE DE GARGALO)
+==================================================
+Taxas dos enlaces: ['10 Mbps', '1 Mbps', '100 Mbps']
+Vazão fim a fim:   1 Mbps (gargalo)
+Tempo p/ 32 Mb:    32.0 segundos
+==================================================
+</code></pre>
+
+        <div class="box-dica">
+            <strong>💡 Observação importante:</strong> Note que, neste exemplo, o atraso de propagação (20 ms) domina completamente sobre o atraso de transmissão (0,12 ms). Isso ilustra por que aumentar a largura de banda de um enlace de longa distância <strong>não reduz significativamente a latência</strong> — o gargalo é a física (velocidade da luz), não a capacidade do enlace.
+        </div>
+
+        <h3>Exemplo 2: Utilizando o Traceroute</h3>
+        <p>O programa <strong>Traceroute</strong> é uma ferramenta de diagnóstico que permite observar a rota fim a fim que os pacotes percorrem na Internet. Ele envia pacotes especiais com TTL (Time To Live) incremental, fazendo com que cada roteador no caminho envie uma mensagem de volta à origem. Assim, é possível reconstruir a rota e medir os atrasos de ida e volta para cada roteador intermediário.</p>
+        <p>Exemplo simplificado de saída do Traceroute (da Universidade de Massachusetts para a Polytechnic University):</p>
+        <pre><code class="language-text"> 1  cs-gw (128.119.240.254)         1.009 ms  0.899 ms  0.993 ms
+ 2  128.119.3.154                   0.931 ms  0.441 ms  0.651 ms
+ 3  border4-rt-gi-1-3.gw.umass.edu  1.032 ms  0.484 ms  0.451 ms
+ 4  acrl-ge-2-1-0.Boston.cw.net    10.006 ms  8.150 ms  8.460 ms
+ 5  agr4-loopback.NewYork.cw.net   12.272 ms 14.344 ms 13.267 ms
+ 6  acr2-loopback.NewYork.cw.net   13.225 ms 12.292 ms 12.148 ms
+ 7  pos10-2.core2.NewYork1.Level3.net  12.218 ms 11.823 ms 11.793 ms
+ 8  gige9-1-52.hsipaccess1.NewYork1.Level3.net  13.081 ms 11.556 ms 13.297 ms
+ 9  p0-0.polyu.bbnplanet.net        12.716 ms 13.052 ms 12.786 ms
+10  cis.poly.edu (128.238.32.126)   14.080 ms 13.035 ms 12.802 ms
+</code></pre>
+        <p><strong>Análise:</strong> Observe que entre os roteadores 3 e 4 há um salto significativo no atraso (de ~1 ms para ~10 ms). Isso indica que o pacote saiu da rede local da universidade e entrou na rede de um ISP de nível superior (cw.net), percorrendo uma distância física muito maior (de Massachusetts a Nova York). Os três tempos por roteador representam três tentativas, e a variação entre eles reflete o <strong>atraso de fila variável</strong>.</p>
+    </section>
+
+    <!-- SEÇÃO E: MERCADO DE TRABALHO -->
+    <section id="mercado">
+        <h2>💼 Aplicação no Mercado de Trabalho de TI</h2>
+        <p>Os conceitos estudados nesta aula têm aplicação direta em diversas funções do mercado de TI:</p>
+
+        <h4>Desenvolvedor Backend / Full Stack</h4>
+        <p>Ao projetar APIs REST ou gRPC, você precisa compreender que cada chamada HTTP envolve múltiplos pacotes atravessando a rede com atrasos de propagação, transmissão e fila. Decisões como: usar conexões persistentes (HTTP keep-alive) vs. novas conexões, implementar retry com backoff exponencial, ou escolher entre comunicação síncrona e assíncrona — todas dependem do entendimento de latência e vazão de rede.</p>
+
+        <h4>DevOps / SRE (Site Reliability Engineer)</h4>
+        <p>Profissionais de confiabilidade monitoram métricas de rede (latência p50, p95, p99), configuram load balancers, otimizam rotas entre data centers e dimensionam a capacidade de enlaces para evitar gargalos. O conceito de intensidade de tráfego (La/R) é diretamente aplicado no dimensionamento de capacidade.</p>
+
+        <h4>Arquiteto de Sistemas Distribuídos</h4>
+        <p>Ao projetar sistemas com microsserviços, a decisão de onde posicionar cada serviço (qual data center, qual região de cloud) é fundamentalmente uma decisão sobre <strong>atraso de propagação</strong>. Um serviço que precisa responder em menos de 100 ms não pode estar a mais de ~10.000 km do usuário (considerando velocidade da luz em fibra).</p>
+
+        <h4>Engenheiro de Redes</h4>
+        <p>Configura roteadores, switches, VLANs e protocolos de roteamento. O entendimento profundo dos quatro tipos de atraso é essencial para troubleshooting de performance e para o dimensionamento de QoS (Quality of Service).</p>
+
+        <h4>Desenvolvedor Mobile / IoT</h4>
+        <p>Aplicações mobile operam em redes com alta variabilidade (WiFi, 4G, 5G). Compreender que a vazão é limitada pelo enlace de acesso e que a perda de pacotes é mais comum em redes sem fio impacta decisões como: tamanho de payload, uso de compressão, estratégias de cache e sincronização offline.</p>
+    </section>
+
+    <!-- SEÇÃO F: PARE E PENSE -->
+    <section id="pare-e-pense">
+        <h2>🧠 Exercícios de Fixação</h2>
+
+        <div class="box-pare-pense">
+            <h4>🔍 Pare e Pense #1</h4>
+            <p>Considere um pacote de 1.000 bytes que precisa percorrer um enlace de 2.500 km, com velocidade de propagação de 2,5 × 10⁸ m/s e taxa de transmissão de 2 Mbps.</p>
+            <p><strong>Perguntas:</strong></p>
+            <ol>
+                <li>Qual é o atraso de propagação? (Dica: d_prop = d/s)</li>
+                <li>Qual é o atraso de transmissão? (Dica: d_trans = L/R)</li>
+                <li>O atraso de propagação depende do comprimento do pacote?</li>
+                <li>O atraso de transmissão depende da distância entre os roteadores?</li>
+                <li>Se aumentarmos a taxa de transmissão para 1 Gbps, o que acontece com cada um dos atrasos?</li>
+            </ol>
+            <p><em>Respostas esperadas: d_prop = 2.500.000 / 250.000.000 = 10 ms; d_trans = 8.000 / 2.000.000 = 4 ms; Não, a propagação não depende de L; Não, a transmissão não depende de d; Com 1 Gbps, d_trans cai para 0,008 ms, mas d_prop permanece 10 ms.</em></p>
+        </div>
+
+        <div class="box-pare-pense">
+            <h4>🔍 Pare e Pense #2</h4>
+            <p>Uma aplicação de videoconferência (como Zoom ou Microsoft Teams) requer baixa latência e vazão mínima de 1 Mbps por participante. Uma aplicação de e-mail pode tolerar atrasos de segundos.</p>
+            <p><strong>Perguntas:</strong></p>
+            <ol>
+                <li>Qual tipo de atraso (processamento, fila, transmissão ou propagação) é mais crítico para a videoconferência? Justifique.</li>
+                <li>Por que a comutação de pacotes, com seus atrasos de fila variáveis, representa um desafio para aplicações de tempo real?</li>
+                <li>Como o conceito de QoS (Quality of Service) pode ajudar a priorizar pacotes de vídeo sobre pacotes de e-mail?</li>
+                <li>Se a intensidade de tráfego (La/R) em um roteador for 0,95, o que você espera do atraso de fila? E se for 1,05?</li>
+            </ol>
+            <p><em>Reflexão: O atraso de fila é o mais variável e imprevisível, sendo o principal inimigo de aplicações de tempo real. Quando La/R se aproxima de 1, o atraso de fila cresce exponencialmente. QoS permite classificar e priorizar pacotes sensíveis a atraso.</em></p>
+        </div>
+    </section>
+
+    <!-- SEÇÃO G: GLOSSÁRIO -->
+    <section id="glossario">
+        <h2>📝 Glossário</h2>
+        <dl class="glossario">
+            <dt>Comutação de Pacotes</dt>
+            <dd>Paradigma de comunicação onde os dados são divididos em pacotes que trafegam de forma independente pela rede, compartilhando recursos por demanda (multiplexação estatística). É o paradigma utilizado pela Internet.</dd>
+
+            <dt>Comutação de Circuitos</dt>
+            <dd>Paradigma onde os recursos de rede (largura de banda, buffers) são reservados exclusivamente para uma conexão durante toda a sessão. Utilizado na rede telefônica tradicional.</dd>
+
+            <dt>Enlace de Comunicação (Link)</dt>
+            <dd>Meio físico (ou lógico) que conecta dois dispositivos adjacentes em uma rede. Pode ser guiado (cabo, fibra) ou não guiado (rádio, satélite). Sua capacidade é medida em bits por segundo (bps).</dd>
+
+            <dt>Hospedeiro (Host) / Sistema Final</dt>
+            <dd>Qualquer dispositivo conectado à periferia da Internet que executa aplicações de rede. Inclui PCs, servidores, smartphones, sensores IoT, etc.</dd>
+
+            <dt>Intensidade de Tráfego</dt>
+            <dd>Razão La/R, onde L é o tamanho do pacote, a é a taxa de chegada e R é a taxa de transmissão. Se La/R > 1, a fila cresce sem limite. Se La/R ≈ 1, pequenos aumentos causam grandes atrasos.</dd>
+
+            <dt>ISP (Internet Service Provider)</dt>
+            <dd>Provedor de Serviço de Internet. Organização que fornece acesso à Internet e/ou serviços de backbone. Organizados em hierarquia de níveis (nível 1, 2, acesso).</dd>
+
+            <dt>Protocolo</dt>
+            <dd>Conjunto de regras que define o formato e a ordem das mensagens trocadas entre entidades comunicantes, bem como as ações realizadas na transmissão e recepção. Exemplos: TCP, IP, HTTP, Ethernet.</dd>
+
+            <dt>Comutador de Pacotes</dt>
+            <dd>Dispositivo que recebe pacotes em um enlace de entrada e os encaminha para um enlace de saída. Os dois tipos principais são roteadores (camada 3) e switches (camada 2).</dd>
+
+            <dt>Vazão (Throughput)</dt>
+            <dd>Taxa efetiva (em bits/s) na qual dados são transferidos da origem ao destino. Em uma rota com múltiplos enlaces, é limitada pelo enlace de gargalo (menor taxa).</dd>
+
+            <dt>Atraso de Transmissão</dt>
+            <dd>Tempo necessário para empurrar todos os bits de um pacote para o enlace. Fórmula: d_trans = L/R. Depende do tamanho do pacote e da taxa do enlace, não da distância.</dd>
+
+            <dt>Atraso de Propagação</dt>
+            <dd>Tempo que um bit leva para se propagar fisicamente pelo meio de um nó ao próximo. Fórmula: d_prop = d/s. Depende da distância e do meio, não do tamanho do pacote.</dd>
+
+            <dt>Enlace de Gargalo</dt>
+            <dd>O enlace com a menor taxa de transmissão em um caminho fim a fim. Determina a vazão máxima da transferência de dados.</dd>
+
+            <dt>RFC (Request for Comments)</dt>
+            <dd>Documento padronizado da IETF que define protocolos e padrões da Internet. Exemplos: RFC 793 (TCP), RFC 791 (IP), RFC 2616 (HTTP/1.1).</dd>
+
+            <dt>Traceroute</dt>
+            <dd>Ferramenta de diagnóstico que rastreia a rota fim a fim dos pacotes na Internet, mostrando cada roteador intermediário e os atrasos de ida e volta.</dd>
+        </dl>
+    </section>
+
+    <!-- SEÇÃO H: CONCLUSÃO -->
+    <section id="conclusao">
+        <h2>✅ Conclusão e Resumo</h2>
+        <p>Nesta primeira aula, estabelecemos as fundações conceituais de toda a disciplina. Os pontos essenciais que você deve reter são:</p>
+        <ol>
+            <li><strong>A Internet é uma rede de redes:</strong> composta por sistemas finais (hospedeiros), enlaces de comunicação, comutadores de pacotes (roteadores e switches) e organizadas em uma hierarquia de ISPs.</li>
+            <li><strong>Protocolos são as regras do jogo:</strong> TCP e IP são os protocolos fundamentais. Sem protocolos padronizados, a comunicação entre dispositivos heterogêneos seria impossível.</li>
+            <li><strong>Comutação de pacotes é o paradigma da Internet:</strong> recursos são compartilhados por demanda (multiplexação estatística), ao contrário da comutação de circuitos que reserva recursos antecipadamente.</li>
+            <li><strong>Performance é quantificável:</strong> o atraso nodal total é a soma de quatro componentes (processamento, fila, transmissão, propagação). Cada um depende de fatores diferentes, e confundi-los é um erro comum que você deve evitar.</li>
+            <li><strong>Vazão é limitada pelo gargalo:</strong> em qualquer caminho fim a fim, a taxa efetiva de transferência é determinada pelo enlace mais lento.</li>
+            <li><strong>Para o desenvolvedor ADS, redes são fundamentais:</strong> toda aplicação moderna é distribuída. Compreender latência, vazão e perda de pacotes impacta diretamente decisões de arquitetura de software.</li>
+        </ol>
+        <p><strong>Na próxima aula,</strong> avançaremos para a classificação das redes (quanto à topologia, abrangência, modelo de comunicação e modo de operação do canal), aprofundando os elementos que conectam os dispositivos e como a informação flui entre eles.</p>
+    </section>
+
+    <!-- SEÇÃO I: REFERÊNCIAS -->
+    <section id="referencias">
+        <h2>📚 Referências</h2>
+        <div class="referencias">
+            <ol>
+                <li>KUROSE, James F.; ROSS, Keith W. <strong>Redes de Computadores e a Internet: Uma Abordagem Top-Down</strong>. 5ª edição. São Paulo: Addison Wesley (Pearson), 2010. Capítulo 1: Redes de Computadores e a Internet.</li>
+                <li>TANENBAUM, Andrew S. <strong>Redes de Computadores</strong>. 4ª edição. São Paulo: Elsevier/Campus, 2003.</li>
+                <li>UNICESUMAR. <strong>Redes de Computadores</strong>. Caderno de Estudos — Unidade 1: Conhecendo a Internet e as Redes de Computadores. Maringá: Unicesumar, 2013.</li>
+                <li>CERF, V.; KAHN, R. A Protocol for Packet Network Intercommunication. <strong>IEEE Transactions on Communications</strong>, vol. 22, no. 5, pp. 637-648, May 1974.</li>
+                <li>KLEINROCK, L. Information Flow in Large Communication Nets. <strong>IEEE Transactions on Communication Technology</strong>, vol. COM-12, no. 4, pp. 556-561, July 1964.</li>
+            </ol>
+        </div>
+    </section>
+
+    <footer>
+        <p>Material de estudo — Disciplina: Redes de Computadores e Sistemas Distribuídos<br>
+        Curso: Análise e Desenvolvimento de Sistemas (ADS) — Ensino Superior<br>
+        Aula 01 | Duração: 180 minutos</p>
+    </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
