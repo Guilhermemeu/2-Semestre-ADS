@@ -1,4 +1,0 @@
-﻿  Aula1.cpp
-C:\Users\Assupero\Desktop\2ºSemestre ADS\Programação Estroturada em C++\Aula 13-08\Aula 13-08\Aula1.cpp(15,17): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
-C:\Users\Assupero\Desktop\2ºSemestre ADS\Programação Estroturada em C++\Aula 13-08\Aula 13-08\Aula1.cpp(17,12): warning C4244: '=': conversão de 'double' para 'float', possível perda de dados
-  Aula 13-08.vcxproj -> C:\Users\Assupero\Desktop\2ºSemestre ADS\Programação Estroturada em C++\Aula 13-08\x64\Debug\Aula 13-08.exe
