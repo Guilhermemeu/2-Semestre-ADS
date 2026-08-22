@@ -1,7 +1,11 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::cin;
+using std::ios;
+
 
 int main() {
     int n1,n2,n3;
@@ -16,7 +20,7 @@ int main() {
     cout.setf(ios::fixed | ios::showpoint);
     cout.precision(2);
 
-    cout << "Media: " << setw(8) << soma / 3.00 << endl;
+    cout << "Media: " << std::setw(8) << soma / 3.00 << endl;
     cout << "Produto: " << (unsigned) n1*n2*n3 << endl; 
 
 

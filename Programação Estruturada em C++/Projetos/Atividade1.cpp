@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::cin;
 
 int main() {
     system("cls");

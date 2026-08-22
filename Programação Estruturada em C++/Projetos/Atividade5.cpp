@@ -1,7 +1,9 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::cin;
 
 int main(){
     int tp;

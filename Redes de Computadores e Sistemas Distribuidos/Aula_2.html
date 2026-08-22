@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <title>Aula Prática · Comandos de Rede (CMD e PowerShell) | ADS</title>
+  <!-- Prism.js para destaque de sintaxe -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iIREO2e/DK8frQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Base e acessibilidade */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7f9fc;
+      color: #1a1e2b;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      font-size: 1.4em;
+      line-height: 1.65;
+      padding: 2rem 1.8rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: #0a2a3b;
+    }
+    h1 { font-size: 2.2rem; border-left: 8px solid #0077b6; padding-left: 1.2rem; }
+    h2 { font-size: 1.8rem; border-bottom: 2px solid #b8d4e8; padding-bottom: 0.3rem; }
+    h3 { font-size: 1.5rem; color: #1a4d6b; margin-top: 1.6rem; }
+    p, li { margin-bottom: 0.7rem; max-width: 80ch; }
+    ul, ol { margin-left: 1.8rem; margin-bottom: 1.2rem; }
+    .box-note, .box-tip, .box-alert, .box-pause {
+      border-radius: 16px;
+      padding: 1rem 1.8rem;
+      margin: 1.8rem 0;
+      background: #e8f0fe;
+      border-left: 8px solid #0077b6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .box-tip { background: #e2f0e6; border-left-color: #2a6d4a; }
+    .box-alert { background: #fde8e5; border-left-color: #b13e3e; }
+    .box-pause { background: #fef6e0; border-left-color: #b68b40; }
+    pre[class*="language-"] {
+      background: #1a1e2b !important;
+      border-radius: 14px;
+      padding: 1.2rem 1.6rem !important;
+      font-size: 0.95em;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      width: 100%;
+      margin: 1.4rem 0;
+    }
+    code[class*="language-"] {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.9em;
+	  color:white;
+    }
+    pre code { display: block; white-space: pre; }
+    .cmd-badge {
+      display: inline-block;
+      background: #0d2b3e;
+      color: #b3e0ff;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.8rem;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      margin-right: 0.4rem;
+      font-weight: 600;
+    }
+    .diagram-svg {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 0.5rem;
+      margin: 1.6rem 0;
+      border: 1px solid #d4e2ed;
+      width: 100%;
+      max-width: 100%;
+    }
+    .diagram-svg svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .glossary {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.2rem 1.5rem;
+      background: #eef4f9;
+      padding: 1.4rem 2rem;
+      border-radius: 24px;
+      margin: 2rem 0;
+    }
+    .glossary dt { font-weight: 700; color: #02456b; margin-top: 0.6rem; }
+    .glossary dd { margin-left: 1.2rem; margin-bottom: 0.4rem; border-left: 2px solid #b0cee0; padding-left: 1rem; }
+    @media (max-width: 720px) {
+      body { font-size: 1.2em; padding: 1rem; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.3rem; }
+      pre[class*="language-"] { font-size: 0.85em; padding: 0.8rem; }
+    }
+    @media (max-width: 480px) { body { font-size: 1em; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🖥️ Laboratório de Redes · Comandos Essenciais</h1>
+  <p style="font-size: 1.1rem; color: #1f4c66;"><strong>Disciplina:</strong> Redes e Sistemas Distribuídos · <strong>ADS</strong> · Aula prática (CMD / PowerShell)</p>
+</header>
+
+<!-- Objetivos -->
+<section>
+  <h2>🎯 Objetivos da prática</h2>
+  <ul>
+    <li><strong>Executar</strong> comandos básicos de diagnóstico de rede no <strong>Prompt de Comando (CMD)</strong> e no <strong>PowerShell</strong>.</li>
+    <li><strong>Interpretar</strong> saídas de ferramentas como <code>ping</code>, <code>ipconfig</code>, <code>tracert</code> e <code>nslookup</code>.</li>
+    <li><strong>Comparar</strong> a sintaxe e os recursos disponíveis em cada ambiente.</li>
+    <li><strong>Aplicar</strong> esses comandos para verificar conectividade, resolver nomes e mapear a rota de pacotes.</li>
+  </ul>
+  <div class="box-note">
+    <strong>🔧 Pré-requisito:</strong> Acesso a um terminal Windows (CMD ou PowerShell) com privilégios de usuário comum (não requer administrador para a maioria dos comandos).
+  </div>
+</section>
+
+<!-- Introdução -->
+<section>
+  <h2>📌 Introdução</h2>
+  <p>Nesta aula prática, vamos explorar as ferramentas de linha de comando que todo profissional de TI deve conhecer. Tanto o <strong>CMD</strong> (Prompt de Comando) quanto o <strong>PowerShell</strong> oferecem utilitários para testar e diagnosticar redes. Embora muitos comandos sejam idênticos, o PowerShell traz recursos adicionais, como objetos e pipes.</p>
+  <p>Vamos começar com os comandos mais comuns e, em seguida, avançar para variações úteis. <strong>Execute cada comando no seu terminal</strong> e observe os resultados — a prática é essencial!</p>
+</section>
+
+<!-- Desenvolvimento prático -->
+<section>
+  <h2>🧪 Comandos fundamentais</h2>
+
+  <h3><span class="cmd-badge">CMD / PS</span> <code>ping</code> — testar conectividade</h3>
+  <p>O <code>ping</code> envia pacotes ICMP para um destino e mede o tempo de resposta. É o primeiro comando para verificar se um host está ativo.</p>
+  <pre class="language-powershell"><code class="language-powershell"># Exemplo: pingar o gateway padrão (geralmente 192.168.1.1)
+ping 192.168.1.1
+
+# Pingar um servidor público (Google DNS)
+ping 8.8.8.8
+
+# No PowerShell, podemos usar -n para número de pacotes
+ping -n 4 8.8.8.8</code></pre>
+  <p><strong>Saída típica:</strong> respostas com tempo em ms, TTL e estatísticas de perda.</p>
+
+  <h3><span class="cmd-badge">CMD / PS</span> <code>ipconfig</code> / <code>ifconfig</code> — informações de interface</h3>
+  <p>Exibe a configuração de rede do adaptador: endereço IP, máscara de sub-rede, gateway padrão.</p>
+  <pre class="language-powershell"><code class="language-powershell"># CMD / PowerShell
+ipconfig
+
+# Mais detalhes (inclui MAC, DHCP, etc.)
+ipconfig /all
+
+# No PowerShell, também podemos usar Get-NetIPConfiguration (mais moderno)
+Get-NetIPConfiguration | Select-Object InterfaceAlias, IPv4Address, IPv4DefaultGateway</code></pre>
+
+  <h3><span class="cmd-badge">CMD / PS</span> <code>tracert</code> (ou <code>traceroute</code>) — rota até o destino</h3>
+  <p>Mostra cada salto (roteador) entre seu computador e o destino, com os tempos de resposta.</p>
+  <pre class="language-powershell"><code class="language-powershell"># CMD / PowerShell (o comando é o mesmo)
+tracert 8.8.8.8
+
+# No PowerShell, também funciona com Test-NetConnection -TraceRoute
+Test-NetConnection 8.8.8.8 -TraceRoute</code></pre>
+
+  <h3><span class="cmd-badge">CMD / PS</span> <code>nslookup</code> — resolução de nomes DNS</h3>
+  <p>Consulta servidores DNS para obter o endereço IP de um domínio (e vice-versa).</p>
+  <pre class="language-powershell"><code class="language-powershell"># Consultar o IP de um domínio
+nslookup google.com
+
+# Consultar um servidor DNS específico (ex: Cloudflare)
+nslookup google.com 1.1.1.1</code></pre>
+
+  <h3><span class="cmd-badge">CMD</span> <code>arp</code> — tabela de resolução de endereços</h3>
+  <p>Exibe a tabela ARP (endereço IP ↔ MAC) da rede local.</p>
+  <pre class="language-powershell"><code class="language-powershell"># CMD / PowerShell
+arp -a</code></pre>
+
+  <h3><span class="cmd-badge">CMD</span> <code>netstat</code> — estatísticas e conexões ativas</h3>
+  <p>Mostra portas abertas, conexões TCP/UDP e estatísticas de protocolo.</p>
+  <pre class="language-powershell"><code class="language-powershell"># CMD / PowerShell
+netstat -an
+
+# Exibir apenas conexões TCP estabelecidas
+netstat -an | findstr ESTABLISHED   # no CMD
+netstat -an | Select-String ESTABLISHED   # no PowerShell</code></pre>
+
+  <div class="box-tip">
+    <strong>💡 Dica:</strong> No PowerShell, você pode filtrar saídas com <code>Select-String</code> ou <code>Where-Object</code>, o que torna a análise mais flexível.
+  </div>
+
+  <h3><span class="cmd-badge">PowerShell</span> <code>Test-NetConnection</code> — diagnóstico avançado</h3>
+  <p>Substituto moderno do <code>ping</code> e <code>tracert</code>, com detecção de portas abertas.</p>
+  <pre class="language-powershell"><code class="language-powershell"># Testar conectividade e porta específica (ex: HTTP)
+Test-NetConnection google.com -Port 80
+
+# Testar conectividade com rota detalhada
+Test-NetConnection 8.8.8.8 -TraceRoute</code></pre>
+</section>
+
+<!-- Exemplo prático integrado -->
+<section>
+  <h2>🔍 Roteiro prático — diagnóstico passo a passo</h2>
+  <p>Vamos simular um diagnóstico de rede usando os comandos vistos. Abra o <strong>CMD</strong> ou <strong>PowerShell</strong> e execute na ordem:</p>
+  <ol>
+    <li><strong>Verificar configuração:</strong> <code>ipconfig /all</code> — anote o IP, máscara e gateway.</li>
+    <li><strong>Testar gateway:</strong> <code>ping &lt;gateway&gt;</code> — se falhar, há problema no roteador ou cabo.</li>
+    <li><strong>Testar DNS externo:</strong> <code>ping 8.8.8.8</code> — se falhar, problema de roteamento externo.</li>
+    <li><strong>Rastrear rota:</strong> <code>tracert 8.8.8.8</code> — identifica onde os pacotes param.</li>
+    <li><strong>Resolver domínio:</strong> <code>nslookup google.com</code> — verifica se o DNS está funcionando.</li>
+  </ol>
+  <div class="box-pause">
+    <strong>🤔 Pare e Pense:</strong> Se o <code>ping</code> para 8.8.8.8 funciona, mas o <code>ping google.com</code> falha, qual é o provável problema? (Dica: pense no DNS).
+  </div>
+</section>
+
+<!-- Aplicação no mercado -->
+<section>
+  <h2>🏢 Onde esses comandos são usados?</h2>
+  <p>No dia a dia de um analista de suporte, administrador de redes ou desenvolvedor, esses comandos são a primeira linha de defesa para resolver problemas de conectividade. Eles ajudam a:</p>
+  <ul>
+    <li>Diagnosticar lentidão em aplicações web.</li>
+    <li>Verificar se um servidor está acessível após uma implantação.</li>
+    <li>Validar configurações de firewall e roteamento.</li>
+    <li>Identificar ataques de negação de serviço (via <code>netstat</code>).</li>
+  </ul>
+  <p>Saber interpretar a saída desses comandos é uma habilidade essencial para qualquer profissional de TI.</p>
+</section>
+
+<!-- Glossário -->
+<section>
+  <h2>📖 Glossário de comandos</h2>
+  <dl class="glossary">
+    <dt>ping</dt>
+    <dd>Envia pacotes ICMP Echo Request para testar conectividade e medir latência.</dd>
+    <dt>ipconfig / ifconfig</dt>
+    <dd>Exibe a configuração de rede das interfaces (IP, máscara, gateway).</dd>
+    <dt>tracert / traceroute</dt>
+    <dd>Mostra a rota (saltos) percorrida pelos pacotes até o destino.</dd>
+    <dt>nslookup</dt>
+    <dd>Consulta servidores DNS para resolver nomes de domínio em IP e vice-versa.</dd>
+    <dt>arp</dt>
+    <dd>Gerencia a tabela de resolução de endereços IP para MAC (camada 2).</dd>
+    <dt>netstat</dt>
+    <dd>Exibe conexões ativas, portas abertas e estatísticas de rede.</dd>
+    <dt>Test-NetConnection</dt>
+    <dd>Comando do PowerShell que combina ping, traceroute e teste de porta.</dd>
+  </dl>
+</section>
+
+<!-- Conclusão -->
+<section>
+  <h2>✅ Conclusão</h2>
+  <p>Nesta prática, conhecemos os principais comandos de rede disponíveis no CMD e PowerShell. Aprendemos a testar conectividade, visualizar configurações, rastrear rotas e resolver nomes DNS. Essas ferramentas são indispensáveis para o dia a dia de suporte e desenvolvimento.</p>
+  <p>Nas próximas aulas, vamos aprofundar em tópicos como <strong>sub-redes</strong> e <strong>VLANs</strong>, onde esses comandos nos ajudarão a validar as configurações. Continue praticando!</p>
+</section>
+
+<!-- Referências -->
+<section>
+  <h2>📚 Referências</h2>
+  <ul>
+    <li>Documentação Microsoft: <a href="https://learn.microsoft.com/pt-br/windows-server/administration/windows-commands/windows-commands" target="_blank" rel="noopener">Comandos do Windows</a></li>
+    <li>Documentação Microsoft: <a href="https://learn.microsoft.com/pt-br/powershell/module/nettcpip/" target="_blank" rel="noopener">Módulo NetTCPIP (PowerShell)</a></li>
+    <li>KUROSE, J. F.; ROSS, K. W. <em>Redes de Computadores e a Internet</em>. 6ª ed. Pearson, 2013.</li>
+  </ul>
+</section>
+
+<!-- Scripts para highlight -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7QhFn1NAlCg1oX5SR9rCxxlJ+/YgD+qJ09h3RDE1O6rL2Hzv4dT03BtcxCHr+oUViA4sl5LgQHpCPy0j7nLSQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-powershell.min.js" integrity="sha512-8cP9OjK5K7j8j9Z7gJehFVvOZZ5kCzG/8T7z7A0A5nOa0Edf7znPvD8X+H89xvObEpcTvnmjPqYjGc99aJm1Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

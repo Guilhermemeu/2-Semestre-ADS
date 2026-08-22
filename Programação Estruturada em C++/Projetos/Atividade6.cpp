@@ -2,7 +2,10 @@
 #include <iomanip>
 #include <string>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::cin;
+using std::string;
 
 #define VALORCONSULTA 150;
 int main(){
