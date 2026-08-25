@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios de Modelagem – Aula 01 | ADS</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1e293b;
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.7;
+            font-size: 1.2rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1, h2, h3 {
+            color: #0b3b5c;
+        }
+        h1 {
+            border-bottom: 4px solid #0b5394;
+            padding-bottom: 0.5rem;
+        }
+        .exercicio {
+            background: #f8fafc;
+            border-left: 6px solid #0b5394;
+            padding: 1.5rem 2rem;
+            margin: 2.5rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .exercicio h2 {
+            margin-top: 0;
+            color: #0b5394;
+        }
+        .etapa {
+            background: #eef2ff;
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+        }
+        .etapa strong {
+            color: #1e3a8a;
+        }
+        hr {
+            border: none;
+            border-top: 2px dashed #cbd5e1;
+            margin: 2rem 0;
+        }
+        .dica {
+            background: #f0fdf4;
+            border-left: 6px solid #15803d;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .dica strong {
+            color: #15803d;
+        }
+        .atencao {
+            background: #fefce8;
+            border-left: 6px solid #ca8a04;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .atencao strong {
+            color: #a16207;
+        }
+        .instrucao {
+            font-size: 1.1rem;
+            background: #e6f4ea;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 640px) {
+            body { font-size: 1rem; }
+            .container { padding: 1.5rem; }
+            .exercicio { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🧩 Exercícios de Modelagem de Banco de Dados Relacional</h1>
+    <p><strong>Disciplina:</strong> Modelagem de Banco de Dados Relacional e NoSQL<br>
+    <strong>Aula 01 – Conceitos Fundamentais</strong></p>
+    <p>Estes exercícios têm como objetivo praticar a identificação de <strong>entidades, atributos, relacionamentos e cardinalidades</strong>, bem como a construção do <strong>Modelo Entidade-Relacionamento (MER)</strong> a partir de uma descrição textual.</p>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- EXERCÍCIO 1 – LANCHONETE                                      -->
+    <!-- ============================================================ -->
+    <div class="exercicio">
+        <h2>Exercício 1 – Controle de uma Lanchonete</h2>
+        <p><em>Nível: básico</em></p>
+
+        <p>Uma pequena lanchonete deseja informatizar seu sistema de pedidos. O dono precisa guardar informações sobre os <strong>clientes</strong>, os <strong>produtos</strong> do cardápio e os <strong>pedidos</strong> realizados.</p>
+
+        <ul>
+            <li>Cada cliente possui um <strong>ID</strong> (único), <strong>nome</strong>, <strong>telefone</strong> e <strong>endereço</strong>.</li>
+            <li>Cada produto tem um <strong>código</strong> (único), <strong>nome</strong>, <strong>descrição</strong> e <strong>preço</strong>.</li>
+            <li>Um pedido é feito por um único cliente, mas um cliente pode fazer vários pedidos ao longo do tempo.</li>
+            <li>Um pedido pode conter <strong>um ou mais produtos</strong>, e um produto pode aparecer em vários pedidos.</li>
+            <li>Para cada pedido, é importante registrar: <strong>número do pedido</strong> (único), <strong>data/hora</strong> e o <strong>total</strong> calculado.</li>
+            <li>Além disso, para cada produto em um pedido, deve-se guardar a <strong>quantidade</strong> e o <strong>preço unitário</strong> no momento da venda (pois o preço pode mudar com o tempo).</li>
+        </ul>
+
+        <div class="etapa">
+            <strong>🔍 Tarefa 1 – Identificação</strong>
+            <p>Liste todas as <strong>entidades</strong> e seus respectivos <strong>atributos</strong>. Destaque os atributos que podem ser chaves primárias (PK) e possíveis chaves estrangeiras (FK).</p>
+        </div>
+
+        <div class="etapa">
+            <strong>🔗 Tarefa 2 – Relacionamentos e Cardinalidades</strong>
+            <p>Identifique todos os <strong>relacionamentos</strong> entre as entidades, especificando a <strong>cardinalidade</strong> (1:1, 1:N, N:M) de cada lado. Explique brevemente a regra de negócio que justifica cada cardinalidade.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>📐 Tarefa 3 – Modelo Entidade-Relacionamento (MER)</strong>
+            <p>Desenhe o <strong>diagrama ER</strong> utilizando a notação de Chen (ou a notação que você preferir, desde que clara). Indique entidades, atributos (com chaves), relacionamentos e cardinalidades. Você pode fazer o desenho à mão e anexar uma foto, ou descrever textualmente a estrutura.</p>
+        </div>
+
+        <div class="dica">
+            <strong>💡 Dica:</strong> Lembre-se de que relacionamentos N:M geralmente precisam de uma <strong>tabela associativa</strong> no modelo lógico, mas no MER eles são representados diretamente com a cardinalidade N:M.
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- EXERCÍCIO 2 – OFICINA MECÂNICA                                -->
+    <!-- ============================================================ -->
+    <div class="exercicio">
+        <h2>Exercício 2 – Oficina Mecânica</h2>
+        <p><em>Nível: intermediário</em></p>
+
+        <p>Uma oficina mecânica deseja controlar os serviços realizados em veículos. O sistema deve gerenciar informações sobre <strong>clientes</strong>, <strong>veículos</strong>, <strong>serviços</strong> (tipos de serviço) e <strong>ordens de serviço</strong> (OS).</p>
+
+        <ul>
+            <li>Um <strong>cliente</strong> pode possuir um ou mais <strong>veículos</strong> cadastrados. Cada veículo pertence a um único cliente.</li>
+            <li>Dados do cliente: <strong>CPF</strong> (único), <strong>nome</strong>, <strong>telefone</strong> e <strong>e-mail</strong>.</li>
+            <li>Dados do veículo: <strong>placa</strong> (única), <strong>modelo</strong>, <strong>marca</strong>, <strong>ano</strong> e <strong>cor</strong>.</li>
+            <li>A oficina oferece diversos <strong>serviços</strong> (ex.: troca de óleo, alinhamento, revisão). Cada serviço tem um <strong>código</strong> único, <strong>descrição</strong> e <strong>preço padrão</strong>.</li>
+            <li>Uma <strong>ordem de serviço</strong> é aberta para um veículo específico (portanto, para um cliente). Uma OS pode incluir <strong>um ou mais serviços</strong>, e um mesmo serviço pode ser executado em várias OS.</li>
+            <li>Para cada OS, registra-se: <strong>número da OS</strong> (único), <strong>data de abertura</strong>, <strong>data de conclusão</strong> (pode ser nula), <strong>status</strong> (aberta, em andamento, concluída) e um <strong>observação</strong> opcional.</li>
+            <li>Para cada serviço executado em uma OS, é necessário guardar o <strong>preço praticado</strong> (que pode ser diferente do preço padrão) e a <strong>quantidade de horas</strong> ou <strong>mão de obra</strong> utilizada.</li>
+            <li>Além disso, a oficina quer saber quais <strong>funcionários</strong> (mecânicos) participaram de cada serviço em uma OS. Um serviço em uma OS pode ser executado por um ou mais mecânicos; um mecânico pode participar de vários serviços em várias OS.</li>
+            <li>Dados do mecânico: <strong>registro</strong> (único), <strong>nome</strong>, <strong>especialidade</strong> e <strong>telefone</strong>.</li>
+        </ul>
+
+        <div class="etapa">
+            <strong>🔍 Tarefa 1 – Identificação</strong>
+            <p>Liste todas as <strong>entidades</strong> e seus atributos. Para cada entidade, indique claramente a <strong>chave primária</strong> e possíveis chaves estrangeiras.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>🔗 Tarefa 2 – Relacionamentos e Cardinalidades</strong>
+            <p>Descreva todos os relacionamentos entre as entidades, com suas respectivas <strong>cardinalidades</strong>. Justifique cada uma com base na descrição.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>📐 Tarefa 3 – Modelo Entidade-Relacionamento (MER)</strong>
+            <p>Construa o diagrama ER completo, utilizando a notação de Chen (ou equivalente). Indique claramente entidades, atributos (com chaves sublinhadas), relacionamentos e cardinalidades.</p>
+        </div>
+
+        <div class="atencao">
+            <strong>⚠️ Atenção:</strong> Este caso envolve relacionamentos mais complexos, incluindo um relacionamento N:M entre OS e Serviço, e também entre OS-Serviço e Mecânico (ou seja, um relacionamento ternário ou uma composição). Pense na melhor forma de representar a participação dos mecânicos.
+        </div>
+
+        <div class="dica">
+            <strong>💡 Dica de modelagem:</strong> Quando um relacionamento N:M possui atributos próprios ou se conecta a outras entidades, muitas vezes criamos uma <strong>entidade associativa</strong> (por exemplo, "Item_OS" ou "Servico_Executado") que se relaciona com as entidades envolvidas.
+        </div>
+    </div>
+
+    <hr>
+
+    <div style="background: #e6f4ea; padding: 1rem 1.5rem; border-radius: 12px;">
+        <p><strong>📌 Instruções finais:</strong></p>
+        <ul>
+            <li>Resolva os exercícios em uma folha à parte ou em um editor de diagramas.</li>
+            <li>Para o MER, você pode usar ferramentas como <strong>draw.io</strong>, <strong>brModelo</strong> ou fazer à mão e fotografar.</li>
+            <li>Após finalizar, compare suas respostas com o <strong>gabarito</strong> (disponível em arquivo separado) para verificar seu entendimento.</li>
+            <li>Estes exercícios serão discutidos na próxima aula prática.</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 2rem; font-size: 0.9rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+        Material elaborado para a disciplina de Modelagem de Banco de Dados – ADS.
+    </footer>
+</div>
+</body>
+</html>

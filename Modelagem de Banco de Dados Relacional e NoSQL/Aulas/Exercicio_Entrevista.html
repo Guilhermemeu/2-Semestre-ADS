@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios – Entrevista de Modelagem | ADS</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1e293b;
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.8;
+            font-size: 1.2rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1, h2, h3 {
+            color: #0b3b5c;
+        }
+        h1 {
+            border-bottom: 4px solid #0b5394;
+            padding-bottom: 0.5rem;
+        }
+        .entrevista {
+            background: #f8fafc;
+            border-left: 6px solid #0b5394;
+            padding: 1.5rem 2rem;
+            margin: 2.5rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .entrevista h2 {
+            margin-top: 0;
+            color: #0b5394;
+        }
+        .entrevista p {
+            margin: 1rem 0;
+        }
+        .etapa {
+            background: #eef2ff;
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .etapa strong {
+            color: #1e3a8a;
+        }
+        hr {
+            border: none;
+            border-top: 2px dashed #cbd5e1;
+            margin: 2rem 0;
+        }
+        .dica {
+            background: #f0fdf4;
+            border-left: 6px solid #15803d;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .dica strong {
+            color: #15803d;
+        }
+        .atencao {
+            background: #fefce8;
+            border-left: 6px solid #ca8a04;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .atencao strong {
+            color: #a16207;
+        }
+        .instrucao {
+            font-size: 1.1rem;
+            background: #e6f4ea;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        @media (max-width: 640px) {
+            body { font-size: 1rem; }
+            .container { padding: 1.5rem; }
+            .entrevista { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🧩 Exercícios de Modelagem – Formato Entrevista</h1>
+    <p><strong>Disciplina:</strong> Modelagem de Banco de Dados Relacional e NoSQL<br>
+    <strong>Aula 01 – Conceitos Fundamentais</strong></p>
+    <p>Os textos a seguir são transcrições de entrevistas entre um analista de sistemas e proprietários de comércios. Sua tarefa é extrair as <strong>entidades</strong>, <strong>atributos</strong>, <strong>relacionamentos</strong> e <strong>cardinalidades</strong> a partir da conversa, e, por fim, construir o <strong>Modelo Entidade-Relacionamento (MER)</strong>.</p>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- EXERCÍCIO 3 – PET SHOP                                        -->
+    <!-- ============================================================ -->
+    <div class="entrevista">
+        <h2>Exercício 3 – Pet Shop "Amigo Animal"</h2>
+        <p><em>Nível: básico</em></p>
+
+        <p><strong>Entrevista com o Sr. Carlos, proprietário:</strong></p>
+
+        <p>
+            "Nós vendemos produtos (ração, brinquedos, coleiras) e oferecemos serviços (banho, tosa, consulta veterinária básica). 
+            Cada produto tem um código único, nome, marca e preço atual. 
+            Cada serviço tem um ID único, uma descrição e um preço base sugerido.
+        </p>
+        <p>
+            Atendemos clientes (pessoas que trazem os animais). Um cliente pode ter vários animais de estimação cadastrados. 
+            Para cada animal, guardamos o nome, a espécie (cão, gato, etc.), a raça e a data de nascimento.
+        </p>
+        <p>
+            Quando um cliente traz um animal para atendimento, abrimos um atendimento. Cada atendimento é vinculado a um único animal (e, indiretamente, ao seu dono). 
+            No atendimento, o cliente pode comprar vários produtos e contratar vários serviços. 
+            Guardamos a data/hora de abertura e o total calculado do atendimento.
+        </p>
+        <p>
+            Precisamos registrar, para cada produto vendido em um atendimento, a quantidade e o preço unitário praticado na venda (pois o preço do produto pode mudar com o tempo). 
+            Para cada serviço executado em um atendimento, registramos a quantidade de horas gastas e o preço cobrado (que pode ser diferente do preço base, dependendo do porte do animal)."
+        </p>
+
+        <div class="etapa">
+            <strong>🔍 Tarefa 1 – Identificação</strong>
+            <p>Liste todas as <strong>entidades</strong> e seus respectivos <strong>atributos</strong>. Indique claramente a <strong>chave primária (PK)</strong> de cada entidade e as possíveis <strong>chaves estrangeiras (FK)</strong>.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>🔗 Tarefa 2 – Relacionamentos e Cardinalidades</strong>
+            <p>Descreva todos os <strong>relacionamentos</strong> entre as entidades, especificando a <strong>cardinalidade</strong> de cada lado (1:1, 1:N, N:M). Justifique com base na entrevista.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>📐 Tarefa 3 – Modelo Entidade-Relacionamento (MER)</strong>
+            <p>Desenhe o diagrama ER utilizando a notação de Chen (ou similar). Indique entidades, atributos (com chaves sublinhadas), relacionamentos e cardinalidades.</p>
+        </div>
+
+        <div class="dica">
+            <strong>💡 Dica:</strong> Lembre-se de que relacionamentos N:M geralmente precisam de uma <strong>tabela associativa</strong> no modelo lógico. No MER, eles são representados diretamente com a cardinalidade N:M e, se tiverem atributos próprios, podemos representá-los como uma entidade associativa.
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- EXERCÍCIO 4 – ACADEMIA                                        -->
+    <!-- ============================================================ -->
+    <div class="entrevista">
+        <h2>Exercício 4 – Academia "FitLife"</h2>
+        <p><em>Nível: intermediário</em></p>
+
+        <p><strong>Entrevista com a Sra. Fernanda, gerente:</strong></p>
+
+        <p>
+            "Temos alunos matriculados. Cada aluno possui uma matrícula única, nome, CPF e telefone. 
+            Eles escolhem um plano de assinatura. Os planos têm um código único, um nome (ex.: Mensal, Trimestral, Anual) e um valor mensal.
+        </p>
+        <p>
+            Contratamos instrutores. Cada instrutor tem um registro profissional único, nome, especialidade (ex.: Musculação, Yoga, Pilates) e telefone.
+        </p>
+        <p>
+            Oferecemos diversas modalidades de aula, como Pilates, Spinning e Musculação. 
+            Cada modalidade tem um ID único, nome, duração padrão (em minutos) e a capacidade máxima de alunos por turma.
+        </p>
+        <p>
+            As aulas são agendadas em horários específicos. Cada aula possui uma data, hora de início e hora de fim. 
+            Uma aula está vinculada a uma única modalidade e a um único instrutor (o professor que ministra aquela aula naquele horário).
+        </p>
+        <p>
+            Um aluno pode se matricular em várias aulas, e uma aula pode ter vários alunos matriculados. 
+            Para cada matrícula, guardamos a data da matrícula.
+        </p>
+        <p>
+            Controlamos os pagamentos dos alunos. Cada pagamento tem um ID único, data de vencimento, data de pagamento (se já foi pago), valor e status (pago, pendente, atrasado). Um aluno pode ter vários pagamentos registrados.
+        </p>
+        <p>
+            Além disso, temos um inventário de equipamentos na academia. Cada equipamento possui um número de série único, nome, data de aquisição e uma situação (em operação, em manutenção, inativo). 
+            Uma modalidade pode exigir determinados equipamentos. Por exemplo, a modalidade 'Spinning' precisa de bicicletas. Para cada equipamento necessário em uma modalidade, registramos a quantidade necessária."
+        </p>
+
+        <div class="etapa">
+            <strong>🔍 Tarefa 1 – Identificação</strong>
+            <p>Liste todas as <strong>entidades</strong> e seus atributos. Para cada entidade, indique a <strong>chave primária</strong> e as <strong>chaves estrangeiras</strong>.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>🔗 Tarefa 2 – Relacionamentos e Cardinalidades</strong>
+            <p>Descreva todos os relacionamentos entre as entidades, com suas respectivas <strong>cardinalidades</strong>. Justifique cada uma com base na descrição.</p>
+        </div>
+
+        <div class="etapa">
+            <strong>📐 Tarefa 3 – Modelo Entidade-Relacionamento (MER)</strong>
+            <p>Construa o diagrama ER completo, utilizando a notação de Chen (ou equivalente). Indique entidades, atributos (com chaves sublinhadas), relacionamentos e cardinalidades.</p>
+        </div>
+
+        <div class="atencao">
+            <strong>⚠️ Atenção:</strong> Este caso envolve múltiplos relacionamentos N:M e exige a criação de entidades associativas (como Matrícula e Equipamento_Modalidade). Pense também em como o pagamento se conecta ao aluno.
+        </div>
+
+        <div class="dica">
+            <strong>💡 Dica de modelagem:</strong> Quando uma relação N:M possui atributos próprios (ex.: data_matricula em ALUNO x AULA), ela se torna uma entidade associativa no modelo.
+        </div>
+    </div>
+
+    <hr>
+
+    <div style="background: #e6f4ea; padding: 1rem 1.5rem; border-radius: 12px;">
+        <p><strong>📌 Instruções finais:</strong></p>
+        <ul>
+            <li>Leia atentamente cada entrevista e destaque mentalmente ou com marca-texto as entidades e atributos.</li>
+            <li>Resolva os exercícios em uma folha à parte ou ferramenta de diagramas.</li>
+            <li>Após finalizar, consulte o <strong>gabarito</strong> (arquivo separado) para verificar sua resolução.</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 2rem; font-size: 0.9rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+        Material elaborado para a disciplina de Modelagem de Banco de Dados – ADS.
+    </footer>
+</div>
+</body>
+</html>
