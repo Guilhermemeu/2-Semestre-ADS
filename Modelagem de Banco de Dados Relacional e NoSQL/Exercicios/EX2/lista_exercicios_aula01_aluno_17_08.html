@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lista de Exercícios — Aula 01: Conceitos de Modelagem de Banco de Dados Relacional. Caderno do Aluno.">
+<title>Lista de Exercícios — Aula 01 | Caderno do Aluno | ADS</title>
+
+<!-- Prism.js (syntax highlighting) via CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+<style>
+  :root{
+    --bg:#f7f9fc; --texto:#1f2933; --suave:#3e4c59;
+    --primaria:#0b5394; --primaria-escura:#073763;
+    --superficie:#ffffff; --borda:#d9e2ec;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--texto);
+    font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:1.4em; line-height:1.8;
+  }
+  .container{ max-width:960px; margin:0 auto; padding:1.5rem 1.25rem 4rem; }
+
+  header.topo{
+    background:linear-gradient(135deg,var(--primaria-escura),var(--primaria));
+    color:#fff; padding:2rem 1.25rem;
+  }
+  header.topo .container{ padding-top:0; padding-bottom:0; }
+  header.topo .curso{ text-transform:uppercase; letter-spacing:.12em; font-size:.62em; opacity:.92; margin:0 0 .4rem; }
+  header.topo h1{ font-size:1.45em; line-height:1.35; margin:0 0 .5rem; }
+  header.topo .meta{ display:flex; flex-wrap:wrap; gap:.5rem 1.25rem; font-size:.68em; margin-top:.8rem; }
+  header.topo .meta span{
+    background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35);
+    border-radius:999px; padding:.15rem .8rem;
+  }
+
+  h2{ color:var(--primaria-escura); border-bottom:3px solid var(--primaria); padding-bottom:.35rem; margin-top:2.6rem; font-size:1.2em; }
+  h3{ color:var(--primaria); margin-top:0; font-size:1em; }
+  p{ margin:.9rem 0; }
+
+  table{ width:100%; border-collapse:collapse; margin:1.2rem 0; font-size:.85em; background:var(--superficie); }
+  caption{ caption-side:top; text-align:left; font-weight:600; padding-bottom:.4rem; color:var(--suave); }
+  th,td{ border:1px solid var(--borda); padding:.5rem .7rem; text-align:left; vertical-align:top; }
+  th{ background:#eaf1f8; color:var(--primaria-escura); }
+
+  .instrucoes{
+    background:var(--superficie); border:1px solid var(--borda); border-left:8px solid var(--primaria);
+    border-radius:10px; padding:1.1rem 1.3rem; margin:1.4rem 0;
+  }
+  .instrucoes strong.rotulo{ display:block; margin-bottom:.35rem; }
+
+  .questao{
+    background:var(--superficie); border:1px solid var(--borda);
+    border-radius:12px; padding:1.2rem 1.4rem; margin:1.8rem 0;
+    box-shadow:0 2px 6px rgba(7,55,99,.06);
+  }
+  .badge{
+    display:inline-block; font-size:.58em; font-weight:700;
+    padding:.18rem .75rem; border-radius:999px; vertical-align:middle; margin-left:.6rem;
+  }
+  .facil  { background:#e6f4ea; color:#14532d; border:1px solid #1e7e34; }
+  .medio  { background:#fff4e0; color:#7c3a04; border:1px solid #b45309; }
+  .dificil{ background:#fdecea; color:#7f1d1d; border:1px solid #b3261e; }
+  .tag-codigo{
+    display:inline-block; font-size:.55em; font-weight:700; margin-left:.5rem;
+    padding:.18rem .7rem; border-radius:999px; background:#eef2ff; color:#312e81; border:1px solid #4338ca;
+  }
+
+  ul.alternativas{ list-style:none; padding-left:.2rem; margin:.8rem 0 .2rem; }
+  ul.alternativas li{
+    margin:.55rem 0; padding:.55rem .8rem; border:1px solid var(--borda);
+    border-radius:8px; background:#fbfdff;
+  }
+
+  .resposta-aluno{
+    border:2px dashed #94a3b8; border-radius:10px; min-height:9rem;
+    padding:1rem; margin-top:1rem; background:#fbfdff;
+    color:#64748b; font-size:.8em;
+  }
+
+  pre{ width:100%; overflow-x:auto; border-radius:10px; margin:1.1rem 0; box-shadow:0 2px 10px rgba(0,0,0,.18); }
+  pre[class*="language-"]{ padding:1.2rem; }
+  pre code, code[class*="language-"]{
+    font-size:1rem; line-height:1.7; white-space:pre;
+    font-family:"Cascadia Code",Consolas,"Fira Code",monospace;
+  }
+  code.inline{
+    background:#e5edf5; color:#073763; padding:.08rem .45rem;
+    border-radius:5px; font-size:.85em; font-family:Consolas,monospace;
+  }
+
+  figure{ margin:1.6rem 0; background:var(--superficie); border:1px solid var(--borda); border-radius:12px; padding:1rem; }
+  figure svg{ width:100%; height:auto; display:block; }
+  figcaption{ font-size:.72em; color:var(--suave); margin-top:.6rem; text-align:center; }
+
+  footer{ margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--borda); font-size:.75em; color:var(--suave); }
+
+  @media (max-width:640px){
+    body{ font-size:1.25em; }
+    pre code, code[class*="language-"]{ white-space:pre-wrap; word-break:break-word; }
+    header.topo h1{ font-size:1.2em; }
+    table{ font-size:.78em; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="container">
+    <p class="curso">Análise e Desenvolvimento de Sistemas &bull; Modelagem de Banco de Dados Relacional e NoSQL</p>
+    <h1>Lista de Exercícios — Aula 01: Conceitos de Modelagem de Banco de Dados Relacional</h1>
+    <p style="margin:0; font-size:.85em;">Caderno do Aluno &bull; 10 questões objetivas + 5 dissertativas</p>
+    <div class="meta">
+      <span>Tempo estimado: 50 minutos</span>
+      <span>Consulta: material da Aula 01 permitida</span>
+      <span>SGBD de referência: SQL Server (T-SQL)</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <section id="instrucoes" aria-labelledby="t-instr">
+    <h2 id="t-instr">Instruções e Mapa da Lista</h2>
+    <div class="instrucoes">
+      <strong class="rotulo">📋 Como resolver</strong>
+      <ul style="margin:.3rem 0;">
+        <li>A lista cobre <strong>estritamente</strong> o conteúdo da Aula 01: fundamentos de SGBD, modelo relacional, chaves e integridade, níveis de modelagem, MER, normalização e DDL em SQL Server.</li>
+        <li>As questões objetivas têm alternativas de <strong>A a E</strong>, com apenas <strong>uma correta</strong>.</li>
+        <li>Nas dissertativas, redija respostas completas: conceito + justificativa + exemplo quando solicitado.</li>
+        <li>Questões marcadas com <span class="tag-codigo">💻 CÓDIGO</span> exigem leitura ou escrita de SQL.</li>
+      </ul>
+    </div>
+    <table>
+      <caption>Distribuição das questões por tema e dificuldade</caption>
+      <tr><th>Nº</th><th>Tema</th><th>Tipo</th><th>Dificuldade</th></tr>
+      <tr><td>Q1</td><td>Fundamentos: SGBD × sistemas de arquivos</td><td>Objetiva</td><td>Fácil</td></tr>
+      <tr><td>Q2</td><td>Terminologia do modelo relacional</td><td>Objetiva</td><td>Fácil</td></tr>
+      <tr><td>Q3</td><td>Domínio de atributo</td><td>Objetiva</td><td>Fácil</td></tr>
+      <tr><td>Q4</td><td>Chaves: PK, candidatas, alternativas, substituta</td><td>Objetiva</td><td>Médio</td></tr>
+      <tr><td>Q5</td><td>Integridade referencial (leitura de código)</td><td>Objetiva 💻</td><td>Médio</td></tr>
+      <tr><td>Q6</td><td>Tradução de relacionamento 1:N</td><td>Objetiva</td><td>Médio</td></tr>
+      <tr><td>Q7</td><td>Implementação de relacionamento N:M</td><td>Objetiva</td><td>Médio</td></tr>
+      <tr><td>Q8</td><td>1ª Forma Normal</td><td>Objetiva</td><td>Médio</td></tr>
+      <tr><td>Q9</td><td>2ª Forma Normal e chave composta</td><td>Objetiva</td><td>Difícil</td></tr>
+      <tr><td>Q10</td><td>Constraints UNIQUE/CHECK (leitura de código)</td><td>Objetiva 💻</td><td>Difícil</td></tr>
+      <tr><td>D1</td><td>Esquema × instância; relação × planilha</td><td>Dissertativa</td><td>Fácil</td></tr>
+      <tr><td>D2</td><td>MER e tradução lógica (cardinalidades)</td><td>Dissertativa</td><td>Médio</td></tr>
+      <tr><td>D3</td><td>Anomalias e aplicação da 1FN</td><td>Dissertativa</td><td>Médio</td></tr>
+      <tr><td>D4</td><td>Escrita de DDL com constraints</td><td>Dissertativa 💻</td><td>Difícil</td></tr>
+      <tr><td>D5</td><td>3FN, redesign e desnormalização</td><td>Dissertativa</td><td>Difícil</td></tr>
+    </table>
+  </section>
+
+  <!-- ============================ PARTE I ============================ -->
+  <section id="objetivas" aria-labelledby="t-obj">
+    <h2 id="t-obj">Parte I — Questões Objetivas</h2>
+
+    <!-- Q1 -->
+    <article class="questao">
+      <h3>Questão 1 <span class="badge facil">Fácil</span></h3>
+      <p>Antes dos Sistemas Gerenciadores de Banco de Dados (SGBD), cada aplicação mantinha seus próprios arquivos de dados, o que gerava problemas estruturais nas organizações. Assinale a alternativa que apresenta o principal conjunto de problemas que os SGBD foram criados para resolver:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> Alto custo dos discos rígidos e a lentidão dos compiladores da época.</li>
+        <li><strong>B)</strong> Redundância e inconsistência de dados, isolamento de dados, dificuldade de acesso e falta de garantias de integridade e recuperação.</li>
+        <li><strong>C)</strong> O excesso de normalização aplicado aos arquivos texto, que impedia a leitura sequencial.</li>
+        <li><strong>D)</strong> A necessidade de substituir imediatamente todos os bancos relacionais por bancos NoSQL.</li>
+        <li><strong>E)</strong> A ausência de interfaces gráficas nos sistemas operacionais, que impedia o cadastro de clientes.</li>
+      </ul>
+    </article>
+
+    <!-- Q2 -->
+    <article class="questao">
+      <h3>Questão 2 <span class="badge facil">Fácil</span></h3>
+      <p>No modelo relacional proposto por Edgar Codd, existe uma correspondência formal entre os termos teóricos e a visualização tabular que utilizamos na prática. Assinale a alternativa que apresenta essa correspondência de forma <strong>correta</strong>:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> Relação ↔ coluna; Tupla ↔ linha; Atributo ↔ tabela.</li>
+        <li><strong>B)</strong> Relação ↔ tabela; Tupla ↔ linha; Atributo ↔ coluna.</li>
+        <li><strong>C)</strong> Relação ↔ linha; Tupla ↔ coluna; Atributo ↔ célula.</li>
+        <li><strong>D)</strong> Relação ↔ banco de dados; Tupla ↔ SGBD; Atributo ↔ índice.</li>
+        <li><strong>E)</strong> Relação ↔ tabela; Tupla ↔ coluna; Atributo ↔ linha.</li>
+      </ul>
+    </article>
+
+    <!-- Q3 -->
+    <article class="questao">
+      <h3>Questão 3 <span class="badge facil">Fácil</span></h3>
+      <p>No modelo relacional, o conceito de <strong>domínio</strong> é fundamental para a integridade dos dados. Assinale a alternativa que o define corretamente:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> É a quantidade de tuplas armazenadas em uma relação em um dado instante.</li>
+        <li><strong>B)</strong> É o conjunto de valores permitidos para um atributo, como datas válidas ou inteiros positivos.</li>
+        <li><strong>C)</strong> É o nome oficial de uma tabela dentro do esquema do banco de dados.</li>
+        <li><strong>D)</strong> É sinônimo de chave estrangeira quando ela referencia outra tabela.</li>
+        <li><strong>E)</strong> É o grau de uma relação, ou seja, o número de colunas que ela possui.</li>
+      </ul>
+    </article>
+
+    <!-- Q4 -->
+    <article class="questao">
+      <h3>Questão 4 <span class="badge medio">Médio</span></h3>
+      <p>Considere a relação <code class="inline">Cliente(id_cliente, nome, cpf, email)</code>, em que <code class="inline">id_cliente</code> é um identificador numérico gerado automaticamente pelo banco (chave substituta), e <code class="inline">cpf</code> e <code class="inline">email</code> são atributos obrigatórios e únicos para cada cliente. Assinale a alternativa <strong>correta</strong>:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> <code class="inline">cpf</code> e <code class="inline">email</code> não podem ser chaves candidatas porque são do tipo texto.</li>
+        <li><strong>B)</strong> <code class="inline">id_cliente</code> é a chave primária, enquanto <code class="inline">cpf</code> e <code class="inline">email</code> são chaves alternativas que devem ser protegidas por restrições UNIQUE.</li>
+        <li><strong>C)</strong> Uma relação pode ter apenas uma chave candidata; as demais devem ser removidas do modelo.</li>
+        <li><strong>D)</strong> Toda chave estrangeira deve, obrigatoriamente, referenciar uma chave primária composta.</li>
+        <li><strong>E)</strong> A chave substituta deve ser sempre um dado de negócio estável, como o CPF do cliente.</li>
+      </ul>
+    </article>
+
+    <!-- Q5 -->
+    <article class="questao">
+      <h3>Questão 5 <span class="badge medio">Médio</span> <span class="tag-codigo">💻 LEITURA DE CÓDIGO</span></h3>
+      <p>Considere que o banco LojaVirtual da Aula 01 já foi criado com as tabelas <code class="inline">Cliente</code> e <code class="inline">Pedido</code>, incluindo a restrição <code class="inline">FK_Pedido_Cliente</code>, e que a tabela Cliente contém apenas o cliente com <code class="inline">id_cliente = 1</code> (Maria). Analise o comando abaixo:</p>
+<pre><code class="language-sql">INSERT INTO Pedido (id_cliente, status, total)
+VALUES (999, 'PENDENTE', 10.00);</code></pre>
+      <p>Assinale o que acontecerá ao executá-lo:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> O pedido será inserido normalmente, com o nome do cliente preenchido como NULL.</li>
+        <li><strong>B)</strong> O comando será rejeitado por violação de integridade referencial (FOREIGN KEY), gerando um erro semelhante ao Msg 547 do SQL Server.</li>
+        <li><strong>C)</strong> O SGBD criará automaticamente um novo cliente com id_cliente = 999 para satisfazer a inserção.</li>
+        <li><strong>D)</strong> O comando será rejeitado porque a tabela Pedido possui grau maior que o da tabela Cliente.</li>
+        <li><strong>E)</strong> O pedido ficará em estado pendente até que um COMMIT confirme a criação do cliente 999.</li>
+      </ul>
+    </article>
+
+    <!-- Q6 -->
+    <article class="questao">
+      <h3>Questão 6 <span class="badge medio">Médio</span></h3>
+      <p>Na passagem do modelo conceitual (ER) para o modelo lógico relacional, existe uma regra padrão para a implementação de um relacionamento <strong>1:N</strong> (um-para-muitos), como CLIENTE (1) realiza PEDIDO (N). Assinale a alternativa que descreve essa regra corretamente:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> A chave primária do lado “N” migra como chave estrangeira para o lado “1”.</li>
+        <li><strong>B)</strong> Cria-se uma terceira tabela contendo apenas os atributos do relacionamento.</li>
+        <li><strong>C)</strong> A chave primária da entidade do lado “1” migra como chave estrangeira (NOT NULL, quando obrigatória) para a tabela do lado “N”.</li>
+        <li><strong>D)</strong> Relacionamentos 1:N não podem ser representados no modelo relacional e devem ser simplificados para 1:1.</li>
+        <li><strong>E)</strong> As duas entidades devem ser fundidas em uma única tabela para evitar junções.</li>
+      </ul>
+    </article>
+
+    <!-- Q7 -->
+    <article class="questao">
+      <h3>Questão 7 <span class="badge medio">Médio</span></h3>
+      <p>Um relacionamento <strong>N:M</strong> (muitos-para-muitos), como PEDIDO contém PRODUTO, não pode ser implementado diretamente no modelo relacional. Assinale a alternativa que descreve a solução correta e consagrada para esse caso:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> Inserir uma chave estrangeira multivalorada em uma das duas tabelas, separando os valores por vírgula.</li>
+        <li><strong>B)</strong> Criar uma tabela associativa (ex.: ITEM_PEDIDO) com chaves estrangeiras para as duas entidades, decompondo o N:M em dois relacionamentos 1:N.</li>
+        <li><strong>C)</strong> Duplicar a tabela PEDIDO, criando uma cópia para cada produto envolvido.</li>
+        <li><strong>D)</strong> Escolher arbitrariamente um dos lados para receber a chave estrangeira do outro.</li>
+        <li><strong>E)</strong> Migrar o relacionamento N:M para uma planilha auxiliar fora do SGBD.</li>
+      </ul>
+    </article>
+
+    <!-- Q8 -->
+    <article class="questao">
+      <h3>Questão 8 <span class="badge medio">Médio</span></h3>
+      <p>Considere a tabela MATRICULA abaixo, utilizada para registrar matrículas de alunos em disciplinas:</p>
+      <table>
+        <tr><th>id_matricula</th><th>aluno</th><th>disciplinas</th><th>professor</th><th>nota</th></tr>
+        <tr><td>1</td><td>Maria</td><td>BD, LP1</td><td>Prof. Ana; Prof. Carlos</td><td>8,5; 7,0</td></tr>
+        <tr><td>2</td><td>João</td><td>BD</td><td>Prof. Ana</td><td>9,0</td></tr>
+      </table>
+      <p>Essa estrutura viola, <strong>imediatamente</strong>, qual regra de projeto?</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> A 3ª Forma Normal, pois existe dependência transitiva entre aluno e nota.</li>
+        <li><strong>B)</strong> A 2ª Forma Normal, pois a chave é composta.</li>
+        <li><strong>C)</strong> A 1ª Forma Normal, pois há células com múltiplos valores (grupos repetidos), ferindo a atomicidade.</li>
+        <li><strong>D)</strong> A integridade referencial, pois não há chave estrangeira declarada.</li>
+        <li><strong>E)</strong> A integridade de entidade, pois id_matricula não pode ser numérico.</li>
+      </ul>
+    </article>
+
+    <!-- Q9 -->
+    <article class="questao">
+      <h3>Questão 9 <span class="badge dificil">Difícil</span></h3>
+      <p>Considere a relação <code class="inline">MATRICULA(id_matricula, cod_disc, aluno, professor, nota)</code> já na 1FN, com chave primária <strong>composta</strong> <code class="inline">(id_matricula, cod_disc)</code>. Sabe-se que:</p>
+      <ul>
+        <li><code class="inline">aluno</code> depende apenas de <code class="inline">id_matricula</code> (o nome do aluno não muda conforme a disciplina);</li>
+        <li><code class="inline">professor</code> depende apenas de <code class="inline">cod_disc</code> (a disciplina define o professor, independentemente do aluno);</li>
+        <li><code class="inline">nota</code> depende da chave completa (aluno + disciplina).</li>
+      </ul>
+      <p>Com base nessas dependências, assinale a alternativa <strong>correta</strong>:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> A relação já se encontra na 3ª Forma Normal, pois todos os atributos dependem da chave.</li>
+        <li><strong>B)</strong> A relação viola a 1ª Forma Normal, pois possui chave composta.</li>
+        <li><strong>C)</strong> A relação viola a 2ª Forma Normal, pois aluno e professor dependem apenas de parte da chave composta (dependência parcial).</li>
+        <li><strong>D)</strong> A relação viola somente a 3ª Forma Normal, pois nota depende de aluno.</li>
+        <li><strong>E)</strong> A relação viola a integridade de entidade, pois chaves compostas são proibidas no modelo relacional.</li>
+      </ul>
+    </article>
+
+    <!-- Q10 -->
+    <article class="questao">
+      <h3>Questão 10 <span class="badge dificil">Difícil</span> <span class="tag-codigo">💻 LEITURA DE CÓDIGO</span></h3>
+      <p>Analise o script T-SQL abaixo, executado em um banco recém-criado e vazio:</p>
+<pre><code class="language-sql">CREATE TABLE Cliente (
+    id_cliente INT IDENTITY(1,1) PRIMARY KEY,
+    nome       VARCHAR(100) NOT NULL,
+    email      VARCHAR(120) NOT NULL UNIQUE,
+    cpf        CHAR(11)     NOT NULL UNIQUE
+);
+GO
+
+INSERT INTO Cliente (nome, email, cpf)
+VALUES ('Maria Silva', 'maria@email.com', '11111111111');
+
+INSERT INTO Cliente (nome, email, cpf)
+VALUES ('José Santos', 'jose@email.com', '22222222222');
+
+INSERT INTO Cliente (nome, email, cpf)
+VALUES ('Maria Duarte', 'maria@email.com', '33333333333');</code></pre>
+      <p>Assinale o que ocorrerá na execução do <strong>terceiro</strong> INSERT:</p>
+      <ul class="alternativas">
+        <li><strong>A)</strong> Será executado com sucesso, pois o nome “Maria Duarte” é diferente de “Maria Silva”.</li>
+        <li><strong>B)</strong> Será rejeitado por violação da restrição UNIQUE sobre email (erro do tipo Msg 2627), pois 'maria@email.com' já existe.</li>
+        <li><strong>C)</strong> Será rejeitado por violação de chave estrangeira, pois não existe tabela Pedido correspondente.</li>
+        <li><strong>D)</strong> Será rejeitado por violação de uma restrição CHECK de domínio sobre o atributo cpf.</li>
+        <li><strong>E)</strong> Será executado com sucesso e sobrescreverá os dados da cliente Maria Silva.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ============================ PARTE II ============================ -->
+  <section id="dissertativas" aria-labelledby="t-dis">
+    <h2 id="t-dis">Parte II — Questões Dissertativas</h2>
+
+    <!-- D1 -->
+    <article class="questao">
+      <h3>Questão D1 <span class="badge facil">Fácil</span></h3>
+      <p><strong>a)</strong> Explique a diferença entre <strong>esquema</strong> e <strong>instância</strong> de uma relação, indicando qual deles é alterado por um comando INSERT.<br>
+      <strong>b)</strong> Embora uma relação se pareça com uma planilha eletrônica, elas não são equivalentes. Cite e explique <strong>três</strong> diferenças conceituais entre elas.</p>
+      <div class="resposta-aluno">✍️ Espaço para resposta — utilize os conceitos de esquema, instância, atomicidade, unicidade de tuplas e ordenação lógica.</div>
+    </article>
+
+    <!-- D2 -->
+    <article class="questao">
+      <h3>Questão D2 <span class="badge medio">Médio</span></h3>
+      <p>Observe o modelo conceitual abaixo, referente a uma loja virtual:</p>
+      <figure>
+        <svg viewBox="0 0 860 230" role="img" aria-label="Diagrama entidade-relacionamento com a entidade CLIENTE ligada pelo relacionamento realiza, cardinalidade 1 para N, à entidade PEDIDO, que por sua vez liga-se pelo relacionamento contém, cardinalidade N para N, à entidade PRODUTO">
+          <title>Cenário da Questão D2: CLIENTE (1) realiza (N) PEDIDO; PEDIDO (N) contém (N) PRODUTO</title>
+          <rect x="0" y="0" width="860" height="230" fill="#ffffff"/>
+          <rect x="40" y="90" width="150" height="55" fill="#0b5394"/>
+          <text x="115" y="124" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">CLIENTE</text>
+          <polygon points="275,85 340,117 275,150 210,117" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+          <text x="275" y="123" text-anchor="middle" font-size="14" font-weight="bold" fill="#312e81">realiza</text>
+          <rect x="355" y="90" width="150" height="55" fill="#1e7e34"/>
+          <text x="430" y="124" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">PEDIDO</text>
+          <polygon points="590,85 655,117 590,150 525,117" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+          <text x="590" y="123" text-anchor="middle" font-size="14" font-weight="bold" fill="#312e81">contém</text>
+          <rect x="670" y="90" width="150" height="55" fill="#b45309"/>
+          <text x="745" y="124" text-anchor="middle" fill="#fff" font-size="17" font-weight="bold">PRODUTO</text>
+          <line x1="190" y1="117" x2="210" y2="117" stroke="#334155" stroke-width="2.5"/>
+          <text x="196" y="105" font-size="16" font-weight="bold" fill="#b3261e">1</text>
+          <line x1="340" y1="117" x2="355" y2="117" stroke="#334155" stroke-width="2.5"/>
+          <text x="342" y="105" font-size="16" font-weight="bold" fill="#b3261e">N</text>
+          <line x1="505" y1="117" x2="525" y2="117" stroke="#334155" stroke-width="2.5"/>
+          <text x="508" y="105" font-size="16" font-weight="bold" fill="#b3261e">N</text>
+          <line x1="655" y1="117" x2="670" y2="117" stroke="#334155" stroke-width="2.5"/>
+          <text x="656" y="105" font-size="16" font-weight="bold" fill="#b3261e">N</text>
+          <text x="430" y="200" text-anchor="middle" font-size="13" font-style="italic" fill="#64748b">O relacionamento “contém” possui os atributos quantidade e preco_unitario.</text>
+        </svg>
+        <figcaption>Figura 1 — Cenário conceitual da Questão D2 (notação de Chen).</figcaption>
+      </figure>
+      <p><strong>a)</strong> Classifique as cardinalidades dos relacionamentos <em>realiza</em> e <em>contém</em>, justificando cada uma em linguagem de negócio.<br>
+      <strong>b)</strong> Explique, passo a passo, como o relacionamento <em>contém</em> (N:M) deve ser traduzido para o modelo lógico relacional.<br>
+      <strong>c)</strong> Em qual tabela do modelo lógico devem ficar os atributos <code class="inline">quantidade</code> e <code class="inline">preco_unitario</code>? Justifique.</p>
+      <div class="resposta-aluno">✍️ Espaço para resposta — descreva a tabela associativa, sua chave primária composta e suas chaves estrangeiras.</div>
+    </article>
+
+    <!-- D3 -->
+    <article class="questao">
+      <h3>Questão D3 <span class="badge medio">Médio</span></h3>
+      <p>Considere novamente a tabela MATRICULA não normalizada da Questão 8 (células com listas de disciplinas, professores e notas).</p>
+      <p><strong>a)</strong> Defina e exemplifique, com base nessa tabela, as três anomalias: de <strong>inserção</strong>, de <strong>atualização</strong> e de <strong>exclusão</strong>.<br>
+      <strong>b)</strong> Aplique a <strong>1ª Forma Normal</strong> à tabela, mostrando como ficam as linhas após a correção, e explique o critério utilizado.</p>
+      <div class="resposta-aluno">✍️ Espaço para resposta — apresente ao menos um exemplo concreto para cada anomalia e a tabela resultante da 1FN.</div>
+    </article>
+
+    <!-- D4 -->
+    <article class="questao">
+      <h3>Questão D4 <span class="badge dificil">Difícil</span> <span class="tag-codigo">💻 ESCRITA DE CÓDIGO</span></h3>
+      <p>Escreva, em <strong>Transact-SQL (SQL Server)</strong>, o script DDL completo que:</p>
+      <ol>
+        <li>Cria a tabela <code class="inline">Cliente</code> com: <code class="inline">id_cliente</code> inteiro auto-incremental como chave primária nomeada; <code class="inline">nome</code> obrigatório; <code class="inline">email</code> obrigatório e único; <code class="inline">data_cadastro</code> com valor padrão igual à data/hora atual;</li>
+        <li>Cria a tabela <code class="inline">Pedido</code> com: <code class="inline">id_pedido</code> inteiro auto-incremental como chave primária nomeada; <code class="inline">id_cliente</code> como chave estrangeira nomeada, obrigatória, referenciando Cliente; <code class="inline">total</code> numérico com restrição que impeça valores negativos;</li>
+        <li>Para cada restrição criada, indique em comentário qual tipo de integridade ela protege (entidade, referencial ou domínio).</li>
+      </ol>
+      <div class="resposta-aluno">✍️ Espaço para resposta — escreva o código T-SQL completo, comentado e executável.</div>
+    </article>
+
+    <!-- D5 -->
+    <article class="questao">
+      <h3>Questão D5 <span class="badge dificil">Difícil</span></h3>
+      <p>Considere a relação <code class="inline">PEDIDO(id_pedido, id_cliente, nome_cliente, cidade_cliente, total_pedido)</code>, em que <code class="inline">id_pedido</code> é a chave primária.</p>
+      <p><strong>a)</strong> Identifique e explique a violação de normalização presente nessa relação (dica: analise as dependências funcionais de <code class="inline">nome_cliente</code> e <code class="inline">cidade_cliente</code>).<br>
+      <strong>b)</strong> Proponha o redesign correto, indicando as tabelas, chaves primárias e estrangeiras resultantes.<br>
+      <strong>c)</strong> Descreva uma anomalia de atualização concreta que o redesign elimina.<br>
+      <strong>d)</strong> Com base na Aula 01, explique em que situação a <strong>desnormalização</strong> (reintrodução proposital de redundância) seria justificável e quais cuidados ela exige.</p>
+      <div class="resposta-aluno">✍️ Espaço para resposta — cite a dependência transitiva, o novo esquema com CLIENTE e PEDIDO, e o critério de medição de desempenho para desnormalizar.</div>
+    </article>
+  </section>
+
+  <footer>
+    <p>Lista de Exercícios — Aula 01: Conceitos de Modelagem de Banco de Dados Relacional. Disciplina: Modelagem de Banco de Dados Relacional e NoSQL — ADS. Caderno do Aluno (sem gabarito).</p>
+  </footer>
+
+</div>
+</body>
+</html>
