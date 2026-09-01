@@ -1,0 +1,1041 @@
+<!-- ==================================================================== -->
+<!-- ARQUIVO 1: CADERNO DO ALUNO (Lista de Exercícios)                    -->
+<!-- ==================================================================== -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Exercícios - Classificação de Redes | ADS</title>
+
+    <!-- highlight.js via CDN para código -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+
+    <style>
+        /* Mesmo estilo base da aula, com pequenas adaptações para lista */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-size: 1.4em;
+            line-height: 1.7;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background-color: #f8f9fc;
+            color: #1e1e2f;
+            padding: 1.5rem 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: #0b1c3a;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 4px solid #1a5276;
+            padding-bottom: 0.5rem;
+        }
+        h2 {
+            font-size: 1.7rem;
+            border-left: 6px solid #1a5276;
+            padding-left: 0.8rem;
+            margin-top: 2.2rem;
+        }
+        h3 {
+            font-size: 1.35rem;
+            margin-top: 1.8rem;
+            color: #1e3a5f;
+        }
+
+        p,
+        li {
+            margin-bottom: 0.7rem;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .cabecalho-lista {
+            background: linear-gradient(135deg, #eaf2f8 0%, #d4e6f1 100%);
+            border-radius: 1.2rem;
+            padding: 1.8rem 2.2rem;
+            margin-bottom: 2rem;
+            border-left: 8px solid #1a5276;
+        }
+
+        .questao {
+            background: #ffffff;
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.8rem;
+            margin: 1.2rem 0;
+            border-left: 4px solid #2e86c1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .questao .cabecalho-questao {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.4rem;
+        }
+        .questao .numero {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #0b1c3a;
+        }
+        .questao .dificuldade {
+            font-size: 0.8rem;
+            background: #d4e6f1;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a3b5c;
+        }
+        .questao .dificuldade.facil {
+            background: #d5f5e3;
+            color: #1a6e3e;
+        }
+        .questao .dificuldade.medio {
+            background: #fdebd0;
+            color: #7d6608;
+        }
+        .questao .dificuldade.dificil {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
+        .questao .enunciado {
+            margin-top: 0.4rem;
+        }
+
+        .questao .alternativas {
+            list-style-type: upper-alpha;
+            padding-left: 1.8rem;
+            margin-top: 0.4rem;
+        }
+        .questao .alternativas li {
+            margin-bottom: 0.2rem;
+        }
+
+        pre {
+            background: #1e1e2e;
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.4rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            width: 100%;
+            font-size: 0.9em;
+            line-height: 1.7;
+            border: 1px solid #2d2d44;
+        }
+        pre code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.95em;
+            line-height: 1.7;
+            white-space: pre;
+            display: block;
+            color: #e4e4f0;
+            background: transparent;
+            padding: 0;
+        }
+        @media (max-width: 680px) {
+            body {
+                font-size: 1.2em;
+                padding: 1rem 1.2rem;
+            }
+            pre {
+                font-size: 0.8em;
+                padding: 0.8rem;
+            }
+            pre code {
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        }
+
+        .box-dica {
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.6rem;
+            margin: 1.6rem 0;
+            border-left: 6px solid #1e8449;
+            background: #eafaf1;
+        }
+        .box-dica::before {
+            content: "💡 Dica: ";
+            font-weight: 700;
+            color: #1e8449;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px dashed #b8c9dd;
+            margin: 2.4rem 0;
+        }
+        footer {
+            font-size: 0.8rem;
+            color: #3d5a78;
+            padding: 0.4rem 0 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="cabecalho-lista">
+        <h1>Lista de Exercícios – Classificação de Redes</h1>
+        <p style="font-size:1.1rem; margin-top:0.3rem;">
+            <strong>Disciplina:</strong> Redes de Computadores e Sistemas Distribuídos &nbsp;|&nbsp;
+            <strong>Curso:</strong> ADS &nbsp;|&nbsp;
+            <strong>Baseado na aula de 28/08/2026</strong>
+        </p>
+        <p><strong>Instruções:</strong> Responda às questões objetivas (alternativas A–E) e dissertativas. As questões de código devem ser analisadas e/ou escritas. Use o espaço adequado para suas respostas.</p>
+    </header>
+
+    <!-- ================================================================== -->
+    <!-- QUESTÕES OBJETIVAS (10)                                            -->
+    <!-- ================================================================== -->
+    <section>
+        <h2>Questões Objetivas (10 questões)</h2>
+
+        <!-- Q1 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 1</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <div class="enunciado">
+                <p>Qual das seguintes classificações de rede se refere à forma como os dados fluem em um canal de comunicação entre dois dispositivos, podendo ser unidirecional, bidirecional alternado ou bidirecional simultâneo?</p>
+            </div>
+            <ol class="alternativas">
+                <li>Serviço de transporte</li>
+                <li>Modelo de comunicação</li>
+                <li>Modo de operação do canal</li>
+                <li>Topologia</li>
+                <li>Abrangência geográfica</li>
+            </ol>
+        </div>
+
+        <!-- Q2 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 2</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <div class="enunciado">
+                <p>Em uma rede com topologia em estrela, qual é a principal desvantagem em relação à confiabilidade?</p>
+            </div>
+            <ol class="alternativas">
+                <li>Alto custo de cabos</li>
+                <li>Dificuldade de expansão</li>
+                <li>Ponto único de falha no dispositivo central</li>
+                <li>Colisões frequentes de dados</li>
+                <li>Necessidade de repetidores a cada 100 metros</li>
+            </ol>
+        </div>
+
+        <!-- Q3 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 3</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <div class="enunciado">
+                <p>O modelo de comunicação em que um único emissor envia dados para <strong>todos</strong> os dispositivos em um domínio de broadcast é chamado de:</p>
+            </div>
+            <ol class="alternativas">
+                <li>Unicast</li>
+                <li>Broadcast</li>
+                <li>Multicast</li>
+                <li>Anycast</li>
+                <li>Geocast</li>
+            </ol>
+        </div>
+
+        <!-- Q4 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 4</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p>Qual das seguintes alternativas descreve corretamente a comutação de pacotes no modo datagrama?</p>
+            </div>
+            <ol class="alternativas">
+                <li>Um caminho dedicado é estabelecido antes da transmissão.</li>
+                <li>Os pacotes seguem todos a mesma rota pré-definida.</li>
+                <li>Cada pacote é encaminhado independentemente, podendo seguir rotas diferentes.</li>
+                <li>Os recursos de rede são reservados durante toda a comunicação.</li>
+                <li>É utilizado exclusivamente em redes de telefonia.</li>
+            </ol>
+        </div>
+
+        <!-- Q5 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 5</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p>Uma rede que cobre uma área metropolitana, como uma cidade, é classificada como:</p>
+            </div>
+            <ol class="alternativas">
+                <li>PAN</li>
+                <li>LAN</li>
+                <li>MAN</li>
+                <li>WAN</li>
+                <li>GAN</li>
+            </ol>
+        </div>
+
+        <!-- Q6 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 6</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p>Considere o seguinte trecho de código Python que simula o envio de mensagens em uma rede. Qual será a saída para a chamada <code>rede.enviar("Servidor", "multicast", "Teste")</code> considerando que os dispositivos "Cliente1" e "Cliente2" estão no grupo multicast, e "Cliente3" não está?</p>
+                <pre><code class="language-python">class Dispositivo:
+    def __init__(self, nome, grupo=None):
+        self.nome = nome
+        self.grupo = grupo if grupo else set()
+
+    def receber(self, mensagem, origem, destino):
+        if destino == "multicast" and self.nome in self.grupo:
+            print(f"{self.nome} recebeu: {mensagem}")
+        # ... (outros casos)</code></pre>
+            </div>
+            <ol class="alternativas">
+                <li>Apenas Cliente1 recebe a mensagem.</li>
+                <li>Apenas Cliente2 recebe a mensagem.</li>
+                <li>Cliente1 e Cliente2 recebem a mensagem; Cliente3 não.</li>
+                <li>Todos os dispositivos recebem a mensagem, incluindo Cliente3.</li>
+                <li>Nenhum dispositivo recebe, pois multicast não é suportado.</li>
+            </ol>
+        </div>
+
+        <!-- Q7 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 7</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p>Qual das seguintes topologias oferece a maior redundância e tolerância a falhas, porém com maior custo de cabos e gerenciamento?</p>
+            </div>
+            <ol class="alternativas">
+                <li>Estrela</li>
+                <li>Barramento</li>
+                <li>Anel</li>
+                <li>Malha</li>
+                <li>Árvore</li>
+            </ol>
+        </div>
+
+        <!-- Q8 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 8</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="enunciado">
+                <p>Analise o seguinte script bash. Ele foi executado em um servidor Linux. Com base na saída, qual afirmação sobre a topologia <strong>lógica</strong> da rede é <strong>falsa</strong>?</p>
+                <pre><code class="language-bash">#!/bin/bash
+ip -br link show
+ip neigh show
+ip route show</code></pre>
+                <p>Supondo que a saída mostre várias interfaces, entradas ARP para diferentes IPs e rotas para redes internas e externas.</p>
+            </div>
+            <ol class="alternativas">
+                <li>O comando <code>ip link</code> revela o estado das interfaces de camada 2.</li>
+                <li>A tabela ARP mostra mapeamentos de endereços IP para MAC, indicando vizinhos na camada de enlace.</li>
+                <li>É possível inferir a topologia física completa (cabos e switches) a partir desses comandos.</li>
+                <li>As rotas mostradas ajudam a entender a topologia lógica de camada 3.</li>
+                <li>O script não modifica a configuração da rede.</li>
+            </ol>
+        </div>
+
+        <!-- Q9 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 9</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="enunciado">
+                <p>Em um cenário de videoconferência com muitos participantes, qual modelo de comunicação é mais eficiente para distribuir o fluxo de vídeo do apresentador para todos os participantes, minimizando o tráfego na rede?</p>
+            </div>
+            <ol class="alternativas">
+                <li>Unicast, enviando cópias individuais para cada participante.</li>
+                <li>Broadcast, enviando para todos os dispositivos da rede.</li>
+                <li>Multicast, enviando para um grupo de participantes inscritos.</li>
+                <li>Anycast, enviando para o participante mais próximo.</li>
+                <li>Simplex, pois vídeo é unidirecional.</li>
+            </ol>
+        </div>
+
+        <!-- Q10 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 10</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="enunciado">
+                <p>Considere as seguintes afirmações sobre classificação de redes. Assinale a alternativa que contém <strong>todas</strong> as afirmações corretas:</p>
+                <p>I. A comutação de circuitos é mais eficiente que a comutação de pacotes em termos de uso de enlaces.<br>
+                II. O modo half-duplex permite transmissão simultânea nos dois sentidos.<br>
+                III. Uma LAN pode abranger até cerca de 1 km.<br>
+                IV. A topologia em barramento é a mais utilizada em redes modernas devido à sua alta escalabilidade.</p>
+            </div>
+            <ol class="alternativas">
+                <li>Apenas I e II</li>
+                <li>Apenas II e III</li>
+                <li>Apenas III</li>
+                <li>Apenas I e IV</li>
+                <li>Apenas III e IV</li>
+            </ol>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- ================================================================== -->
+    <!-- QUESTÕES DISSERTATIVAS (5)                                        -->
+    <!-- ================================================================== -->
+    <section>
+        <h2>Questões Dissertativas (5 questões)</h2>
+
+        <!-- Q11 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 11</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p><strong>Leitura de código:</strong> O código abaixo simula uma rede com topologia em estrela. Analise e responda:</p>
+                <pre><code class="language-python">class Switch:
+    def __init__(self):
+        self.portas = {}
+
+    def conectar(self, dispositivo, porta):
+        self.portas[porta] = dispositivo
+
+    def enviar(self, origem, destino, mensagem):
+        for porta, disp in self.portas.items():
+            if disp.nome != origem:
+                disp.receber(mensagem, origem, destino)
+
+class Computador:
+    def __init__(self, nome):
+        self.nome = nome
+
+    def receber(self, mensagem, origem, destino):
+        if destino == self.nome or destino == "broadcast":
+            print(f"{self.nome} recebeu de {origem}: {mensagem}")</code></pre>
+                <p><strong>a)</strong> Explique como o método <code>enviar</code> do Switch implementa o comportamento de broadcast.<br>
+                <strong>b)</strong> Se um computador enviar uma mensagem com destino "broadcast", todos os outros computadores receberão? Justifique.<br>
+                <strong>c)</strong> O que aconteceria se houvesse dois switches interconectados? Como a topologia se modificaria?</p>
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 12</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="enunciado">
+                <p><strong>Escrita de código:</strong> Escreva uma classe em Python que represente uma rede com topologia em anel. A classe deve ter métodos para adicionar nós (cada nó com um nome) e para enviar uma mensagem de um nó para outro, percorrendo o anel em uma direção. O método <code>enviar(origem, destino, mensagem)</code> deve exibir o caminho percorrido pela mensagem (ex: "N1 -> N2 -> N3 -> destino: mensagem") e entregar a mensagem ao destino. Considere que o anel é unidirecional. Forneça o código completo e um exemplo de uso com pelo menos 4 nós.</p>
+                <p><strong>Observação:</strong> Se houver falha em um nó, a mensagem não deve ser entregue (simplificação).</p>
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 13</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="enunciado">
+                <p><strong>Leitura de código e conceito:</strong> O seguinte trecho de código (em Python) tenta implementar uma comunicação unicast, mas contém um erro lógico. Identifique o erro e corrija-o, explicando o motivo.</p>
+                <pre><code class="language-python">def enviar_unicast(rede, origem, destino, mensagem):
+    for dispositivo in rede.dispositivos:
+        if dispositivo.nome == destino:
+            dispositivo.receber(mensagem, origem)
+        else:
+            print(f"Descartando para {dispositivo.nome}")</code></pre>
+                <p>Qual a consequência desse código e como você o reescreveria para uma comunicação unicast correta?</p>
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 14</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <div class="enunciado">
+                <p>Explique, com suas palavras, a diferença entre topologia física e topologia lógica de uma rede. Dê um exemplo de uma situação em que essas duas topologias são diferentes.</p>
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="questao">
+            <div class="cabecalho-questao">
+                <span class="numero">Questão 15</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="enunciado">
+                <p><strong>Leitura de código e projeto:</strong> Você é responsável por projetar uma rede para uma universidade com 5 prédios, cada um com 200 computadores. A universidade exige alta disponibilidade e baixa latência entre os prédios. Com base nos critérios de classificação estudados, justifique as seguintes escolhas:</p>
+                <ul>
+                    <li>Topologia mais adequada para a rede interna de cada prédio (LAN) e para a interconexão entre os prédios (campus).</li>
+                    <li>Modo de operação do canal (simplex, half-duplex ou full-duplex) e justificativa.</li>
+                    <li>Modelo de comunicação para distribuição de avisos institucionais em tempo real (texto) e para transmissão de aulas ao vivo (vídeo).</li>
+                </ul>
+                <p>Apresente sua resposta de forma estruturada, mencionando os critérios de classificação aplicados.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <footer>
+        <span>Caderno do Aluno — Lista de Exercícios</span>
+        <span>Curso Superior de ADS | Redes de Computadores</span>
+    </footer>
+
+</body>
+</html>
+
+
+<!-- ==================================================================== -->
+<!-- ARQUIVO 2: GABARITO (Respostas e Justificativas)                    -->
+<!-- ==================================================================== -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabarito - Lista de Exercícios | ADS</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+
+    <style>
+        /* Mesmo estilo do caderno do aluno, mas com cores de destaque para respostas */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-size: 1.4em;
+            line-height: 1.7;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background-color: #f8f9fc;
+            color: #1e1e2f;
+            padding: 1.5rem 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: #0b1c3a;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 4px solid #1a5276;
+            padding-bottom: 0.5rem;
+        }
+        h2 {
+            font-size: 1.7rem;
+            border-left: 6px solid #1a5276;
+            padding-left: 0.8rem;
+            margin-top: 2.2rem;
+        }
+        h3 {
+            font-size: 1.35rem;
+            margin-top: 1.8rem;
+            color: #1e3a5f;
+        }
+
+        p,
+        li {
+            margin-bottom: 0.7rem;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .cabecalho-gabarito {
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e6f1 100%);
+            border-radius: 1.2rem;
+            padding: 1.8rem 2.2rem;
+            margin-bottom: 2rem;
+            border-left: 8px solid #1a5276;
+        }
+
+        .questao-gabarito {
+            background: #ffffff;
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.8rem;
+            margin: 1.2rem 0;
+            border-left: 4px solid #27ae60;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .questao-gabarito .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.4rem;
+        }
+        .questao-gabarito .numero {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #0b1c3a;
+        }
+        .questao-gabarito .dificuldade {
+            font-size: 0.8rem;
+            background: #d4e6f1;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a3b5c;
+        }
+        .questao-gabarito .dificuldade.facil {
+            background: #d5f5e3;
+            color: #1a6e3e;
+        }
+        .questao-gabarito .dificuldade.medio {
+            background: #fdebd0;
+            color: #7d6608;
+        }
+        .questao-gabarito .dificuldade.dificil {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
+        .resposta {
+            margin-top: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: #f0f7fb;
+            border-radius: 0.6rem;
+            border-left: 4px solid #1a5276;
+        }
+        .resposta .rotulo {
+            font-weight: 700;
+            color: #0b3d6b;
+        }
+
+        .justificativa {
+            margin-top: 0.3rem;
+            font-size: 0.95em;
+            color: #1e2f45;
+        }
+
+        pre {
+            background: #1e1e2e;
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.4rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            width: 100%;
+            font-size: 0.9em;
+            line-height: 1.7;
+            border: 1px solid #2d2d44;
+        }
+        pre code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.95em;
+            line-height: 1.7;
+            white-space: pre;
+            display: block;
+            color: #e4e4f0;
+            background: transparent;
+            padding: 0;
+        }
+        @media (max-width: 680px) {
+            body {
+                font-size: 1.2em;
+                padding: 1rem 1.2rem;
+            }
+            pre {
+                font-size: 0.8em;
+                padding: 0.8rem;
+            }
+            pre code {
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        }
+
+        .box-dica {
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.6rem;
+            margin: 1.6rem 0;
+            border-left: 6px solid #1e8449;
+            background: #eafaf1;
+        }
+        .box-dica::before {
+            content: "💡 Dica: ";
+            font-weight: 700;
+            color: #1e8449;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px dashed #b8c9dd;
+            margin: 2.4rem 0;
+        }
+        footer {
+            font-size: 0.8rem;
+            color: #3d5a78;
+            padding: 0.4rem 0 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="cabecalho-gabarito">
+        <h1>Gabarito – Lista de Exercícios</h1>
+        <p style="font-size:1.1rem; margin-top:0.3rem;">
+            <strong>Disciplina:</strong> Redes de Computadores e Sistemas Distribuídos &nbsp;|&nbsp;
+            <strong>Curso:</strong> ADS
+        </p>
+        <p><strong>Instruções:</strong> Este gabarito contém as respostas corretas, justificativas técnicas detalhadas e, para as dissertativas, o padrão de resposta esperado (incluindo código quando aplicável).</p>
+    </header>
+
+    <!-- ================================================================== -->
+    <!-- GABARITO OBJETIVAS                                                -->
+    <!-- ================================================================== -->
+    <section>
+        <h2>Respostas – Questões Objetivas</h2>
+
+        <!-- Q1 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 1</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Modo de operação do canal</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">O modo de operação do canal define a direcionalidade da transmissão: simplex (unidirecional), half-duplex (bidirecional alternado) e full-duplex (bidirecional simultâneo). As demais alternativas referem-se a outros critérios de classificação: serviço de transporte (circuito/pacote), modelo de comunicação (unicast, broadcast, multicast), topologia (disposição física) e abrangência (escala geográfica).</p>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 2</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Ponto único de falha no dispositivo central</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">Na topologia em estrela, todos os dispositivos se conectam a um elemento central (switch, hub ou roteador). Se esse elemento falha, toda a rede fica inoperante. Embora haja outros custos e limitações, a principal desvantagem em termos de confiabilidade é o ponto único de falha.</p>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 3</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> B) Broadcast</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">Broadcast é o modelo de comunicação em que um emissor envia dados para todos os dispositivos no domínio de broadcast. Unicast é ponto a ponto; multicast é para um grupo; anycast e geocast são variações menos comuns em redes tradicionais.</p>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 4</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Cada pacote é encaminhado independentemente, podendo seguir rotas diferentes.</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">No modo datagrama da comutação de pacotes, não há reserva de recursos nem caminho fixo. Cada pacote contém endereço de destino e é roteado individualmente, podendo seguir caminhos distintos. As alternativas A e D descrevem comutação de circuitos; B descreve circuito virtual; E é incorreta, pois é usada em redes de dados (como a Internet).</p>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 5</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) MAN</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">MAN (Metropolitan Area Network) é a rede que cobre uma área metropolitana, como uma cidade. PAN é pessoal (metros), LAN é local (até 1 km), WAN é ampla (países/continentes) e GAN é global.</p>
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 6</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Cliente1 e Cliente2 recebem a mensagem; Cliente3 não.</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">O método <code>receber</code> verifica se o destino é "multicast" e se o nome do dispositivo está no grupo. Como Cliente1 e Cliente2 estão no grupo, eles recebem; Cliente3 não está no grupo, portanto ignora. Isso reproduz o comportamento esperado do multicast.</p>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 7</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> D) Malha</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">A topologia em malha oferece múltiplos caminhos entre os nós, proporcionando alta redundância e tolerância a falhas. No entanto, exige mais cabos e equipamentos, além de gerenciamento mais complexo, o que aumenta o custo.</p>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 8</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) É possível inferir a topologia física completa (cabos e switches) a partir desses comandos.</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">Os comandos <code>ip link</code>, <code>ip neigh</code> e <code>ip route</code> fornecem informações sobre interfaces, vizinhos ARP e rotas, que ajudam a entender a topologia <strong>lógica</strong> (camadas 2 e 3), mas não revelam a topologia física detalhada (como cabos, switches físicos, disposição em rack). Para isso, seriam necessários protocolos como LLDP ou CDP. Portanto, a afirmação C é falsa.</p>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 9</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Multicast, enviando para um grupo de participantes inscritos.</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">O multicast é o modelo mais eficiente para distribuir o mesmo fluxo a múltiplos receptores, pois o emissor envia uma única cópia e a rede se encarrega de replicá-la apenas para os ramos onde há receptores inscritos. Unicast geraria tráfego redundante; broadcast é desnecessário e pode sobrecarregar a rede; anycast não se aplica a esse cenário.</p>
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 10</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <p><strong>Alternativa correta:</strong> C) Apenas III</p>
+            <div class="resposta">
+                <span class="rotulo">Justificativa:</span>
+                <p class="justificativa">I é falsa: comutação de circuitos é menos eficiente em uso de enlaces que comutação de pacotes. II é falsa: half-duplex não permite transmissão simultânea; isso é full-duplex. III é correta: uma LAN pode abranger até cerca de 1 km (embora em alguns contextos possa ser maior, o padrão é essa ordem de grandeza). IV é falsa: barramento não é a mais utilizada; estrela é predominante. Portanto, apenas III é correta.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- ================================================================== -->
+    <!-- GABARITO DISSERTATIVAS                                            -->
+    <!-- ================================================================== -->
+    <section>
+        <h2>Respostas – Questões Dissertativas</h2>
+
+        <!-- Q11 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 11</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="resposta">
+                <span class="rotulo">Padrão de resposta esperado:</span>
+                <p><strong>a)</strong> O método <code>enviar</code> percorre todas as portas do switch e envia a mensagem para todos os dispositivos conectados, exceto o remetente. Isso implementa o broadcast, pois a mensagem é repassada a todos os outros nós.</p>
+                <p><strong>b)</strong> Sim, todos os outros computadores receberão, pois o switch replica a mensagem para todas as portas, exceto a de origem. Esse é o comportamento típico de um switch em uma rede com broadcast.</p>
+                <p><strong>c)</strong> Se dois switches forem interconectados, a topologia se torna uma árvore (ou malha, dependendo das conexões). O broadcast seria propagado para todos os domínios de broadcast conectados, potencialmente inundando a rede se não houver mecanismos de controle (como STP). O código atual não trata loops, o que poderia causar tempestades de broadcast.</p>
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 12</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="resposta">
+                <span class="rotulo">Padrão de resposta esperado (código):</span>
+                <pre><code class="language-python">class No:
+    def __init__(self, nome):
+        self.nome = nome
+        self.proximo = None
+
+    def __repr__(self):
+        return self.nome
+
+class Anel:
+    def __init__(self):
+        self.nos = []
+
+    def adicionar_no(self, nome):
+        novo = No(nome)
+        if not self.nos:
+            self.nos.append(novo)
+            novo.proximo = novo   # aponta para si mesmo em anel de 1 nó
+        else:
+            # insere no final e ajusta o último para apontar para o novo, e o novo para o primeiro
+            ultimo = self.nos[-1]
+            ultimo.proximo = novo
+            novo.proximo = self.nos[0]
+            self.nos.append(novo)
+
+    def enviar(self, origem_nome, destino_nome, mensagem):
+        # encontra o nó de origem
+        origem = None
+        for no in self.nos:
+            if no.nome == origem_nome:
+                origem = no
+                break
+        if not origem:
+            print(f"Origem {origem_nome} não encontrada.")
+            return
+
+        # percorre o anel a partir do próximo nó
+        atual = origem.proximo
+        caminho = [origem.nome]
+        while atual != origem:
+            caminho.append(atual.nome)
+            if atual.nome == destino_nome:
+                print(" -> ".join(caminho) + f" : {mensagem}")
+                return
+            atual = atual.proximo
+        print(f"Destino {destino_nome} não alcançado (anel percorrido).")
+
+# Exemplo de uso:
+anel = Anel()
+for nome in ["N1", "N2", "N3", "N4"]:
+    anel.adicionar_no(nome)
+
+anel.enviar("N1", "N3", "Olá, N3!")
+# Saída esperada: N1 -> N2 -> N3 : Olá, N3!
+</code></pre>
+                <p><strong>Explicação:</strong> A classe <code>Anel</code> mantém uma lista de nós, cada um com referência ao próximo. O método <code>enviar</code> percorre o anel a partir da origem, acumulando o caminho, até encontrar o destino ou retornar à origem.</p>
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 13</span>
+                <span class="dificuldade medio">Médio</span>
+            </div>
+            <div class="resposta">
+                <span class="rotulo">Padrão de resposta esperado:</span>
+                <p><strong>Erro identificado:</strong> O código exibe "Descartando para ..." para todos os dispositivos que não são o destino, o que é desnecessário e polui a saída. Além disso, se o destino não for encontrado, nenhuma mensagem é entregue (o que é correto), mas a mensagem de "Descartando" pode ser confusa, pois sugere que a mensagem foi descartada mesmo quando o dispositivo não era o destino — o que não é um erro, mas sim o comportamento normal do unicast.</p>
+                <p><strong>Correção:</strong> Remover o <code>else</code> que imprime "Descartando", pois em unicast a mensagem deve ser enviada apenas ao destino, e os demais dispositivos simplesmente não a recebem. O código revisado:</p>
+                <pre><code class="language-python">def enviar_unicast(rede, origem, destino, mensagem):
+    for dispositivo in rede.dispositivos:
+        if dispositivo.nome == destino:
+            dispositivo.receber(mensagem, origem)
+            return   # para após encontrar o destino
+    print(f"Destino {destino} não encontrado.")</code></pre>
+                <p>Dessa forma, a mensagem é entregue apenas ao destinatário e não há saídas indesejadas.</p>
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 14</span>
+                <span class="dificuldade facil">Fácil</span>
+            </div>
+            <div class="resposta">
+                <span class="rotulo">Padrão de resposta esperado:</span>
+                <p>A <strong>topologia física</strong> refere-se à disposição real dos cabos, dispositivos e equipamentos (como a forma como os switches estão conectados fisicamente). A <strong>topologia lógica</strong> descreve como os dados fluem na rede, ou seja, o caminho que as informações percorrem logicamente, independente da disposição física.</p>
+                <p><strong>Exemplo:</strong> Em uma rede com switches interconectados em estrela (fisicamente), a topologia lógica pode ser um barramento se todos os dispositivos compartilharem o mesmo domínio de colisão (em redes antigas com hubs). Atualmente, com switches, a topologia lógica é também em estrela, mas VLANs podem criar topologias lógicas diferentes da física.</p>
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="questao-gabarito">
+            <div class="cabecalho">
+                <span class="numero">Questão 15</span>
+                <span class="dificuldade dificil">Difícil</span>
+            </div>
+            <div class="resposta">
+                <span class="rotulo">Padrão de resposta esperado:</span>
+                <p><strong>Topologia interna dos prédios (LAN):</strong> Estrela com switches, pois oferece gerenciamento centralizado, fácil expansão e isola falhas. Cada andar pode ter um switch, interconectados em árvore ou cascata.</p>
+                <p><strong>Topologia entre prédios (campus):</strong> Malha parcial ou anel com redundância (ex: dois caminhos distintos entre os prédios) para garantir alta disponibilidade. Pode-se usar fibra óptica e protocolos de roteamento dinâmico.</p>
+                <p><strong>Modo de operação:</strong> Full-duplex em todas as conexões, pois permite transmissão simultânea, maximizando a utilização do enlace e reduzindo colisões (comum em Ethernet com switches).</p>
+                <p><strong>Modelo de comunicação:</strong> Avisos institucionais em texto podem usar broadcast (se forem para todos) ou unicast (se personalizados). Aulas ao vivo em vídeo devem usar multicast para otimizar o tráfego, evitando cópias individuais para cada receptor.</p>
+                <p><strong>Justificativa dos critérios:</strong> A escolha da topologia leva em conta a abrangência (LAN e MAN), a confiabilidade (malha), o modo de operação (full-duplex) e o modelo de comunicação adequado a cada tipo de tráfego.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+
+    <footer>
+        <span>Gabarito — Lista de Exercícios</span>
+        <span>Curso Superior de ADS | Redes de Computadores</span>
+    </footer>
+
+</body>
+</html>

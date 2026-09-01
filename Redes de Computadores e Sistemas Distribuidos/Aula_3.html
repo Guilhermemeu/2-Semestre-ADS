@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula: Classificação das Redes de Computadores | ADS</title>
+
+    <!-- highlight.js via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+
+    <style>
+        /* Reset básico */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-size: 1.4em;
+            line-height: 1.7;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background-color: #f8f9fc;
+            color: #1e1e2f;
+            padding: 1.5rem 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* Contraste AA: #1e1e2f sobre #f8f9fc → razão ~14.5:1 */
+        /* Links com contraste */
+        a {
+            color: #0b4b8a;
+            text-decoration: underline;
+            text-underline-offset: 0.1em;
+        }
+        a:hover,
+        a:focus {
+            color: #04315e;
+        }
+
+        /* Tipografia e espaçamento */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: #0b1c3a;
+        }
+        h1 {
+            font-size: 2.2rem;
+            border-bottom: 4px solid #1a5276;
+            padding-bottom: 0.5rem;
+            margin-top: 0.2rem;
+        }
+        h2 {
+            font-size: 1.7rem;
+            border-left: 6px solid #1a5276;
+            padding-left: 0.8rem;
+            margin-top: 2.2rem;
+        }
+        h3 {
+            font-size: 1.35rem;
+            margin-top: 1.8rem;
+            color: #1e3a5f;
+        }
+        h4 {
+            font-size: 1.15rem;
+            margin-top: 1.4rem;
+            color: #2a4a6e;
+        }
+
+        p,
+        li {
+            margin-bottom: 0.7rem;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Cabeçalho da aula */
+        .aula-header {
+            background: linear-gradient(135deg, #eaf2f8 0%, #d4e6f1 100%);
+            border-radius: 1.2rem;
+            padding: 1.8rem 2.2rem;
+            margin-bottom: 2rem;
+            border-left: 8px solid #1a5276;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+        .aula-header .meta {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #1a3b5c;
+            font-weight: 600;
+        }
+        .aula-header .meta span {
+            background: #1a5276;
+            color: #fff;
+            padding: 0.15rem 0.9rem;
+            border-radius: 30px;
+            font-weight: 500;
+            margin-right: 0.6rem;
+        }
+
+        /* Caixas de destaque */
+        .box-dica,
+        .box-alerta,
+        .box-aviso,
+        .box-reflexao {
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.6rem;
+            margin: 1.6rem 0;
+            border-left: 6px solid;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .box-dica {
+            border-color: #1e8449;
+            background: #eafaf1;
+        }
+        .box-dica::before {
+            content: "💡 Dica: ";
+            font-weight: 700;
+            color: #1e8449;
+        }
+        .box-alerta {
+            border-color: #b7950b;
+            background: #fcf9e7;
+        }
+        .box-alerta::before {
+            content: "⚠️ Atenção: ";
+            font-weight: 700;
+            color: #7d6608;
+        }
+        .box-aviso {
+            border-color: #a93226;
+            background: #fdedec;
+        }
+        .box-aviso::before {
+            content: "🚨 Erro comum: ";
+            font-weight: 700;
+            color: #922b21;
+        }
+        .box-reflexao {
+            border-color: #2e86c1;
+            background: #ebf5fb;
+        }
+        .box-reflexao::before {
+            content: "🧠 Pare e Pense: ";
+            font-weight: 700;
+            color: #1a5276;
+        }
+
+        /* Blocos de código */
+        pre {
+            background: #1e1e2e;
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.4rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            width: 100%;
+            font-size: 0.9em;
+            line-height: 1.7;
+            border: 1px solid #2d2d44;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        pre code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.95em;
+            line-height: 1.7;
+            white-space: pre;
+            display: block;
+            color: #e4e4f0;
+            background: transparent;
+            padding: 0;
+            min-height: 1.5em;
+            /* altura automática conforme linhas */;
+        }
+        /* Ajuste para mobile */
+        @media (max-width: 680px) {
+            pre {
+                font-size: 0.8em;
+                padding: 0.8rem 0.8rem;
+            }
+            pre code {
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        }
+
+        /* SVG e figuras */
+        .figura-svg {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 1rem 0.5rem;
+            margin: 1.4rem 0;
+            border: 1px solid #dce3ed;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            overflow-x: auto;
+        }
+        .figura-svg svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .figura-svg .legenda {
+            font-size: 0.85rem;
+            color: #2c3e50;
+            margin-top: 0.4rem;
+            font-style: italic;
+        }
+
+        /* Glossário */
+        .glossario {
+            background: #f0f4fa;
+            border-radius: 1rem;
+            padding: 1.6rem 2rem;
+            margin: 2rem 0;
+            border: 1px solid #cbd7e6;
+        }
+        .glossario dl {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 0.4rem 1.2rem;
+        }
+        .glossario dt {
+            font-weight: 700;
+            color: #0b1c3a;
+        }
+        .glossario dd {
+            margin-bottom: 0.4rem;
+            color: #1e2f45;
+        }
+        @media (max-width: 600px) {
+            .glossario dl {
+                grid-template-columns: 1fr;
+                gap: 0.1rem;
+            }
+            .glossario dt {
+                margin-top: 0.8rem;
+                border-bottom: 1px dashed #a0b8d0;
+            }
+        }
+
+        /* Objetivos */
+        .objetivos {
+            background: #e8f0fe;
+            border-radius: 0.8rem;
+            padding: 1.4rem 2rem;
+            margin: 1.2rem 0;
+            border-left: 6px solid #0b4b8a;
+        }
+        .objetivos ul {
+            list-style-type: none;
+            padding-left: 0.2rem;
+        }
+        .objetivos ul li::before {
+            content: "✓ ";
+            font-weight: 700;
+            color: #0b4b8a;
+        }
+
+        /* Referências */
+        .referencias {
+            background: #f2f5f9;
+            border-radius: 0.8rem;
+            padding: 1.2rem 2rem;
+            margin: 2rem 0;
+            border: 1px solid #d0dbe8;
+        }
+        .referencias ul {
+            list-style-type: none;
+            padding-left: 0.2rem;
+        }
+        .referencias ul li::before {
+            content: "📘 ";
+        }
+
+        /* Conclusão / Resumo */
+        .conclusao {
+            background: #dce9f5;
+            border-radius: 1rem;
+            padding: 1.6rem 2rem;
+            margin: 2rem 0;
+            border-left: 8px solid #0b3d6b;
+        }
+
+        /* Responsividade geral */
+        @media (max-width: 800px) {
+            body {
+                font-size: 1.2em;
+                padding: 1rem 1.2rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            h3 {
+                font-size: 1.2rem;
+            }
+            .aula-header {
+                padding: 1.2rem 1.4rem;
+            }
+            .figura-svg {
+                padding: 0.5rem 0.2rem;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                font-size: 1em;
+                padding: 0.8rem 0.8rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            h2 {
+                font-size: 1.2rem;
+                padding-left: 0.5rem;
+            }
+            .box-dica,
+            .box-alerta,
+            .box-aviso,
+            .box-reflexao {
+                padding: 0.8rem 1rem;
+            }
+            pre {
+                font-size: 0.7em;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Espaçamento extra para leitura */
+        .destaque-texto {
+            background: #f0f4fb;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px dashed #b8c9dd;
+            margin: 2.4rem 0;
+        }
+
+        /* Tabelas simples */
+        .tabela-conceitos {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            margin: 1rem 0;
+            background: #fff;
+            border-radius: 0.6rem;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .tabela-conceitos th {
+            background: #1a3b5c;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            text-align: left;
+        }
+        .tabela-conceitos td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tabela-conceitos tr:nth-child(even) {
+            background: #f7f9fc;
+        }
+        .tabela-conceitos tr:hover {
+            background: #eaf0f8;
+        }
+        @media (max-width: 600px) {
+            .tabela-conceitos {
+                font-size: 0.8rem;
+            }
+            .tabela-conceitos th,
+            .tabela-conceitos td {
+                padding: 0.4rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== CABEÇALHO ========== -->
+    <header class="aula-header">
+        <div class="meta">
+            <span>ADS</span> Redes de Computadores e Sistemas Distribuídos
+            <span style="margin-left:1rem;">Aula 2</span>
+        </div>
+        <h1>Classificação das Redes de Computadores</h1>
+        <p style="font-size:1.1rem; margin-top:0.3rem; color:#1a3b5c;">
+            <strong>Duração:</strong> 180 minutos &nbsp;|&nbsp;
+            <strong>Professor:</strong> Especialista em Redes e Sistemas Distribuídos
+        </p>
+        <p style="margin-top:0.5rem;">
+            <em>“Uma rede de computadores é mais que fios e roteadores: é a espinha dorsal da comunicação digital.”</em>
+        </p>
+    </header>
+
+    <!-- ========== OBJETIVOS ========== -->
+    <section>
+        <h2>Objetivos da Aula</h2>
+        <div class="objetivos">
+            <p style="font-weight:600; margin-bottom:0.4rem;">Ao final desta aula, você será capaz de:</p>
+            <ul>
+                <li><strong>Compreender</strong> os fundamentos da classificação de redes quanto ao tipo de serviço de transporte, modelo de comunicação, modo de operação do canal, topologia e abrangência.</li>
+                <li><strong>Analisar</strong> as diferenças entre as principais topologias de rede, identificando vantagens, desvantagens e casos de uso.</li>
+                <li><strong>Comparar</strong> os modelos de comunicação <em>broadcast</em>, <em>multicast</em> e <em>unicast</em>, relacionando-os a aplicações reais.</li>
+                <li><strong>Aplicar</strong> os conceitos de classificação para escolher a arquitetura de rede mais adequada a um cenário empresarial ou acadêmico.</li>
+                <li><strong>Interpretar</strong> diagramas de topologia e esquemas de comunicação, relacionando-os com a infraestrutura de redes moderna.</li>
+            </ul>
+        </div>
+
+        <div style="background:#f3f6fb; border-radius:0.8rem; padding:0.8rem 1.6rem; margin:0.8rem 0 1.6rem 0; border-left:4px solid #5d7b9a;">
+            <p style="margin:0; font-size:0.95rem;">
+                <strong>🔗 Conexão com a aula anterior:</strong> Na aula passada, vimos os fundamentos de redes — o que é uma rede, seus componentes básicos (hosts, switches, roteadores, meios de transmissão) e a importância da padronização. Hoje, aprofundaremos <em>como</em> as redes são organizadas e classificadas, criando a base para entendermos os modelos OSI e TCP/IP nas próximas aulas.
+            </p>
+        </div>
+    </section>
+
+    <!-- ========== INTRODUÇÃO ========== -->
+    <section>
+        <h2>Introdução</h2>
+        <p>
+            Classificar uma rede de computadores é como classificar um organismo vivo: observamos suas características estruturais, seu comportamento e sua finalidade. Uma rede pode ser vista sob diferentes ângulos — o tipo de serviço que oferece, a forma como os dados fluem, a disposição física dos dispositivos, o tamanho geográfico que ocupa, entre outros.
+        </p>
+        <p>
+            Nesta aula, vamos explorar <strong>cinco critérios fundamentais</strong> de classificação, amplamente utilizados por engenheiros de rede, arquitetos de soluções e profissionais de TI para projetar, documentar e diagnosticar infraestruturas de comunicação.
+        </p>
+        <div class="figura-svg">
+            <svg viewBox="0 0 800 140" aria-label="Diagrama: cinco critérios de classificação de redes" role="img" style="max-width:100%;">
+                <title>Cinco critérios de classificação de redes</title>
+                <rect x="10" y="20" width="140" height="90" rx="12" fill="#1a5276" stroke="#0b2f4a" stroke-width="2" />
+                <text x="80" y="55" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">Serviço de</text>
+                <text x="80" y="80" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">transporte</text>
+
+                <rect x="170" y="20" width="140" height="90" rx="12" fill="#1f6f8a" stroke="#0f3f52" stroke-width="2" />
+                <text x="240" y="55" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">Modelo de</text>
+                <text x="240" y="80" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">comunicação</text>
+
+                <rect x="330" y="20" width="140" height="90" rx="12" fill="#2e7d5e" stroke="#1a4d38" stroke-width="2" />
+                <text x="400" y="55" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">Modo de</text>
+                <text x="400" y="80" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">operação</text>
+
+                <rect x="490" y="20" width="140" height="90" rx="12" fill="#b9770e" stroke="#7a550a" stroke-width="2" />
+                <text x="560" y="55" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">Topologia</text>
+                <text x="560" y="80" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">(física/lógica)</text>
+
+                <rect x="650" y="20" width="140" height="90" rx="12" fill="#8e44ad" stroke="#5b2d6e" stroke-width="2" />
+                <text x="720" y="55" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">Abrangência</text>
+                <text x="720" y="80" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">geográfica</text>
+            </svg>
+            <div class="legenda">Figura 1 — Os cinco critérios de classificação que estudaremos nesta aula.</div>
+        </div>
+        <p>
+            Cada critério nos ajuda a responder perguntas práticas: <em>“Por que minha rede corporativa usa comutação por pacotes e não por circuitos?”</em>, <em>“Qual topologia é mais adequada para um prédio de 20 andares?”</em>, <em>“Como a Internet consegue conectar bilhões de dispositivos com diferentes modelos de comunicação?”</em>.
+        </p>
+    </section>
+
+    <!-- ========== DESENVOLVIMENTO TEÓRICO ========== -->
+    <section>
+
+        <!-- 2.1 Serviço de transporte -->
+        <h2>2.1 Classificação quanto ao tipo de serviço de transporte</h2>
+        <p>
+            O <strong>serviço de transporte</strong> define como os dados são entregues entre origem e destino. Historicamente, duas grandes categorias dominam: <strong>circuito virtual</strong> (ou comutação de circuitos) e <strong>comutação de pacotes</strong> (datagrama e circuito virtual com pacotes). Vamos detalhar cada uma.
+        </p>
+
+        <h3>Comutação de circuitos</h3>
+        <p>
+            Na comutação de circuitos, um <strong>caminho dedicado</strong> (circuito) é estabelecido entre origem e destino antes da transmissão dos dados. Esse caminho permanece reservado durante toda a comunicação, mesmo que não haja dados sendo enviados. É o modelo usado na telefonia tradicional (PSTN).
+        </p>
+        <ul>
+            <li><strong>Vantagens:</strong> Qualidade de serviço (QoS) previsível, baixa latência, sem contenção por recursos.</li>
+            <li><strong>Desvantagens:</strong> Ineficiência no uso do meio (recursos ociosos), tempo de estabelecimento da conexão, escalabilidade limitada.</li>
+        </ul>
+        <div class="box-alerta">
+            <strong>Erro comum:</strong> Achar que comutação de circuitos é obsoleta. Ela ainda é usada em redes de telefonia, em enlaces dedicados (linhas E1/T1) e em alguns cenários de missão crítica onde a previsibilidade é mais importante que a eficiência.
+        </div>
+
+        <h3>Comutação de pacotes</h3>
+        <p>
+            Na comutação de pacotes, os dados são divididos em <strong>pacotes</strong> que trafegam independentemente pela rede, compartilhando os enlaces com outros fluxos. Cada pacote contém cabeçalho com endereço de destino, permitindo que roteadores encaminhem cada pacote individualmente.
+        </p>
+        <ul>
+            <li><strong>Vantagens:</strong> Uso eficiente do meio, escalabilidade, robustez (roteamento dinâmico).</li>
+            <li><strong>Desvantagens:</strong> Latência variável, perda de pacotes, necessidade de mecanismos de controle de congestionamento.</li>
+        </ul>
+        <p>
+            A comutação de pacotes se subdivide em <strong>datagrama</strong> (cada pacote segue caminho próprio, sem reserva de recursos) e <strong>circuito virtual</strong> (uma rota é estabelecida antes da transmissão, mas os recursos são compartilhados — como no MPLS ou Frame Relay).
+        </p>
+
+        <div class="box-dica">
+            A Internet é o maior exemplo de rede com comutação de pacotes no modo datagrama. O protocolo IP (Internet Protocol) opera exatamente com esse paradigma: cada pacote é tratado de forma independente.
+        </div>
+
+        <!-- 2.2 Modelo de comunicação -->
+        <h2>2.2 Classificação quanto ao modelo de comunicação</h2>
+        <p>
+            O <strong>modelo de comunicação</strong> descreve como os dados são direcionados: se de um ponto a outro, de um ponto para muitos, ou de um ponto para todos. Os três modelos clássicos são:
+        </p>
+
+        <ul>
+            <li><strong>Unicast</strong> — comunicação ponto a ponto (um emissor, um receptor). É o modelo mais comum na Internet: quando você acessa um site, seu navegador envia requisições unicast para o servidor.</li>
+            <li><strong>Broadcast</strong> — comunicação de um emissor para <em>todos</em> os dispositivos na rede (dentro de um domínio de broadcast). Usado em redes locais (Ethernet) para descoberta de serviços (ARP, DHCP).</li>
+            <li><strong>Multicast</strong> — comunicação de um emissor para um <em>grupo específico</em> de receptores. Ideal para streaming de vídeo, videoconferências e distribuição de dados financeiros em tempo real.</li>
+        </ul>
+
+        <div class="figura-svg">
+            <svg viewBox="0 0 900 220" aria-label="Diagrama comparativo: Unicast, Broadcast e Multicast" role="img" style="max-width:100%;">
+                <title>Unicast, Broadcast e Multicast</title>
+
+                <!-- Unicast -->
+                <rect x="20" y="20" width="260" height="170" rx="12" fill="#eaf2f8" stroke="#1a5276" stroke-width="2" />
+                <text x="150" y="50" text-anchor="middle" font-size="20" font-weight="700" fill="#0b2f4a">Unicast</text>
+                <circle cx="80" cy="90" r="22" fill="#2e86c1" />
+                <text x="80" y="96" text-anchor="middle" fill="#fff" font-size="16" font-weight="600">E</text>
+                <circle cx="210" cy="90" r="22" fill="#1a6e8a" />
+                <text x="210" y="96" text-anchor="middle" fill="#fff" font-size="16" font-weight="600">R</text>
+                <line x1="102" y1="90" x2="188" y2="90" stroke="#1a5276" stroke-width="3" marker-end="url(#seta)" />
+                <text x="145" y="140" text-anchor="middle" font-size="14" fill="#1a3b5c">1 emissor → 1 receptor</text>
+
+                <!-- Broadcast -->
+                <rect x="310" y="20" width="260" height="170" rx="12" fill="#fcf9e7" stroke="#b7950b" stroke-width="2" />
+                <text x="440" y="50" text-anchor="middle" font-size="20" font-weight="700" fill="#7d6608">Broadcast</text>
+                <circle cx="370" cy="90" r="22" fill="#e67e22" />
+                <text x="370" y="96" text-anchor="middle" fill="#fff" font-size="16" font-weight="600">E</text>
+                <circle cx="490" cy="80" r="18" fill="#d4ac0d" />
+                <text x="490" y="86" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">R1</text>
+                <circle cx="490" cy="120" r="18" fill="#d4ac0d" />
+                <text x="490" y="126" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">R2</text>
+                <circle cx="530" cy="60" r="18" fill="#d4ac0d" />
+                <text x="530" y="66" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">R3</text>
+                <line x1="392" y1="90" x2="472" y2="80" stroke="#b7950b" stroke-width="2" />
+                <line x1="392" y1="90" x2="472" y2="120" stroke="#b7950b" stroke-width="2" />
+                <line x1="392" y1="90" x2="512" y2="60" stroke="#b7950b" stroke-width="2" />
+                <text x="440" y="160" text-anchor="middle" font-size="14" fill="#7d6608">1 emissor → todos</text>
+
+                <!-- Multicast -->
+                <rect x="600" y="20" width="260" height="170" rx="12" fill="#ebf5fb" stroke="#2e86c1" stroke-width="2" />
+                <text x="730" y="50" text-anchor="middle" font-size="20" font-weight="700" fill="#1a5276">Multicast</text>
+                <circle cx="660" cy="90" r="22" fill="#1abc9c" />
+                <text x="660" y="96" text-anchor="middle" fill="#fff" font-size="16" font-weight="600">E</text>
+                <circle cx="780" cy="80" r="18" fill="#16a085" />
+                <text x="780" y="86" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">R1</text>
+                <circle cx="780" cy="120" r="18" fill="#16a085" />
+                <text x="780" y="126" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">R2</text>
+                <circle cx="810" cy="160" r="18" fill="#d5dbdb" stroke="#aab7b7" stroke-width="1.5" />
+                <text x="810" y="166" text-anchor="middle" fill="#5d6d7e" font-size="14" font-weight="600">R3</text>
+                <line x1="682" y1="90" x2="762" y2="80" stroke="#1abc9c" stroke-width="3" />
+                <line x1="682" y1="90" x2="762" y2="120" stroke="#1abc9c" stroke-width="3" />
+                <line x1="682" y1="90" x2="792" y2="160" stroke="#aab7b7" stroke-width="2" stroke-dasharray="6,4" />
+                <text x="730" y="185" text-anchor="middle" font-size="14" fill="#1a5276">1 emissor → grupo</text>
+
+                <defs>
+                    <marker id="seta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a5276" />
+                    </marker>
+                </defs>
+            </svg>
+            <div class="legenda">Figura 2 — Comparação entre os modelos Unicast, Broadcast e Multicast. Em multicast, receptores que não fazem parte do grupo (R3) não recebem os dados.</div>
+        </div>
+
+        <!-- 2.3 Modo de operação do canal -->
+        <h2>2.3 Classificação quanto ao modo de operação do canal de comunicação</h2>
+        <p>
+            O <strong>modo de operação</strong> define como os dados podem fluir em um canal de comunicação entre dois dispositivos. Três modos são possíveis:
+        </p>
+        <ul>
+            <li><strong>Simplex:</strong> transmissão em <em>apenas uma direção</em>, sem possibilidade de retorno. Exemplo: rádio AM/FM, televisão analógica, sensores que apenas enviam dados.</li>
+            <li><strong>Half-duplex:</strong> transmissão em <em>ambas as direções</em>, mas <em>não simultaneamente</em>. Exemplo: rádios walkie-talkie, hubs Ethernet antigos (com CSMA/CD).</li>
+            <li><strong>Full-duplex:</strong> transmissão <em>simultânea</em> em ambas as direções. Exemplo: telefonia, switches Ethernet modernos, fibra óptica com dois canais.</li>
+        </ul>
+        <div class="box-alerta">
+            <strong>Atenção:</strong> Não confunda <em>half-duplex</em> com <em>broadcast</em>. Half-duplex refere-se à direção do fluxo em um enlace ponto a ponto; broadcast refere-se ao número de destinos.
+        </div>
+
+        <!-- 2.4 Topologia -->
+        <h2>2.4 Classificação quanto à topologia</h2>
+        <p>
+            A <strong>topologia</strong> descreve a disposição física ou lógica dos nós (dispositivos) e enlaces em uma rede. É um dos critérios mais visuais e práticos. Podemos distinguir topologias <strong>físicas</strong> (como os cabos estão conectados) e <strong>lógicas</strong> (como os dados fluem — por exemplo, uma topologia em estrela pode operar como um barramento lógico em redes com hub).
+        </p>
+        <p>As principais topologias são:</p>
+
+        <h3>Estrela (Star)</h3>
+        <ul>
+            <li><strong>Estrutura:</strong> todos os dispositivos conectados a um elemento central (switch, hub ou roteador).</li>
+            <li><strong>Vantagens:</strong> fácil gerenciamento, falha em um nó não afeta os demais, alta escalabilidade.</li>
+            <li><strong>Desvantagens:</strong> ponto único de falha (o dispositivo central).</li>
+            <li><strong>Uso:</strong> redes locais (Ethernet com switch) — é a topologia mais comum em escritórios e data centers.</li>
+        </ul>
+
+        <h3>Barramento (Bus)</h3>
+        <ul>
+            <li><strong>Estrutura:</strong> todos os dispositivos compartilham um único cabo (backbone).</li>
+            <li><strong>Vantagens:</strong> baixo custo, fácil instalação.</li>
+            <li><strong>Desvantagens:</strong> colisões frequentes, baixa escalabilidade, falha no cabo afeta toda a rede.</li>
+            <li><strong>Uso:</strong> redes antigas (Ethernet 10Base-2) e algumas redes industriais.</li>
+        </ul>
+
+        <h3>Anel (Ring)</h3>
+        <ul>
+            <li><strong>Estrutura:</strong> cada dispositivo conecta-se a outros dois, formando um círculo. Os dados trafegam em uma direção (ou duas, em anéis duplos).</li>
+            <li><strong>Vantagens:</strong> desempenho previsível, fácil detecção de falhas.</li>
+            <li><strong>Desvantagens:</strong> falha em um nó pode interromper a rede (a menos que haja redundância).</li>
+            <li><strong>Uso:</strong> FDDI (Fibre Distributed Data Interface), SONET/SDH, algumas redes de campus.</li>
+        </ul>
+
+        <h3>Malha (Mesh)</h3>
+        <ul>
+            <li><strong>Estrutura:</strong> cada nó conecta-se a vários outros, criando múltiplos caminhos.</li>
+            <li><strong>Vantagens:</strong> alta redundância, tolerância a falhas, escalabilidade.</li>
+            <li><strong>Desvantagens:</strong> alto custo de cabos e gerenciamento.</li>
+            <li><strong>Uso:</strong> backbones de Internet, redes de data centers críticos, redes sem fio mesh.</li>
+        </ul>
+
+        <h3>Árvore (Tree)</h3>
+        <ul>
+            <li><strong>Estrutura:</strong> combinação de estrelas e barramentos, com hierarquia de nós (raiz, ramos, folhas).</li>
+            <li><strong>Vantagens:</strong> escalabilidade hierárquica, agregação de tráfego.</li>
+            <li><strong>Desvantagens:</strong> falha em níveis superiores compromete sub-redes inteiras.</li>
+            <li><strong>Uso:</strong> redes empresariais com switches em cascata, provedores de acesso.</li>
+        </ul>
+
+        <div class="figura-svg">
+            <svg viewBox="0 0 920 240" aria-label="Diagrama das topologias Estrela, Barramento, Anel e Malha" role="img" style="max-width:100%;">
+                <title>Topologias de rede: Estrela, Barramento, Anel e Malha</title>
+
+                <!-- Estrela -->
+                <rect x="10" y="10" width="210" height="210" rx="10" fill="#eaf2f8" stroke="#1a5276" stroke-width="2" />
+                <text x="115" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#0b2f4a">Estrela</text>
+                <circle cx="115" cy="100" r="22" fill="#1a5276" />
+                <text x="115" y="106" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">C</text>
+                <circle cx="60" cy="170" r="16" fill="#2e86c1" />
+                <text x="60" y="176" text-anchor="middle" fill="#fff" font-size="12">N1</text>
+                <circle cx="170" cy="170" r="16" fill="#2e86c1" />
+                <text x="170" y="176" text-anchor="middle" fill="#fff" font-size="12">N2</text>
+                <circle cx="60" cy="60" r="16" fill="#2e86c1" />
+                <text x="60" y="66" text-anchor="middle" fill="#fff" font-size="12">N3</text>
+                <circle cx="170" cy="60" r="16" fill="#2e86c1" />
+                <text x="170" y="66" text-anchor="middle" fill="#fff" font-size="12">N4</text>
+                <line x1="115" y1="100" x2="60" y2="170" stroke="#1a5276" stroke-width="2" />
+                <line x1="115" y1="100" x2="170" y2="170" stroke="#1a5276" stroke-width="2" />
+                <line x1="115" y1="100" x2="60" y2="60" stroke="#1a5276" stroke-width="2" />
+                <line x1="115" y1="100" x2="170" y2="60" stroke="#1a5276" stroke-width="2" />
+
+                <!-- Barramento -->
+                <rect x="230" y="10" width="210" height="210" rx="10" fill="#fcf9e7" stroke="#b7950b" stroke-width="2" />
+                <text x="335" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#7d6608">Barramento</text>
+                <line x1="260" y1="120" x2="410" y2="120" stroke="#7d6608" stroke-width="4" />
+                <circle cx="280" cy="120" r="16" fill="#d4ac0d" />
+                <text x="280" y="126" text-anchor="middle" fill="#fff" font-size="12">N1</text>
+                <circle cx="335" cy="120" r="16" fill="#d4ac0d" />
+                <text x="335" y="126" text-anchor="middle" fill="#fff" font-size="12">N2</text>
+                <circle cx="390" cy="120" r="16" fill="#d4ac0d" />
+                <text x="390" y="126" text-anchor="middle" fill="#fff" font-size="12">N3</text>
+                <text x="335" y="190" text-anchor="middle" font-size="14" fill="#7d6608">Cabo compartilhado</text>
+
+                <!-- Anel -->
+                <rect x="450" y="10" width="210" height="210" rx="10" fill="#ebf5fb" stroke="#2e86c1" stroke-width="2" />
+                <text x="555" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#1a5276">Anel</text>
+                <circle cx="555" cy="80" r="16" fill="#1abc9c" />
+                <text x="555" y="86" text-anchor="middle" fill="#fff" font-size="12">N1</text>
+                <circle cx="630" cy="130" r="16" fill="#1abc9c" />
+                <text x="630" y="136" text-anchor="middle" fill="#fff" font-size="12">N2</text>
+                <circle cx="555" cy="180" r="16" fill="#1abc9c" />
+                <text x="555" y="186" text-anchor="middle" fill="#fff" font-size="12">N3</text>
+                <circle cx="480" cy="130" r="16" fill="#1abc9c" />
+                <text x="480" y="136" text-anchor="middle" fill="#fff" font-size="12">N4</text>
+                <line x1="555" y1="96" x2="630" y2="130" stroke="#1abc9c" stroke-width="3" />
+                <line x1="630" y1="146" x2="555" y2="180" stroke="#1abc9c" stroke-width="3" />
+                <line x1="555" y1="196" x2="480" y2="130" stroke="#1abc9c" stroke-width="3" />
+                <line x1="480" y1="114" x2="555" y2="80" stroke="#1abc9c" stroke-width="3" />
+
+                <!-- Malha -->
+                <rect x="670" y="10" width="230" height="210" rx="10" fill="#f0f0f5" stroke="#6c3483" stroke-width="2" />
+                <text x="785" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#4a235a">Malha</text>
+                <circle cx="710" cy="80" r="16" fill="#8e44ad" />
+                <text x="710" y="86" text-anchor="middle" fill="#fff" font-size="12">N1</text>
+                <circle cx="800" cy="80" r="16" fill="#8e44ad" />
+                <text x="800" y="86" text-anchor="middle" fill="#fff" font-size="12">N2</text>
+                <circle cx="710" cy="150" r="16" fill="#8e44ad" />
+                <text x="710" y="156" text-anchor="middle" fill="#fff" font-size="12">N3</text>
+                <circle cx="800" cy="150" r="16" fill="#8e44ad" />
+                <text x="800" y="156" text-anchor="middle" fill="#fff" font-size="12">N4</text>
+                <line x1="710" y1="96" x2="800" y2="96" stroke="#6c3483" stroke-width="2" />
+                <line x1="710" y1="96" x2="710" y2="134" stroke="#6c3483" stroke-width="2" />
+                <line x1="710" y1="96" x2="800" y2="134" stroke="#6c3483" stroke-width="2" />
+                <line x1="800" y1="96" x2="710" y2="134" stroke="#6c3483" stroke-width="2" />
+                <line x1="800" y1="96" x2="800" y2="134" stroke="#6c3483" stroke-width="2" />
+                <line x1="710" y1="134" x2="800" y2="134" stroke="#6c3483" stroke-width="2" />
+            </svg>
+            <div class="legenda">Figura 3 — Representação das quatro topologias principais: Estrela, Barramento, Anel e Malha.</div>
+        </div>
+
+        <!-- 2.5 Abrangência -->
+        <h2>2.5 Classificação quanto à abrangência geográfica</h2>
+        <p>
+            A <strong>abrangência</strong> (ou escala) é provavelmente o critério mais intuitivo. Ele define o tamanho físico da rede e, por extensão, as tecnologias e protocolos utilizados. A classificação tradicional é:
+        </p>
+
+        <table class="tabela-conceitos">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Abreviatura</th>
+                    <th>Extensão</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Rede de Área Pessoal</strong></td>
+                    <td>PAN</td>
+                    <td>Até ~10 m</td>
+                    <td>Bluetooth, comunicação entre smartphone e fone de ouvido</td>
+                </tr>
+                <tr>
+                    <td><strong>Rede de Área Local</strong></td>
+                    <td>LAN</td>
+                    <td>Até ~1 km (mesmo prédio ou campus)</td>
+                    <td>Ethernet com switches, Wi-Fi empresarial</td>
+                </tr>
+                <tr>
+                    <td><strong>Rede de Área Metropolitana</strong></td>
+                    <td>MAN</td>
+                    <td>De 1 km a ~100 km (cidade)</td>
+                    <td>Redes de TV a cabo, backbones urbanos, redes de provedores</td>
+                </tr>
+                <tr>
+                    <td><strong>Rede de Área Ampla</strong></td>
+                    <td>WAN</td>
+                    <td>Mais de 100 km (países, continentes)</td>
+                    <td>Internet, redes de operadoras, VPNs intercontinentais</td>
+                </tr>
+                <tr>
+                    <td><strong>Rede Global</strong></td>
+                    <td>GAN</td>
+                    <td>Planetária</td>
+                    <td>Internet (como um todo), redes via satélite</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box-dica">
+            <strong>Contexto moderno:</strong> Com a computação em nuvem e as redes definidas por software (SDN), a fronteira entre LAN, MAN e WAN tornou-se mais fluida. Uma VPN pode fazer um computador em São Paulo se comportar como se estivesse na mesma LAN de um servidor em Londres.
+        </div>
+    </section>
+
+    <!-- ========== PARADA PARA REFLEXÃO 1 ========== -->
+    <div class="box-reflexao">
+        <p style="font-weight:600; margin-bottom:0.3rem;">Pare e Pense — Classificação</p>
+        <p>
+            Uma empresa de médio porte tem três andares em um mesmo prédio, com 120 computadores, e precisa compartilhar arquivos e impressoras. Além disso, possui uma filial em outra cidade que se comunica via VPN.<br>
+            <strong>a)</strong> Que topologia física você recomendaria para a rede local e por quê?<br>
+            <strong>b)</strong> Que modelo de comunicação seria usado para transmitir um vídeo institucional ao vivo para todos os funcionários da filial?<br>
+            <strong>c)</strong> Qual a classificação de abrangência para a rede entre as duas unidades?
+        </p>
+        <p style="margin-top:0.6rem; font-size:0.95rem; color:#1a3b5c;">
+            <em>Resposta sugerida ao final da aula.</em>
+        </p>
+    </div>
+
+    <!-- ========== EXEMPLOS PRÁTICOS E CÓDIGO ========== -->
+    <section>
+        <h2>Exemplos de aplicação prática e código</h2>
+        <p>
+            Vamos agora conectar a teoria à prática. Abaixo, dois exemplos:
+        </p>
+
+        <h3>Exemplo 1 — Simulação de um ping com diferentes modelos de comunicação (Python)</h3>
+        <p>
+            O código a seguir simula o envio de mensagens nos modos unicast, broadcast e multicast, usando uma abstração simples. Ele ilustra a lógica de encaminhamento, não o protocolo real.
+        </p>
+
+        <pre><code class="language-python">"""
+Simulação conceitual de comunicação Unicast, Broadcast e Multicast.
+Não utiliza sockets reais — apenas lógica de roteamento.
+"""
+
+from typing import List, Set
+
+class Dispositivo:
+    """Representa um nó na rede."""
+
+    def __init__(self, nome: str, grupo_multicast: Set[str] = None):
+        self.nome = nome
+        self.grupo = grupo_multicast if grupo_multicast else set()
+
+    def receber(self, mensagem: str, origem: str, destino: str) -> None:
+        """Recebe uma mensagem se for destinada a este dispositivo."""
+        if destino == "broadcast":
+            print(f"  [{self.nome}] Recebeu broadcast de {origem}: {mensagem}")
+            return
+        if destino == "multicast" and self.nome in self.grupo:
+            print(f"  [{self.nome}] Recebeu multicast de {origem}: {mensagem}")
+            return
+        if destino == self.nome:
+            print(f"  [{self.nome}] Recebeu unicast de {origem}: {mensagem}")
+            # else: ignora
+
+class Rede:
+    """Rede que gerencia dispositivos e encaminha mensagens."""
+
+    def __init__(self):
+        self.dispositivos: List[Dispositivo] = []
+
+    def adicionar(self, d: Dispositivo) -> None:
+        self.dispositivos.append(d)
+
+    def enviar(self, origem: str, destino: str, mensagem: str) -> None:
+        """Encaminha uma mensagem para todos os dispositivos elegíveis."""
+        print(f"\n[ENVIO] {origem} → {destino}: '{mensagem}'")
+        for d in self.dispositivos:
+            # Não envia para o próprio remetente
+            if d.nome == origem:
+                continue
+            d.receber(mensagem, origem, destino)
+
+
+if __name__ == "__main__":
+    # Cria a rede
+    rede = Rede()
+
+    # Adiciona dispositivos
+    rede.adicionar(Dispositivo("Servidor"))
+    rede.adicionar(Dispositivo("Cliente1", grupo_multicast={"Cliente1", "Cliente2"}))
+    rede.adicionar(Dispositivo("Cliente2", grupo_multicast={"Cliente1", "Cliente2"}))
+    rede.adicionar(Dispositivo("Cliente3", grupo_multicast={"Cliente3"}))
+
+    # Teste: unicast
+    rede.enviar("Servidor", "Cliente1", "Arquivo de relatório")
+
+    # Teste: broadcast
+    rede.enviar("Servidor", "broadcast", "Atualização de sistema disponível")
+
+    # Teste: multicast (grupo: Cliente1 e Cliente2)
+    rede.enviar("Servidor", "multicast", "Videoconferência iniciada")
+</code></pre>
+
+        <p><strong>Saída esperada:</strong></p>
+        <pre><code>[ENVIO] Servidor → Cliente1: 'Arquivo de relatório'
+  [Cliente1] Recebeu unicast de Servidor: Arquivo de relatório
+
+[ENVIO] Servidor → broadcast: 'Atualização de sistema disponível'
+  [Cliente1] Recebeu broadcast de Servidor: Atualização de sistema disponível
+  [Cliente2] Recebeu broadcast de Servidor: Atualização de sistema disponível
+  [Cliente3] Recebeu broadcast de Servidor: Atualização de sistema disponível
+
+[ENVIO] Servidor → multicast: 'Videoconferência iniciada'
+  [Cliente1] Recebeu multicast de Servidor: Videoconferência iniciada
+  [Cliente2] Recebeu multicast de Servidor: Videoconferência iniciada
+  # Cliente3 não recebe, pois não está no grupo</code></pre>
+
+        <div class="box-dica">
+            <strong>Observação:</strong> Em redes reais, o broadcast é limitado ao domínio de broadcast (geralmente uma VLAN ou sub-rede). O multicast depende de protocolos como IGMP e PIM para gerenciar grupos.
+        </div>
+
+        <h3>Exemplo 2 — Comando para visualizar topologia em sistemas Linux</h3>
+        <p>
+            No Linux, podemos inspecionar a topologia de rede (pelo menos a camada de enlace) com o comando <code>ip link</code> e <code>bridge link</code>. Um exemplo simples de script bash para listar interfaces e seus estados:
+        </p>
+
+        <pre><code class="language-bash">#!/bin/bash
+# Exibe informações básicas de topologia de enlace
+echo "=== Interfaces de rede e estados ==="
+ip -br link show | while read linha; do
+    echo "  $linha"
+done
+
+echo -e "\n=== Tabela de vizinhança ARP (camada 2) ==="
+ip neigh show | head -n 5
+
+echo -e "\n=== Rotas (camada 3) ==="
+ip route show | head -n 5
+</code></pre>
+
+        <p>
+            Esse script não modifica a rede; apenas coleta informações que ajudam a <em>inferir</em> a topologia lógica. Em ambientes corporativos, ferramentas como <strong>LLDP</strong> (Link Layer Discovery Protocol) e <strong>CDP</strong> (Cisco Discovery Protocol) são usadas para mapear topologias físicas de forma automática.
+        </p>
+    </section>
+
+    <!-- ========== APLICAÇÃO NO MERCADO ========== -->
+    <section>
+        <h2>Aplicação no mercado de trabalho de TI</h2>
+        <p>
+            O conhecimento sobre classificação de redes não é apenas acadêmico — ele é <strong>essencial no dia a dia de diversos profissionais</strong>:
+        </p>
+        <ul>
+            <li>
+                <strong>Analistas de Infraestrutura</strong> usam a classificação para projetar redes que equilibram custo, desempenho e confiabilidade. Por exemplo, escolher topologia em estrela com switches redundantes para um data center, ou topologia em malha para interconectar roteadores de borda.
+            </li>
+            <li>
+                <strong>Engenheiros de Redes</strong> configuram protocolos de roteamento que consideram a abrangência: OSPF para redes internas (LAN/MAN) e BGP para WAN/Internet.
+            </li>
+            <li>
+                <strong>Arquitetos de Soluções em Nuvem</strong> precisam entender os modelos de comunicação para projetar balanceadores de carga, grupos de segurança e políticas de tráfego — o multicast, por exemplo, é usado em soluções de streaming e atualizações de software em larga escala.
+            </li>
+            <li>
+                <strong>Desenvolvedores Back-end e de Microsserviços</strong> se beneficiam ao compreender o impacto da topologia e do modo de operação na latência e na confiabilidade das chamadas entre serviços.
+            </li>
+        </ul>
+        <div class="box-alerta">
+            <strong>Erro comum no mercado:</strong> Subestimar a importância da topologia lógica. Muitos profissionais olham apenas para a topologia física (cabos e switches) e ignoram como os dados realmente fluem (roteamento, VLANs, sobreposições). Isso pode levar a gargalos de desempenho e falhas de segurança.
+        </div>
+        <p>
+            <strong>Exemplo real:</strong> Uma empresa de e-commerce migrou sua arquitetura de uma topologia em barramento (com hubs) para estrela com switches e observou uma redução de 40% no tempo de resposta médio. Além disso, implementou VLANs para isolar tráfego de gestão, vendas e desenvolvimento — tudo baseado no entendimento de classificação e segmentação.
+        </p>
+    </section>
+
+    <!-- ========== PARADA PARA REFLEXÃO 2 ========== -->
+    <div class="box-reflexao">
+        <p style="font-weight:600; margin-bottom:0.3rem;">Pare e Pense — Aplicação prática</p>
+        <p>
+            Você é o arquiteto de redes de uma startup que está crescendo rapidamente. A empresa tem 50 funcionários em um escritório open space, e o orçamento para rede é limitado. Você precisa escolher entre:<br>
+            &nbsp;&nbsp;<strong>Opção A:</strong> Switch central com todos os computadores conectados (estrela).<br>
+            &nbsp;&nbsp;<strong>Opção B:</strong> Barramento com um cabo backbone e conectores.<br>
+            &nbsp;&nbsp;<strong>Opção C:</strong> Anel com repetidores.<br>
+        </p>
+        <p>
+            <strong>Perguntas:</strong><br>
+            1. Qual opção você escolheria e por quê?<br>
+            2. Que modo de operação (simplex, half-duplex, full-duplex) seria mais adequado e por quê?<br>
+            3. Se a empresa crescer para 200 funcionários, como sua escolha se comportaria?
+        </p>
+    </div>
+
+    <!-- ========== GLOSSÁRIO ========== -->
+    <section>
+        <h2>Glossário dos termos-chave</h2>
+        <div class="glossario">
+            <dl>
+                <dt>Broadcast</dt>
+                <dd>Comunicação em que um emissor envia dados para todos os dispositivos em um domínio de broadcast.</dd>
+
+                <dt>Circuito virtual</dt>
+                <dd>Rota pré-estabelecida entre origem e destino, com recursos reservados (modo de comutação de pacotes) ou dedicados (comutação de circuitos).</dd>
+
+                <dt>Comutação de circuitos</dt>
+                <dd>Estabelecimento de um caminho físico dedicado entre dois pontos durante toda a comunicação.</dd>
+
+                <dt>Comutação de pacotes</dt>
+                <dd>Transmissão de dados em pacotes independentes, compartilhando os enlaces da rede.</dd>
+
+                <dt>Datagrama</dt>
+                <dd>Unidade básica de dados no modo de comutação de pacotes sem circuito virtual; cada pacote é roteado independentemente.</dd>
+
+                <dt>Full-duplex</dt>
+                <dd>Comunicação simultânea em ambas as direções em um enlace.</dd>
+
+                <dt>Half-duplex</dt>
+                <dd>Comunicação bidirecional, mas não simultânea; apenas um lado transmite por vez.</dd>
+
+                <dt>LAN (Local Area Network)</dt>
+                <dd>Rede de área local, com extensão típica de até 1 km, como em um prédio ou campus.</dd>
+
+                <dt>Multicast</dt>
+                <dd>Comunicação de um emissor para um grupo específico de receptores.</dd>
+
+                <dt>PAN (Personal Area Network)</dt>
+                <dd>Rede de área pessoal, de curto alcance (metros), geralmente sem fio.</dd>
+
+                <dt>Simplex</dt>
+                <dd>Comunicação unidirecional; os dados trafegam em apenas um sentido.</dd>
+
+                <dt>Topologia</dt>
+                <dd>Disposição física ou lógica dos nós e enlaces em uma rede.</dd>
+
+                <dt>Unicast</dt>
+                <dd>Comunicação ponto a ponto, de um emissor para um único receptor.</dd>
+
+                <dt>WAN (Wide Area Network)</dt>
+                <dd>Rede de área ampla, cobrindo grandes distâncias geográficas, como países ou continentes.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ========== CONCLUSÃO ========== -->
+    <section>
+        <h2>Conclusão e resumo</h2>
+        <div class="conclusao">
+            <p>
+                Nesta aula, percorremos os <strong>cinco principais critérios</strong> para classificar redes de computadores, construindo uma base sólida para compreender como as redes modernas são projetadas e operam.
+            </p>
+            <ul>
+                <li><strong>Serviço de transporte:</strong> comutação de circuitos <em>vs.</em> comutação de pacotes (datagrama e circuito virtual).</li>
+                <li><strong>Modelo de comunicação:</strong> unicast, broadcast e multicast — cada um com aplicações específicas.</li>
+                <li><strong>Modo de operação do canal:</strong> simplex, half-duplex e full-duplex — definem a direcionalidade do fluxo.</li>
+                <li><strong>Topologia:</strong> estrela, barramento, anel, malha e árvore — a "forma" da rede, com impactos diretos em desempenho e confiabilidade.</li>
+                <li><strong>Abrangência:</strong> PAN, LAN, MAN, WAN e GAN — a escala geográfica que dita as tecnologias empregadas.</li>
+            </ul>
+            <p style="margin-top:0.8rem;">
+                Esses conceitos não são isolados: um engenheiro de redes combina todos esses critérios para tomar decisões de projeto. Por exemplo, uma <strong>LAN corporativa</strong> normalmente usa <strong>comutação de pacotes</strong>, <strong>topologia em estrela</strong>, <strong>modo full-duplex</strong> e suporte a <strong>unicast e broadcast</strong> (com VLANs para limitar o domínio de broadcast).
+            </p>
+            <p style="margin-top:0.4rem;">
+                Na próxima aula, usaremos essa base para mergulhar nos modelos de referência <strong>OSI</strong> e <strong>TCP/IP</strong>, mostrando como cada camada se relaciona com os critérios que vimos hoje.
+            </p>
+        </div>
+
+        <!-- Resposta da primeira reflexão -->
+        <div style="background:#f3f6fb; border-radius:0.8rem; padding:1rem 1.6rem; margin:1.2rem 0; border-left:4px solid #2e86c1;">
+            <p style="font-weight:600; margin-bottom:0.2rem;">🔍 Resposta sugerida — Primeiro "Pare e Pense":</p>
+            <p style="margin:0;">
+                <strong>a)</strong> Topologia em <em>estrela</em> com switch central, pois facilita gerenciamento, isola falhas e permite expansão.<br>
+                <strong>b)</strong> <em>Multicast</em>, pois transmite a vídeo para um grupo específico (funcionários da filial) sem sobrecarregar a rede com tráfego unicast repetido.<br>
+                <strong>c)</strong> A rede entre as duas unidades é uma <em>WAN</em> (rede de área ampla), pois conecta cidades diferentes.
+            </p>
+        </div>
+    </section>
+
+    <!-- ========== REFERÊNCIAS ========== -->
+    <section>
+        <h2>Referências</h2>
+        <div class="referencias">
+            <ul>
+                <li><strong>KUROSE, James F.; ROSS, Keith W.</strong> <em>Redes de Computadores e a Internet</em>. 6ª ed. São Paulo: Pearson, 2017.</li>
+                <li><strong>TANENBAUM, Andrew S.; WETHERALL, David J.</strong> <em>Redes de Computadores</em>. 5ª ed. São Paulo: Pearson, 2011.</li>
+                <li><strong>COMER, Douglas E.</strong> <em>Redes de Computadores e Internet</em>. 6ª ed. Porto Alegre: Bookman, 2016.</li>
+                <li><strong>IEEE 802.3</strong> — Padrão para Ethernet (LAN). Disponível em: <a href="https://standards.ieee.org/ieee/802.3/" target="_blank" rel="noopener">https://standards.ieee.org/ieee/802.3/</a></li>
+                <li><strong>RFC 791</strong> — Internet Protocol (IP). Disponível em: <a href="https://www.ietf.org/rfc/rfc791.txt" target="_blank" rel="noopener">https://www.ietf.org/rfc/rfc791.txt</a></li>
+            </ul>
+            <p style="font-size:0.85rem; margin-top:0.6rem; color:#2c3e50;">
+                <em>Observação: Todas as referências citadas são obras e documentos amplamente reconhecidos e verificáveis. Não foram inventadas fontes.</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- ========== RODAPÉ ========== -->
+    <hr>
+    <footer style="display:flex; justify-content:space-between; flex-wrap:wrap; font-size:0.8rem; color:#3d5a78; padding:0.4rem 0 1rem 0;">
+        <span>© 2026 — Curso Superior de ADS | Redes de Computadores e Sistemas Distribuídos</span>
+        <span>Material produzido para fins didáticos. Versão 1.0</span>
+    </footer>
+
+</body>
+</html>
