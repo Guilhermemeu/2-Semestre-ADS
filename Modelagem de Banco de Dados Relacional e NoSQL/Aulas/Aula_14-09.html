@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelagem e Gerenciamento no SQL Server | Aula Completa</title>
+    <!-- Prism.js para syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <style>
+        /* ===== Reset e Tipografia ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background-color: #f8f9fc;
+            padding: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ===== Cabeçalho ===== */
+        header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            color: #ffffff;
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 20px rgba(15, 52, 96, 0.3);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* ===== Seções ===== */
+        section {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 1.8rem 1.5rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #0f3460;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: #16213e;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        h4 {
+            font-size: 1.15rem;
+            color: #533483;
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== Caixas de Destaque ===== */
+        .box {
+            border-radius: 8px;
+            padding: 1.2rem 1.4rem;
+            margin: 1.5rem 0;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .box-dica {
+            background: #e8f5e9;
+            border-left: 6px solid #2e7d32;
+        }
+
+        .box-alerta {
+            background: #fff3e0;
+            border-left: 6px solid #e65100;
+        }
+
+        .box-erro {
+            background: #ffebee;
+            border-left: 6px solid #c62828;
+        }
+
+        .box-info {
+            background: #e3f2fd;
+            border-left: 6px solid #1565c0;
+        }
+
+        .box-pare {
+            background: #f3e5f5;
+            border-left: 6px solid #6a1b9a;
+            padding: 1.4rem;
+        }
+
+        .box-pare strong {
+            color: #4a148c;
+        }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* ===== Código ===== */
+        pre[class*="language-"] {
+            margin: 1.2rem 0;
+            border-radius: 8px;
+            font-size: 1em;
+            line-height: 1.6;
+            padding: 1rem;
+            overflow-x: auto;
+            width: 100%;
+            background: #1e1e2e;
+        }
+
+        code[class*="language-"] {
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        /* ===== SVG ===== */
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1.5rem auto;
+        }
+
+        /* ===== Glossário ===== */
+        .glossario dt {
+            font-weight: 700;
+            color: #0f3460;
+            margin-top: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .glossario dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+
+        /* ===== Tabela ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        th {
+            background: #0f3460;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f4f6f9;
+        }
+
+        /* ===== Responsividade ===== */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.15em;
+                padding: 0.8rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 1.2rem 1rem;
+            }
+
+            h2 {
+                font-size: 1.35rem;
+            }
+
+            pre[class*="language-"] {
+                font-size: 0.9em;
+                padding: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 1em;
+            }
+
+            header h1 {
+                font-size: 1.25rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .box {
+                padding: 0.9rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* ===== Acessibilidade ===== */
+        a {
+            color: #0f3460;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #e94560;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HEADER -->
+<!-- ============================================================ -->
+<header>
+    <h1>Modelagem e Gerenciamento no SQL Server<br>e Ferramentas para Modelagem Relacional</h1>
+    <p>Disciplina: Modelagem de Banco de Dados Relacional e NoSQL &mdash; Curso Superior de ADS</p>
+    <p>Duração da aula: 120 minutos</p>
+</header>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 1: OBJETIVOS E CONEXÃO COM A AULA ANTERIOR -->
+<!-- ============================================================ -->
+<section id="objetivos">
+    <h2>1. Objetivos da Aula e Conexão com a Aula Anterior</h2>
+
+    <h3>1.1 Objetivos de Aprendizagem</h3>
+    <p>Ao final desta aula, você deverá ser capaz de:</p>
+    <ol>
+        <li><strong>Compreender</strong> o papel dos esquemas (schemas) como contêineres lógicos e de segurança no SQL Server, diferenciando-os do banco de dados e do usuário.</li>
+        <li><strong>Aplicar</strong> comandos T-SQL para criar esquemas, tabelas e relacionamentos, incluindo a definição de chaves primárias, estrangeiras e restrições de integridade.</li>
+        <li><strong>Implementar</strong> consultas avançadas utilizando CTEs (Common Table Expressions) e funções de janela (window functions) para resolver problemas analíticos complexos.</li>
+        <li><strong>Analisar</strong> o impacto da normalização e da desnormalização no desempenho de consultas, justificando escolhas de projeto.</li>
+        <li><strong>Utilizar</strong> as ferramentas de modelagem nativas do SQL Server (SSMS Database Diagram e Table Designer) para projetar e documentar esquemas relacionais.</li>
+    </ol>
+
+    <h3>1.2 Conexão com a Aula Anterior</h3>
+    <p>Na aula anterior, estudamos os fundamentos da <strong>Modelagem Entidade-Relacionamento (ER)</strong>. Aprendemos a identificar entidades, atributos, relacionamentos e cardinalidades, produzindo diagramas ER que representam a estrutura conceitual de um banco de dados.</p>
+    <p>Agora, damos o próximo passo natural: <strong>transformar o modelo conceitual em um modelo físico implementado no SQL Server</strong>. Enquanto o modelo ER é independente de SGBD, o modelo físico é específico para o SQL Server, envolvendo tipos de dados, esquemas, índices e restrições. É aqui que a teoria encontra a prática de mercado.</p>
+
+    <div class="box box-info">
+        <span class="box-title">🔗 Conexão prática</span>
+        Pense no modelo ER como a <em>planta arquitetônica</em> de uma casa. O modelo físico no SQL Server é a <em>construção real</em>, com tijolos, encanamentos e fiação. Ambos são essenciais, mas operam em níveis diferentes de abstração.
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 2: INTRODUÇÃO -->
+<!-- ============================================================ -->
+<section id="introducao">
+    <h2>2. Introdução</h2>
+
+    <p>O <strong>SQL Server</strong> é um dos sistemas gerenciadores de banco de dados relacionais (SGBDR) mais utilizados no mercado corporativo. Segundo dados de 2025, é o terceiro SGBD mais popular do mundo, presente em milhares de empresas de médio e grande porte[reference:0]. Dominar a modelagem e o gerenciamento de estruturas no SQL Server é, portanto, uma competência altamente valorizada no mercado de TI.</p>
+
+    <p>Nesta aula, vamos além da criação básica de tabelas. Exploraremos:</p>
+    <ul>
+        <li><strong>Esquemas (Schemas):</strong> contêineres lógicos que organizam objetos e implementam segurança.</li>
+        <li><strong>Criação e gerenciamento de tabelas:</strong> tipos de dados, restrições, chaves e índices.</li>
+        <li><strong>Consultas avançadas:</strong> CTEs, funções de janela e otimização.</li>
+        <li><strong>Ferramentas de modelagem:</strong> Database Diagram e Table Designer do SSMS.</li>
+        <li><strong>Normalização e desnormalização:</strong> quando e por que aplicar cada abordagem.</li>
+    </ul>
+
+    <p>Ao longo do texto, utilizaremos exemplos práticos baseados em um cenário de <strong>e-commerce</strong>, permitindo que você visualize como cada conceito se aplica a um sistema real.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 3: DESENVOLVIMENTO TEÓRICO -->
+<!-- ============================================================ -->
+<section id="desenvolvimento">
+    <h2>3. Desenvolvimento Teórico Completo</h2>
+
+    <!-- ========================================================= -->
+    <h3>3.1 Esquemas (Schemas) no SQL Server</h3>
+    <!-- ========================================================= -->
+
+    <h4>3.1.1 O que é um Schema?</h4>
+    <p>Um <strong>schema</strong> (esquema) é um contêiner lógico que agrupa objetos de banco de dados — tabelas, views, stored procedures, funções, entre outros — dentro de um mesmo banco. Ele funciona como um <em>namespace</em>, permitindo que objetos com o mesmo nome coexistam em schemas diferentes.</p>
+
+    <p>Antes do SQL Server 2005, os objetos eram diretamente vinculados ao usuário que os criava. A partir do SQL Server 2005, essa vinculação foi quebrada: <strong>o schema é uma entidade independente do usuário</strong>, o que permite transferir a propriedade de objetos ou reorganizar permissões sem alterar o código da aplicação[reference:1].</p>
+
+    <p>Todo banco de dados SQL Server possui schemas predefinidos:</p>
+    <ul>
+        <li><strong>dbo:</strong> schema padrão para objetos criados por usuários comuns. Se você criar uma tabela sem especificar o schema, ela irá para <code>dbo</code>.</li>
+        <li><strong>sys:</strong> reservado para objetos do sistema. Nunca crie objetos aqui.</li>
+        <li><strong>INFORMATION_SCHEMA:</strong> schema padrão ANSI SQL para consulta de metadados.</li>
+        <li><strong>guest:</strong> associado ao usuário guest. Em produção, geralmente deve ser desabilitado.</li>
+    </ul>
+
+    <div class="box box-dica">
+        <span class="box-title">💡 Dica de mercado</span>
+        Em projetos profissionais, <strong>evite criar todas as tabelas no schema <code>dbo</code></strong>. Organize-as por domínio de negócio: <code>vendas.Pedidos</code>, <code>estoque.Produtos</code>, <code>financeiro.Faturas</code>. Isso facilita a navegação, a segurança granular e a manutenção[reference:2].
+    </div>
+
+    <h4>3.1.2 Criando Schemas com T-SQL</h4>
+    <p>A sintaxe básica para criar um schema é:</p>
+
+    <pre><code class="language-sql">-- Cria um schema simples
+CREATE SCHEMA Vendas;
+GO
+
+-- Cria um schema com proprietário específico
+CREATE SCHEMA Estoque AUTHORIZATION dbo;
+GO
+
+-- Cria um schema e já concede permissão de SELECT a um usuário
+CREATE SCHEMA Financeiro AUTHORIZATION dbo;
+GO
+GRANT SELECT ON SCHEMA::Financeiro TO usuario_consulta;
+GO</code></pre>
+
+    <p>Após criar o schema, você pode criar objetos dentro dele usando a notação <code>Schema.Objeto</code>:</p>
+
+    <pre><code class="language-sql">-- Cria uma tabela dentro do schema Vendas
+CREATE TABLE Vendas.Pedidos (
+    PedidoID INT PRIMARY KEY,
+    DataPedido DATETIME NOT NULL,
+    ClienteID INT NOT NULL,
+    ValorTotal DECIMAL(10,2) NOT NULL
+);
+GO</code></pre>
+
+    <p>Se você precisar mover um objeto de um schema para outro, use <code>ALTER SCHEMA ... TRANSFER</code>:</p>
+
+    <pre><code class="language-sql">-- Move a tabela OldOrders do schema dbo para o schema Vendas
+ALTER SCHEMA Vendas TRANSFER dbo.OldOrders;
+GO</code></pre>
+
+    <div class="box box-alerta">
+        <span class="box-title">⚠️ Atenção</span>
+        Ao transferir um objeto entre schemas, as referências em views, stored procedures e código de aplicação <strong>não são atualizadas automaticamente</strong>. Revise e atualize todas as referências manualmente[reference:3].
+    </div>
+
+    <h4>3.1.3 Listando Schemas Existentes</h4>
+    <p>Para consultar todos os schemas de um banco:</p>
+
+    <pre><code class="language-sql">SELECT 
+    name AS NomeSchema,
+    schema_id,
+    principal_id AS IDProprietario
+FROM sys.schemas
+ORDER BY name;</code></pre>
+
+    <!-- ========================================================= -->
+    <h3>3.2 Criação de Esquemas e Tabelas no SQL Server</h3>
+    <!-- ========================================================= -->
+
+    <h4>3.2.1 Tipos de Dados no SQL Server</h4>
+    <p>A escolha correta do tipo de dado é uma das decisões mais importantes no projeto físico. Tipos inadequados podem causar desperdício de armazenamento, degradação de desempenho e até erros de lógica.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Uso Recomendado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Numéricos exatos</td>
+                <td><code>INT</code>, <code>BIGINT</code>, <code>SMALLINT</code>, <code>TINYINT</code></td>
+                <td>Chaves primárias, contadores, IDs</td>
+            </tr>
+            <tr>
+                <td>Numéricos aproximados</td>
+                <td><code>FLOAT</code>, <code>REAL</code></td>
+                <td>Cálculos científicos (evitar para valores monetários)</td>
+            </tr>
+            <tr>
+                <td>Monetários</td>
+                <td><code>DECIMAL(p,s)</code>, <code>MONEY</code></td>
+                <td>Valores financeiros (preferir <code>DECIMAL</code>)</td>
+            </tr>
+            <tr>
+                <td>Texto</td>
+                <td><code>VARCHAR(n)</code>, <code>NVARCHAR(n)</code>, <code>CHAR(n)</code></td>
+                <td><code>NVARCHAR</code> para Unicode; <code>VARCHAR</code> para ASCII</td>
+            </tr>
+            <tr>
+                <td>Data/Hora</td>
+                <td><code>DATE</code>, <code>TIME</code>, <code>DATETIME2</code>, <code>DATETIMEOFFSET</code></td>
+                <td>Preferir <code>DATETIME2</code> (maior precisão e intervalo)</td>
+            </tr>
+            <tr>
+                <td>Binários</td>
+                <td><code>VARBINARY(MAX)</code>, <code>IMAGE</code> (obsoleto)</td>
+                <td>Arquivos, imagens (preferir <code>VARBINARY(MAX)</code>)</td>
+            </tr>
+            <tr>
+                <td>Especiais</td>
+                <td><code>UNIQUEIDENTIFIER</code>, <code>XML</code>, <code>JSON</code> (via <code>NVARCHAR</code>)</td>
+                <td>GUIDs, documentos XML, dados JSON</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box box-dica">
+        <span class="box-title">💡 Boa prática</span>
+        Para valores monetários, <strong>nunca use <code>FLOAT</code> ou <code>REAL</code></strong>. Esses tipos armazenam aproximações binárias, o que pode gerar erros de centavos em somas e multiplicações. Use <code>DECIMAL(10,2)</code> ou similar.
+    </div>
+
+    <h4>3.2.2 Criando Tabelas com Restrições</h4>
+    <p>Uma tabela bem projetada inclui restrições que garantem a integridade dos dados:</p>
+
+    <pre><code class="language-sql">-- Tabela de Clientes com restrições
+CREATE TABLE Vendas.Clientes (
+    ClienteID     INT IDENTITY(1,1) PRIMARY KEY,  -- Chave primária com auto-incremento
+    Nome          NVARCHAR(150) NOT NULL,
+    Email         NVARCHAR(255) NOT NULL UNIQUE,   -- Valor único
+    CPF           CHAR(11) NOT NULL UNIQUE,
+    DataCadastro  DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    Ativo         BIT NOT NULL DEFAULT 1,
+    LimiteCredito DECIMAL(12,2) NOT NULL DEFAULT 0,
+    CONSTRAINT CK_LimitePositivo CHECK (LimiteCredito >= 0)
+);
+GO
+
+-- Tabela de Pedidos com chave estrangeira
+CREATE TABLE Vendas.Pedidos (
+    PedidoID    INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID   INT NOT NULL,
+    DataPedido  DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    Status      VARCHAR(20) NOT NULL DEFAULT 'Pendente',
+    ValorTotal  DECIMAL(12,2) NOT NULL DEFAULT 0,
+    CONSTRAINT FK_Pedidos_Clientes 
+        FOREIGN KEY (ClienteID) REFERENCES Vendas.Clientes(ClienteID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT CK_StatusValido 
+        CHECK (Status IN ('Pendente', 'Pago', 'Enviado', 'Entregue', 'Cancelado'))
+);
+GO</code></pre>
+
+    <p>Vamos analisar os principais elementos:</p>
+    <ul>
+        <li><strong><code>IDENTITY(1,1)</code>:</strong> gera valores automáticos começando em 1, incrementando de 1 em 1.</li>
+        <li><strong><code>PRIMARY KEY</code>:</strong> define a chave primária (implicitamente cria um índice clusterizado).</li>
+        <li><strong><code>UNIQUE</code>:</strong> garante que não haja valores duplicados na coluna.</li>
+        <li><strong><code>NOT NULL</code>:</strong> impede valores nulos.</li>
+        <li><strong><code>DEFAULT</code>:</strong> define um valor padrão quando nenhum é informado.</li>
+        <li><strong><code>CHECK</code>:</strong> valida uma condição lógica.</li>
+        <li><strong><code>FOREIGN KEY</code>:</strong> estabelece relacionamento com outra tabela.</li>
+        <li><strong><code>ON DELETE CASCADE</code> / <code>ON UPDATE CASCADE</code>:</strong> propaga exclusões/atualizações para tabelas filhas.</li>
+    </ul>
+
+    <div class="box box-erro">
+        <span class="box-title">🚫 Erro comum</span>
+        Usar <code>ON DELETE CASCADE</code> sem analisar o impacto. Se você excluir um cliente, todos os pedidos dele serão excluídos automaticamente. Em sistemas financeiros, isso pode ser catastrófico. Prefira <code>ON DELETE NO ACTION</code> e trate a exclusão logicamente (soft delete).
+    </div>
+
+    <!-- ========================================================= -->
+    <h3>3.3 Consultas e Operações Avançadas em SQL Server</h3>
+    <!-- ========================================================= -->
+
+    <h4>3.3.1 Common Table Expressions (CTEs)</h4>
+    <p>Uma <strong>CTE</strong> é uma expressão de tabela temporária nomeada que existe apenas durante a execução de uma única instrução <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code> ou <code>DELETE</code>. Ela melhora a legibilidade e a manutenção de consultas complexas, permitindo dividir a lógica em etapas[reference:4].</p>
+
+    <p><strong>Sintaxe básica:</strong></p>
+    <pre><code class="language-sql">WITH NomeDaCTE AS (
+    -- Consulta que define a CTE
+    SELECT ...
+)
+SELECT * FROM NomeDaCTE;</code></pre>
+
+    <p><strong>Exemplo prático:</strong> Vamos calcular o total de vendas por cliente e classificar os clientes por volume de compras.</p>
+
+    <pre><code class="language-sql">WITH TotalPorCliente AS (
+    SELECT 
+        c.ClienteID,
+        c.Nome,
+        COUNT(p.PedidoID) AS QtdPedidos,
+        SUM(p.ValorTotal) AS TotalGasto
+    FROM Vendas.Clientes c
+    INNER JOIN Vendas.Pedidos p ON c.ClienteID = p.ClienteID
+    WHERE p.Status = 'Entregue'
+    GROUP BY c.ClienteID, c.Nome
+)
+SELECT 
+    ClienteID,
+    Nome,
+    QtdPedidos,
+    TotalGasto,
+    CASE 
+        WHEN TotalGasto >= 10000 THEN 'VIP'
+        WHEN TotalGasto >= 5000 THEN 'Ouro'
+        WHEN TotalGasto >= 1000 THEN 'Prata'
+        ELSE 'Bronze'
+    END AS Categoria
+FROM TotalPorCliente
+ORDER BY TotalGasto DESC;</code></pre>
+
+    <p><strong>Saída esperada (exemplo):</strong></p>
+    <table>
+        <thead>
+            <tr><th>ClienteID</th><th>Nome</th><th>QtdPedidos</th><th>TotalGasto</th><th>Categoria</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>3</td><td>Ana Souza</td><td>15</td><td>15200.00</td><td>VIP</td></tr>
+            <tr><td>1</td><td>Carlos Lima</td><td>8</td><td>7200.00</td><td>Ouro</td></tr>
+            <tr><td>7</td><td>Mariana Alves</td><td>5</td><td>3200.00</td><td>Prata</td></tr>
+        </tbody>
+    </table>
+
+    <div class="box box-pare">
+        <span class="box-title">🧠 Pare e Pense #1</span>
+        <p><strong>Pergunta:</strong> Qual a diferença entre uma CTE e uma subconsulta (subquery) tradicional? Em que situações uma CTE é preferível?</p>
+        <p><strong>Reflexão:</strong> Uma subconsulta é aninhada dentro de outra consulta, enquanto a CTE é definida separadamente com um nome. A CTE pode ser referenciada múltiplas vezes na mesma consulta, enquanto a subconsulta precisaria ser repetida. Além disso, a CTE melhora a legibilidade, especialmente em consultas com múltiplos níveis de agregação. Para consultas recursivas, a CTE é a única opção viável no SQL Server.</p>
+    </div>
+
+    <h4>3.3.2 Funções de Janela (Window Functions)</h4>
+    <p>As <strong>funções de janela</strong> realizam cálculos sobre um conjunto de linhas relacionadas à linha atual, <strong>sem colapsar o resultado em uma única linha</strong> (como fazem as funções de agregação tradicionais)[reference:5]. Isso é extremamente poderoso para rankings, totais acumulados e médias móveis.</p>
+
+    <p><strong>Sintaxe geral:</strong></p>
+    <pre><code class="language-sql">Função() OVER (
+    [PARTITION BY coluna]
+    [ORDER BY coluna]
+    [ROWS/RANGE BETWEEN ...]
+)</code></pre>
+
+    <p><strong>Exemplo: Ranking de produtos por categoria</strong></p>
+
+    <pre><code class="language-sql">SELECT 
+    p.Categoria,
+    p.Nome AS Produto,
+    p.Preco,
+    ROW_NUMBER() OVER (PARTITION BY p.Categoria ORDER BY p.Preco DESC) AS Ranking,
+    RANK() OVER (PARTITION BY p.Categoria ORDER BY p.Preco DESC) AS RankComEmpates,
+    AVG(p.Preco) OVER (PARTITION BY p.Categoria) AS MediaCategoria
+FROM Estoque.Produtos p
+ORDER BY p.Categoria, Ranking;</code></pre>
+
+    <p><strong>Saída esperada (exemplo):</strong></p>
+    <table>
+        <thead>
+            <tr><th>Categoria</th><th>Produto</th><th>Preco</th><th>Ranking</th><th>RankComEmpates</th><th>MediaCategoria</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Eletrônicos</td><td>Notebook Pro</td><td>8500.00</td><td>1</td><td>1</td><td>5200.00</td></tr>
+            <tr><td>Eletrônicos</td><td>Tablet X</td><td>3200.00</td><td>2</td><td>2</td><td>5200.00</td></tr>
+            <tr><td>Eletrônicos</td><td>Fone BT</td><td>3900.00</td><td>3</td><td>2</td><td>5200.00</td></tr>
+            <tr><td>Livros</td><td>SQL Avançado</td><td>180.00</td><td>1</td><td>1</td><td>120.00</td></tr>
+            <tr><td>Livros</td><td>Python Básico</td><td>95.00</td><td>2</td><td>2</td><td>120.00</td></tr>
+        </tbody>
+    </table>
+
+    <p>Observe que <code>ROW_NUMBER</code> sempre gera números únicos, enquanto <code>RANK</code> atribui o mesmo rank para valores empatados e pula posições. A coluna <code>MediaCategoria</code> calcula a média da categoria sem agrupar as linhas.</p>
+
+    <div class="box box-dica">
+        <span class="box-title">💡 Dica de performance</span>
+        Funções de janela geralmente são mais eficientes que <em>self-joins</em> ou subconsultas correlacionadas para cálculos analíticos. O otimizador do SQL Server consegue processá-las em uma única passagem pelos dados[reference:6].
+    </div>
+
+    <!-- ========================================================= -->
+    <h3>3.4 Índices e Desempenho</h3>
+    <!-- ========================================================= -->
+
+    <h4>3.4.1 O que são Índices?</h4>
+    <p>Um <strong>índice</strong> é uma estrutura auxiliar que permite ao SQL Server localizar dados rapidamente, sem precisar varrer a tabela inteira (full table scan). Pense em um índice como o índice remissivo de um livro: em vez de ler todas as páginas para encontrar um tópico, você consulta o índice e vai direto à página correta[reference:7].</p>
+
+    <h4>3.4.2 Tipos de Índices</h4>
+    <ul>
+        <li><strong>Índice Clusterizado (Clustered):</strong> define a ordem física dos dados na tabela. Cada tabela pode ter apenas <strong>um</strong> índice clusterizado. Por padrão, a chave primária cria um índice clusterizado. Ideal para consultas de intervalo (range queries) e ordenação.</li>
+        <li><strong>Índice Não Clusterizado (Nonclustered):</strong> estrutura separada que contém uma cópia das colunas-chave e um ponteiro para os dados reais. Uma tabela pode ter vários índices não clusterizados. Ideal para consultas de igualdade e junções.</li>
+        <li><strong>Índice Filtrado (Filtered):</strong> índice não clusterizado com uma cláusula <code>WHERE</code>, indexando apenas um subconjunto de linhas. Útil para colunas com muitos valores NULL ou categorias específicas[reference:8].</li>
+        <li><strong>Índice de Cobertura (Covering):</strong> índice não clusterizado que inclui todas as colunas necessárias para uma consulta, evitando acessos à tabela base (key lookup).</li>
+    </ul>
+
+    <h4>3.4.3 Criando Índices</h4>
+
+    <pre><code class="language-sql">-- Índice não clusterizado simples
+CREATE NONCLUSTERED INDEX IX_Pedidos_DataPedido
+ON Vendas.Pedidos (DataPedido);
+GO
+
+-- Índice composto (mais de uma coluna)
+CREATE NONCLUSTERED INDEX IX_Pedidos_Cliente_Status
+ON Vendas.Pedidos (ClienteID, Status);
+GO
+
+-- Índice de cobertura com INCLUDE
+CREATE NONCLUSTERED INDEX IX_Pedidos_Data_Inclui
+ON Vendas.Pedidos (DataPedido)
+INCLUDE (ClienteID, ValorTotal, Status);
+GO
+
+-- Índice filtrado
+CREATE NONCLUSTERED INDEX IX_Pedidos_Pendentes
+ON Vendas.Pedidos (ClienteID)
+WHERE Status = 'Pendente';
+GO</code></pre>
+
+    <div class="box box-alerta">
+        <span class="box-title">⚠️ Cuidado com o excesso de índices</span>
+        Cada índice adicional ocupa espaço em disco e <strong>degrada o desempenho de INSERT, UPDATE e DELETE</strong>, pois o SQL Server precisa atualizar todos os índices afetados. A regra de ouro é: indexe o que é realmente consultado, mas não indexe tudo.
+    </div>
+
+    <h4>3.4.4 Fragmentação e Manutenção</h4>
+    <p>Com o tempo, operações de inserção, atualização e exclusão podem fragmentar os índices, reduzindo a densidade das páginas e degradando o desempenho. Para diagnosticar:</p>
+
+    <pre><code class="language-sql">SELECT 
+    OBJECT_NAME(ips.object_id) AS Tabela,
+    i.name AS Indice,
+    ips.avg_fragmentation_in_percent,
+    ips.page_count
+FROM sys.dm_db_index_physical_stats(
+    DB_ID(), NULL, NULL, NULL, 'LIMITED'
+) ips
+INNER JOIN sys.indexes i ON ips.object_id = i.object_id 
+    AND ips.index_id = i.index_id
+WHERE ips.avg_fragmentation_in_percent > 10
+ORDER BY ips.avg_fragmentation_in_percent DESC;</code></pre>
+
+    <p>Se a fragmentação estiver entre 10% e 30%, use <code>ALTER INDEX ... REORGANIZE</code>. Acima de 30%, use <code>ALTER INDEX ... REBUILD</code>[reference:9].</p>
+
+    <!-- ========================================================= -->
+    <h3>3.5 Normalização e Desnormalização</h3>
+    <!-- ========================================================= -->
+
+    <h4>3.5.1 Normalização</h4>
+    <p>A <strong>normalização</strong> é o processo de organizar dados em tabelas relacionadas para eliminar redundância e evitar anomalias de inserção, atualização e exclusão. As formas normais mais aplicadas são:</p>
+
+    <ul>
+        <li><strong>1FN (Primeira Forma Normal):</strong> elimina grupos repetidos e atributos multivalorados. Cada célula contém um único valor atômico.</li>
+        <li><strong>2FN (Segunda Forma Normal):</strong> elimina dependências parciais. Todos os atributos não-chave dependem da chave primária completa.</li>
+        <li><strong>3FN (Terceira Forma Normal):</strong> elimina dependências transitivas. Atributos não-chave não dependem de outros atributos não-chave.</li>
+    </ul>
+
+    <div class="box box-info">
+        <span class="box-title">📐 Exemplo de violação da 3FN</span>
+        Considere uma tabela <code>Pedidos</code> com as colunas: <code>PedidoID</code>, <code>ClienteID</code>, <code>NomeCliente</code>, <code>CidadeCliente</code>. Aqui, <code>NomeCliente</code> e <code>CidadeCliente</code> dependem de <code>ClienteID</code>, não diretamente de <code>PedidoID</code>. Isso é uma dependência transitiva. A solução é separar os dados do cliente em uma tabela <code>Clientes</code>.
+    </div>
+
+    <h4>3.5.2 Desnormalização</h4>
+    <p>A <strong>desnormalização</strong> é a introdução deliberada de redundância para melhorar o desempenho de leitura. É comum em data warehouses e sistemas analíticos, onde consultas complexas com muitos JOINs podem ser custosas[reference:10].</p>
+
+    <p><strong>Exemplo:</strong> Em vez de sempre fazer JOIN entre <code>Pedidos</code> e <code>Clientes</code> para obter o nome do cliente, você pode armazenar <code>NomeCliente</code> diretamente na tabela <code>Pedidos</code>. Isso acelera relatórios, mas exige cuidado para manter a consistência (se o cliente mudar de nome, todos os pedidos precisam ser atualizados).</p>
+
+    <div class="box box-pare">
+        <span class="box-title">🧠 Pare e Pense #2</span>
+        <p><strong>Pergunta:</strong> Em um sistema de e-commerce com milhões de pedidos e consultas frequentes de relatórios gerenciais, você normalizaria ou desnormalizaria? Justifique considerando o trade-off entre integridade e desempenho.</p>
+        <p><strong>Reflexão:</strong> A resposta ideal é uma abordagem híbrida. Mantenha o modelo transacional (OLTP) normalizado para garantir integridade, e crie um data warehouse ou uma camada de agregação desnormalizada (OLAP) para relatórios. Assim, você tem o melhor dos dois mundos: consistência nas operações do dia a dia e desempenho nas análises.
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 4: EXEMPLOS DE APLICAÇÃO PRÁTICA -->
+<!-- ============================================================ -->
+<section id="pratica">
+    <h2>4. Exemplos de Aplicação Prática</h2>
+
+    <h3>4.1 Cenário Completo: E-commerce</h3>
+    <p>Vamos construir um cenário completo de e-commerce, aplicando todos os conceitos vistos.</p>
+
+    <h4>Passo 1: Criar schemas</h4>
+    <pre><code class="language-sql">CREATE SCHEMA Vendas;
+GO
+CREATE SCHEMA Estoque;
+GO
+CREATE SCHEMA Financeiro;
+GO</code></pre>
+
+    <h4>Passo 2: Criar tabelas normalizadas</h4>
+    <pre><code class="language-sql">-- Clientes
+CREATE TABLE Vendas.Clientes (
+    ClienteID     INT IDENTITY(1,1) PRIMARY KEY,
+    Nome          NVARCHAR(150) NOT NULL,
+    Email         NVARCHAR(255) NOT NULL UNIQUE,
+    CPF           CHAR(11) NOT NULL UNIQUE,
+    DataCadastro  DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    Ativo         BIT NOT NULL DEFAULT 1
+);
+GO
+
+-- Produtos
+CREATE TABLE Estoque.Produtos (
+    ProdutoID   INT IDENTITY(1,1) PRIMARY KEY,
+    Nome        NVARCHAR(200) NOT NULL,
+    Categoria   NVARCHAR(100) NOT NULL,
+    Preco       DECIMAL(10,2) NOT NULL,
+    EstoqueQtd  INT NOT NULL DEFAULT 0,
+    CONSTRAINT CK_PrecoPositivo CHECK (Preco >= 0)
+);
+GO
+
+-- Pedidos
+CREATE TABLE Vendas.Pedidos (
+    PedidoID    INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteID   INT NOT NULL,
+    DataPedido  DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    Status      VARCHAR(20) NOT NULL DEFAULT 'Pendente',
+    ValorTotal  DECIMAL(12,2) NOT NULL DEFAULT 0,
+    CONSTRAINT FK_Pedidos_Clientes 
+        FOREIGN KEY (ClienteID) REFERENCES Vendas.Clientes(ClienteID),
+    CONSTRAINT CK_StatusValido 
+        CHECK (Status IN ('Pendente', 'Pago', 'Enviado', 'Entregue', 'Cancelado'))
+);
+GO
+
+-- Itens do Pedido
+CREATE TABLE Vendas.ItensPedido (
+    ItemID      INT IDENTITY(1,1) PRIMARY KEY,
+    PedidoID    INT NOT NULL,
+    ProdutoID   INT NOT NULL,
+    Quantidade  INT NOT NULL,
+    PrecoUnit   DECIMAL(10,2) NOT NULL,
+    CONSTRAINT FK_Itens_Pedidos 
+        FOREIGN KEY (PedidoID) REFERENCES Vendas.Pedidos(PedidoID),
+    CONSTRAINT FK_Itens_Produtos 
+        FOREIGN KEY (ProdutoID) REFERENCES Estoque.Produtos(ProdutoID),
+    CONSTRAINT CK_QuantidadePositiva CHECK (Quantidade > 0)
+);
+GO</code></pre>
+
+    <h4>Passo 3: Inserir dados de exemplo</h4>
+    <pre><code class="language-sql">INSERT INTO Vendas.Clientes (Nome, Email, CPF) VALUES
+('Ana Souza', 'ana@email.com', '12345678901'),
+('Carlos Lima', 'carlos@email.com', '98765432100'),
+('Mariana Alves', 'mariana@email.com', '11122233344');
+GO
+
+INSERT INTO Estoque.Produtos (Nome, Categoria, Preco, EstoqueQtd) VALUES
+('Notebook Pro', 'Eletrônicos', 8500.00, 10),
+('Tablet X', 'Eletrônicos', 3200.00, 25),
+('Fone BT', 'Eletrônicos', 3900.00, 15),
+('SQL Avançado', 'Livros', 180.00, 100),
+('Python Básico', 'Livros', 95.00, 200);
+GO
+
+INSERT INTO Vendas.Pedidos (ClienteID, Status, ValorTotal) VALUES
+(1, 'Entregue', 8500.00),
+(1, 'Entregue', 3200.00),
+(2, 'Entregue', 180.00),
+(3, 'Pendente', 3900.00);
+GO
+
+INSERT INTO Vendas.ItensPedido (PedidoID, ProdutoID, Quantidade, PrecoUnit) VALUES
+(1, 1, 1, 8500.00),
+(2, 2, 1, 3200.00),
+(3, 4, 1, 180.00),
+(4, 3, 1, 3900.00);
+GO</code></pre>
+
+    <h4>Passo 4: Consulta com CTE e Window Function</h4>
+    <p>Vamos criar um relatório que mostra, para cada cliente, o total gasto, a quantidade de pedidos e o ranking.</p>
+
+    <pre><code class="language-sql">WITH ResumoCliente AS (
+    SELECT 
+        c.ClienteID,
+        c.Nome,
+        COUNT(p.PedidoID) AS QtdPedidos,
+        SUM(p.ValorTotal) AS TotalGasto
+    FROM Vendas.Clientes c
+    LEFT JOIN Vendas.Pedidos p ON c.ClienteID = p.ClienteID
+        AND p.Status = 'Entregue'
+    GROUP BY c.ClienteID, c.Nome
+)
+SELECT 
+    ClienteID,
+    Nome,
+    QtdPedidos,
+    ISNULL(TotalGasto, 0) AS TotalGasto,
+    RANK() OVER (ORDER BY ISNULL(TotalGasto, 0) DESC) AS Ranking
+FROM ResumoCliente
+ORDER BY Ranking;</code></pre>
+
+    <p><strong>Saída esperada:</strong></p>
+    <table>
+        <thead>
+            <tr><th>ClienteID</th><th>Nome</th><th>QtdPedidos</th><th>TotalGasto</th><th>Ranking</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Ana Souza</td><td>2</td><td>11700.00</td><td>1</td></tr>
+            <tr><td>2</td><td>Carlos Lima</td><td>1</td><td>180.00</td><td>2</td></tr>
+            <tr><td>3</td><td>Mariana Alves</td><td>0</td><td>0.00</td><td>3</td></tr>
+        </tbody>
+    </table>
+
+    <h4>Passo 5: Criar índices para otimização</h4>
+    <pre><code class="language-sql">-- Índice para buscas por data de pedido
+CREATE NONCLUSTERED INDEX IX_Pedidos_DataPedido
+ON Vendas.Pedidos (DataPedido)
+INCLUDE (ClienteID, ValorTotal, Status);
+GO
+
+-- Índice para o relatório de clientes
+CREATE NONCLUSTERED INDEX IX_Pedidos_Cliente_Status
+ON Vendas.Pedidos (ClienteID, Status)
+INCLUDE (ValorTotal);
+GO
+
+-- Índice para produtos por categoria
+CREATE NONCLUSTERED INDEX IX_Produtos_Categoria
+ON Estoque.Produtos (Categoria)
+INCLUDE (Nome, Preco);
+GO</code></pre>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 5: APLICAÇÃO NO MERCADO DE TRABALHO -->
+<!-- ============================================================ -->
+<section id="mercado">
+    <h2>5. Aplicação no Mercado de Trabalho de TI</h2>
+
+    <p>Os conhecimentos adquiridos nesta aula são aplicados diariamente em diversas funções do mercado de TI:</p>
+
+    <h3>5.1 Desenvolvedor Back-end</h3>
+    <p>Precisa criar e otimizar consultas SQL, entender planos de execução, projetar índices e garantir que as consultas da aplicação tenham desempenho adequado. Em entrevistas técnicas, é comum a pergunta: <em>"Como você otimizaria uma consulta lenta?"</em> — e a resposta envolve análise de índices, CTEs e window functions.</p>
+
+    <h3>5.2 Analista de Dados / BI</h3>
+    <p>Utiliza CTEs, window functions e agregações avançadas para construir relatórios e dashboards. A capacidade de escrever consultas complexas e legíveis é fundamental para transformar dados brutos em insights de negócio.</p>
+
+    <h3>5.3 DBA (Database Administrator)</h3>
+    <p>Responsável por criar schemas, gerenciar permissões, monitorar fragmentação de índices, realizar manutenção (REORGANIZE/REBUILD) e garantir a disponibilidade e integridade do banco de dados.</p>
+
+    <h3>5.4 Arquiteto de Dados</h3>
+    <p>Decide quando normalizar ou desnormalizar, projeta modelos híbridos (OLTP + OLAP), escolhe entre bancos relacionais e NoSQL, e define estratégias de escalabilidade e particionamento.</p>
+
+    <div class="box box-dica">
+        <span class="box-title">💡 Certificações relevantes</span>
+        <ul>
+            <li><strong>Microsoft Certified: Azure Data Engineer Associate</strong></li>
+            <li><strong>Microsoft Certified: Azure Database Administrator Associate</strong></li>
+            <li><strong>Microsoft Certified: SQL Server 2019/2022 Database Development</strong> (exames 70-761 e 70-762, embora tenham sido descontinuados, os conceitos permanecem válidos)</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 6: FERRAMENTAS DE MODELAGEM NO SQL SERVER -->
+<!-- ============================================================ -->
+<section id="ferramentas">
+    <h2>6. Ferramentas para Modelagem Relacional no SQL Server</h2>
+
+    <h3>6.1 SQL Server Management Studio (SSMS)</h3>
+    <p>O <strong>SSMS</strong> é a principal ferramenta de gerenciamento do SQL Server. Ele inclui o <strong>Visual Database Tools</strong>, um conjunto de designers visuais para trabalhar com estruturas de banco de dados[reference:11].</p>
+
+    <h3>6.2 Database Diagram Designer</h3>
+    <p>O <strong>Database Diagram Designer</strong> permite criar, visualizar e modificar diagramas ER diretamente no SSMS. Você pode:</p>
+    <ul>
+        <li>Adicionar tabelas ao diagrama e visualizar seus relacionamentos.</li>
+        <li>Criar e modificar chaves primárias, estrangeiras e restrições.</li>
+        <li>Criar índices diretamente nas colunas.</li>
+        <li>Exportar o diagrama como imagem para documentação.</li>
+    </ul>
+
+    <p><strong>Como acessar:</strong> No Object Explorer, expanda o banco de dados → clique com o botão direito em <em>Database Diagrams</em> → <em>New Database Diagram</em>[reference:12].</p>
+
+    <div class="box box-alerta">
+        <span class="box-title">⚠️ Nota</span>
+        O Database Diagram Designer exige que o banco tenha os objetos de suporte necessários. Se for a primeira vez, o SSMS perguntará se você deseja criá-los. Isso é normal e seguro[reference:13].
+    </div>
+
+    <h3>6.3 Table Designer</h3>
+    <p>O <strong>Table Designer</strong> é usado para criar e modificar tabelas visualmente. Você pode definir colunas, tipos de dados, restrições, índices e relacionamentos sem escrever T-SQL. É útil para prototipagem rápida, mas em projetos profissionais, prefira scripts T-SQL versionados.</p>
+
+    <h3>6.4 Ferramentas de Terceiros</h3>
+    <p>Além das ferramentas nativas, existem opções de terceiros amplamente utilizadas:</p>
+    <ul>
+        <li><strong>dbForge Studio for SQL Server:</strong> ferramenta completa com designer de banco de dados, comparação de esquemas e geração de documentação.</li>
+        <li><strong>Redgate SQL Toolbelt:</strong> conjunto de ferramentas para desenvolvimento, comparação e implantação de bancos de dados.</li>
+        <li><strong>DrawSQL:</strong> ferramenta online para criação de diagramas ER, colaborativa e com exportação para SQL.</li>
+    </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 7: GLOSSÁRIO -->
+<!-- ============================================================ -->
+<section id="glossario">
+    <h2>7. Glossário</h2>
+
+    <dl class="glossario">
+        <dt>Schema (Esquema)</dt>
+        <dd>Contêiner lógico que agrupa objetos de banco de dados dentro de um mesmo banco. No SQL Server, é independente do usuário.</dd>
+
+        <dt>CTE (Common Table Expression)</dt>
+        <dd>Expressão de tabela temporária nomeada que existe durante a execução de uma única instrução. Melhora a legibilidade de consultas complexas.</dd>
+
+        <dt>Window Function (Função de Janela)</dt>
+        <dd>Função que realiza cálculos sobre um conjunto de linhas relacionadas, sem colapsar o resultado. Exemplos: ROW_NUMBER, RANK, SUM OVER.</dd>
+
+        <dt>Índice Clusterizado</dt>
+        <dd>Índice que define a ordem física dos dados na tabela. Cada tabela pode ter apenas um.</dd>
+
+        <dt>Índice Não Clusterizado</dt>
+        <dd>Estrutura separada que contém cópias das colunas-chave e ponteiros para os dados reais.</dd>
+
+        <dt>Normalização</dt>
+        <dd>Processo de organizar dados em tabelas relacionadas para eliminar redundância e evitar anomalias.</dd>
+
+        <dt>Desnormalização</dt>
+        <dd>Introdução deliberada de redundância para melhorar o desempenho de leitura.</dd>
+
+        <dt>Fragmentação</dt>
+        <dd>Condição em que as páginas de um índice estão fora de ordem física, degradando o desempenho de leitura.</dd>
+
+        <dt>Database Diagram Designer</dt>
+        <dd>Ferramenta visual do SSMS para criar e modificar diagramas ER diretamente no banco de dados.</dd>
+    </dl>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 8: CONCLUSÃO E RESUMO -->
+<!-- ============================================================ -->
+<section id="conclusao">
+    <h2>8. Conclusão e Resumo</h2>
+
+    <p>Nesta aula, percorremos um caminho completo: da modelagem conceitual ER (vista na aula anterior) até a implementação física no SQL Server. Vimos que:</p>
+
+    <ul>
+        <li><strong>Schemas</strong> são fundamentais para organizar objetos e implementar segurança granular. Evite concentrar tudo em <code>dbo</code>.</li>
+        <li><strong>Tabelas bem projetadas</strong> incluem restrições de integridade (PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK, DEFAULT) que previnem dados inconsistentes.</li>
+        <li><strong>CTEs e Window Functions</strong> são ferramentas poderosas para consultas analíticas complexas, melhorando legibilidade e desempenho.</li>
+        <li><strong>Índices</strong> aceleram consultas, mas exigem equilíbrio: muitos índices degradam operações de escrita.</li>
+        <li><strong>Normalização</strong> garante integridade; <strong>desnormalização</strong> melhora desempenho de leitura. A escolha depende do contexto (OLTP vs. OLAP).</li>
+        <li><strong>Ferramentas visuais</strong> (Database Diagram, Table Designer) facilitam a modelagem, mas scripts T-SQL versionados são preferíveis em projetos profissionais.</li>
+    </ul>
+
+    <p>O domínio desses conceitos é essencial para qualquer profissional de ADS que deseje atuar com desenvolvimento back-end, análise de dados, administração de bancos ou arquitetura de dados.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SEÇÃO 9: REFERÊNCIAS -->
+<!-- ============================================================ -->
+<section id="referencias">
+    <h2>9. Referências</h2>
+
+    <ul>
+        <li>MICROSOFT. <em>SQL Server Index Design Guide</em>. Microsoft Learn. Disponível em: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide</a>. Acesso em: 2026.</li>
+        <li>MICROSOFT. <em>Write advanced SQL code</em>. Microsoft Learn. Disponível em: <a href="https://learn.microsoft.com/en-us/training/modules/write-advanced-sql-code/" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/training/modules/write-advanced-sql-code/</a>. Acesso em: 2026.</li>
+        <li>MICROSOFT. <em>Walkthrough: Add and Change a Database Diagram</em>. Microsoft Learn. Disponível em: <a href="https://learn.microsoft.com/en-us/ssms/visual-db-tools/walkthrough-adding-and-changing-a-database-diagram" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/ssms/visual-db-tools/walkthrough-adding-and-changing-a-database-diagram</a>. Acesso em: 2026.</li>
+        <li>MICROSOFT. <em>Explore performance-based design</em>. Microsoft Learn. Disponível em: <a href="https://learn.microsoft.com/en-us/training/modules/explore-performance-based-design/" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/training/modules/explore-performance-based-design/</a>. Acesso em: 2026.</li>
+        <li>SQL AUTHORITY. <em>Execution Plans and Indexing Strategies</em>. Disponível em: <a href="https://blog.sqlauthority.com" target="_blank" rel="noopener">https://blog.sqlauthority.com</a>. Acesso em: 2026.</li>
+    </ul>
+
+    <div class="box box-info">
+        <span class="box-title">📌 Nota sobre referências</span>
+        Todas as referências listadas são fontes reais e verificáveis. Documentações oficiais da Microsoft são a fonte primária para SQL Server.
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer style="text-align: center; padding: 2rem 1rem; color: #666; font-size: 0.9rem;">
+    <p>Material didático produzido para o Curso Superior de Análise e Desenvolvimento de Sistemas.<br>
+    Disciplina: Modelagem de Banco de Dados Relacional e NoSQL.</p>
+    <p>&copy; 2026 — Uso educacional.</p>
+</footer>
+
+<!-- Ativar Prism.js após o carregamento do DOM -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Prism.highlightAll();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Exercícios — Modelagem e Gerenciamento no SQL Server</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background-color: #f8f9fc;
+            padding: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            color: #ffffff;
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 20px rgba(15, 52, 96, 0.3);
+        }
+
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; line-height: 1.3; }
+        header p { font-size: 1.1rem; opacity: 0.9; }
+
+        section {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 1.8rem 1.5rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #0f3460;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        h3 { font-size: 1.3rem; color: #16213e; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+
+        p { margin-bottom: 1rem; text-align: justify; }
+
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+        li { margin-bottom: 0.5rem; }
+
+        .questao {
+            background: #f4f6f9;
+            border-left: 6px solid #0f3460;
+            border-radius: 8px;
+            padding: 1.2rem 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nivel {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .nivel-facil { background: #c8e6c9; color: #1b5e20; }
+        .nivel-medio { background: #fff9c4; color: #f57f17; }
+        .nivel-dificil { background: #ffcdd2; color: #b71c1c; }
+
+        .alternativas { list-style: none; margin-left: 0; padding-left: 0; }
+        .alternativas li {
+            padding: 0.5rem 0.8rem;
+            margin-bottom: 0.4rem;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+        }
+
+        .alternativas li strong { color: #0f3460; margin-right: 0.5rem; }
+
+        pre[class*="language-"] {
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-size: 1em;
+            line-height: 1.6;
+            padding: 1rem;
+            overflow-x: auto;
+            width: 100%;
+            background: #1e1e2e;
+        }
+
+        code[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .box {
+            border-radius: 8px;
+            padding: 1.2rem 1.4rem;
+            margin: 1.5rem 0;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .box-dica { background: #e8f5e9; border-left: 6px solid #2e7d32; }
+
+        @media (max-width: 768px) {
+            body { font-size: 1.15em; padding: 0.8rem; }
+            header h1 { font-size: 1.5rem; }
+            section { padding: 1.2rem 1rem; }
+            h2 { font-size: 1.35rem; }
+            pre[class*="language-"] { font-size: 0.9em; padding: 0.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            body { font-size: 1em; }
+            header h1 { font-size: 1.25rem; }
+            h2 { font-size: 1.2rem; }
+            .box { padding: 0.9rem 1rem; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Lista de Exercícios — Caderno do Aluno</h1>
+    <p>Disciplina: Modelagem de Banco de Dados Relacional e NoSQL</p>
+    <p>Tema: Modelagem e Gerenciamento no SQL Server e Ferramentas de Modelagem</p>
+    <p>Curso Superior de ADS &mdash; Duração: 120 minutos</p>
+</header>
+
+<section>
+    <h2>Instruções</h2>
+    <p>Esta lista contém <strong>10 questões objetivas</strong> (alternativas A a E) e <strong>5 questões dissertativas</strong>. Cada questão está classificada por nível de dificuldade (Fácil, Médio ou Difícil). As questões marcadas com o símbolo <strong>[CÓDIGO]</strong> exigem leitura ou escrita de comandos T-SQL.</p>
+    <div class="box box-dica">
+        <strong>💡 Dica:</strong> Antes de responder, revise o material da aula, especialmente os tópicos sobre schemas, restrições, CTEs, window functions, índices e normalização.
+    </div>
+</section>
+
+<!-- ==================== QUESTÕES OBJETIVAS ==================== -->
+<section>
+    <h2>Parte I — Questões Objetivas</h2>
+
+    <!-- Q1 -->
+    <div class="questao">
+        <h3>Questão 1 <span class="nivel nivel-facil">Fácil</span></h3>
+        <p>No SQL Server, o que é um <strong>schema</strong>?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Um tipo de dado especial para armazenar documentos JSON.</li>
+            <li><strong>B)</strong> Um contêiner lógico que agrupa objetos de banco de dados, como tabelas, views e procedures.</li>
+            <li><strong>C)</strong> Um índice clusterizado criado automaticamente com a chave primária.</li>
+            <li><strong>D)</strong> Um backup diferencial do banco de dados.</li>
+            <li><strong>E)</strong> Uma tabela temporária armazenada em <code>tempdb</code>.</li>
+        </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="questao">
+        <h3>Questão 2 <span class="nivel nivel-facil">Fácil</span></h3>
+        <p>Qual tipo de dado é mais adequado para armazenar valores monetários no SQL Server, evitando erros de arredondamento em somas e multiplicações?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> <code>FLOAT</code></li>
+            <li><strong>B)</strong> <code>REAL</code></li>
+            <li><strong>C)</strong> <code>DECIMAL(12,2)</code></li>
+            <li><strong>D)</strong> <code>VARCHAR(20)</code></li>
+            <li><strong>E)</strong> <code>MONEY</code>, exclusivamente.</li>
+        </ul>
+    </div>
+
+    <!-- Q3 -->
+    <div class="questao">
+        <h3>Questão 3 <span class="nivel nivel-facil">Fácil</span></h3>
+        <p>Na definição <code>ClienteID INT IDENTITY(1,1) PRIMARY KEY</code>, o que a função <code>IDENTITY(1,1)</code> faz?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Define o valor inicial como 0 e incrementa de 1 em 1.</li>
+            <li><strong>B)</strong> Define o valor inicial como 1 e incrementa de 1 em 1 automaticamente.</li>
+            <li><strong>C)</strong> Impede valores nulos na coluna.</li>
+            <li><strong>D)</strong> Cria um índice não clusterizado.</li>
+            <li><strong>E)</strong> Define uma chave estrangeira para a tabela Clientes.</li>
+        </ul>
+    </div>
+
+    <!-- Q4 -->
+    <div class="questao">
+        <h3>Questão 4 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Sobre <strong>CTEs (Common Table Expressions)</strong>, qual afirmação é <strong>correta</strong>?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Uma CTE é armazenada permanentemente no banco de dados.</li>
+            <li><strong>B)</strong> Uma CTE pode ser referenciada múltiplas vezes na mesma consulta e existe apenas durante a execução dessa consulta.</li>
+            <li><strong>C)</strong> Uma CTE substitui completamente os índices clusterizados.</li>
+            <li><strong>D)</strong> Uma CTE só pode ser usada com a instrução <code>SELECT</code>, nunca com <code>UPDATE</code> ou <code>DELETE</code>.</li>
+            <li><strong>E)</strong> Uma CTE não pode conter cláusulas <code>JOIN</code>.</li>
+        </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="questao">
+        <h3>Questão 5 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Qual é a diferença entre as funções de janela <code>ROW_NUMBER()</code> e <code>RANK()</code>?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> <code>ROW_NUMBER</code> gera números únicos sequenciais; <code>RANK</code> atribui o mesmo rank para valores empatados e pula posições.</li>
+            <li><strong>B)</strong> <code>ROW_NUMBER</code> só funciona com <code>PARTITION BY</code>; <code>RANK</code> funciona sem.</li>
+            <li><strong>C)</strong> <code>RANK</code> gera números únicos; <code>ROW_NUMBER</code> permite empates.</li>
+            <li><strong>D)</strong> Ambas retornam exatamente os mesmos valores em todos os cenários.</li>
+            <li><strong>E)</strong> <code>ROW_NUMBER</code> é uma função de agregação; <code>RANK</code> é uma função de janela.</li>
+        </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="questao">
+        <h3>Questão 6 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Sobre <strong>índices clusterizados</strong> no SQL Server, é correto afirmar que:</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Uma tabela pode ter vários índices clusterizados.</li>
+            <li><strong>B)</strong> Eles definem a ordem física dos dados na tabela e cada tabela pode ter apenas um.</li>
+            <li><strong>C)</strong> Eles não podem ser criados em chaves primárias.</li>
+            <li><strong>D)</strong> Eles ocupam menos espaço que índices não clusterizados em todos os casos.</li>
+            <li><strong>E)</strong> Eles são automaticamente removidos após 30 dias de inatividade.</li>
+        </ul>
+    </div>
+
+    <!-- Q7 -->
+    <div class="questao">
+        <h3>Questão 7 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Considere a restrição <code>ON DELETE CASCADE</code> em uma chave estrangeira. Qual é o efeito prático dessa cláusula?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Impede a exclusão de registros pais que possuam filhos.</li>
+            <li><strong>B)</strong> Ao excluir um registro pai, todos os registros filhos relacionados são excluídos automaticamente.</li>
+            <li><strong>C)</strong> Ao excluir um registro filho, o registro pai é excluído automaticamente.</li>
+            <li><strong>D)</strong> Cria um índice filtrado automaticamente.</li>
+            <li><strong>E)</strong> Converte a chave estrangeira em chave primária.</li>
+        </ul>
+    </div>
+
+    <!-- Q8 -->
+    <div class="questao">
+        <h3>Questão 8 <span class="nivel nivel-dificil">Difícil</span></h3>
+        <p>Após analisar a fragmentação de um índice com <code>avg_fragmentation_in_percent = 42%</code>, qual ação é mais adequada?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Executar <code>ALTER INDEX ... REORGANIZE</code>, pois a fragmentação é baixa.</li>
+            <li><strong>B)</strong> Executar <code>ALTER INDEX ... REBUILD</code>, pois a fragmentação está acima de 30%.</li>
+            <li><strong>C)</strong> Ignorar o resultado, pois fragmentação não afeta desempenho.</li>
+            <li><strong>D)</strong> Excluir o índice e recriá-lo com <code>DROP INDEX</code> seguido de <code>CREATE INDEX</code>, sendo o único método válido.</li>
+            <li><strong>E)</strong> Criar um índice filtrado em substituição.</li>
+        </ul>
+    </div>
+
+    <!-- Q9 - CÓDIGO -->
+    <div class="questao">
+        <h3>Questão 9 <span class="nivel nivel-dificil">Difícil</span> <strong>[CÓDIGO]</strong></h3>
+        <p>Analise o código T-SQL abaixo e assinale a alternativa que descreve <strong>corretamente</strong> o resultado produzido:</p>
+        <pre><code class="language-sql">WITH TotalPorCliente AS (
+    SELECT 
+        c.ClienteID,
+        c.Nome,
+        SUM(p.ValorTotal) AS TotalGasto
+    FROM Vendas.Clientes c
+    INNER JOIN Vendas.Pedidos p ON c.ClienteID = p.ClienteID
+    WHERE p.Status = 'Entregue'
+    GROUP BY c.ClienteID, c.Nome
+)
+SELECT 
+    ClienteID,
+    Nome,
+    TotalGasto,
+    RANK() OVER (ORDER BY TotalGasto DESC) AS Ranking
+FROM TotalPorCliente
+ORDER BY Ranking;</code></pre>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Lista todos os clientes, inclusive os que nunca fizeram pedidos, com TotalGasto = 0.</li>
+            <li><strong>B)</strong> Lista apenas os clientes com pedidos com status 'Entregue', mostrando o total gasto e um ranking decrescente por valor.</li>
+            <li><strong>C)</strong> Retorna erro de sintaxe porque CTEs não podem ser usadas com funções de janela.</li>
+            <li><strong>D)</strong> Retorna o total gasto por produto, não por cliente.</li>
+            <li><strong>E)</strong> Ordena os clientes alfabeticamente pelo nome.</li>
+        </ul>
+    </div>
+
+    <!-- Q10 -->
+    <div class="questao">
+        <h3>Questão 10 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Qual das alternativas descreve corretamente uma situação em que a <strong>desnormalização</strong> é apropriada?</p>
+        <ul class="alternativas">
+            <li><strong>A)</strong> Em sistemas OLTP com muitas operações de escrita concorrentes.</li>
+            <li><strong>B)</strong> Em data warehouses ou camadas analíticas, onde o desempenho de leitura é prioridade.</li>
+            <li><strong>C)</strong> Quando se deseja eliminar completamente a redundância de dados.</li>
+            <li><strong>D)</strong> Quando a 3FN ainda não foi aplicada.</li>
+            <li><strong>E)</strong> Sempre que houver chaves estrangeiras.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ==================== QUESTÕES DISSERTATIVAS ==================== -->
+<section>
+    <h2>Parte II — Questões Dissertativas</h2>
+
+    <!-- Q11 -->
+    <div class="questao">
+        <h3>Questão 11 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Explique a diferença entre <strong>normalização</strong> e <strong>desnormalização</strong>. Em que contextos cada abordagem é mais indicada? Dê um exemplo prático de cada.</p>
+    </div>
+
+    <!-- Q12 - CÓDIGO -->
+    <div class="questao">
+        <h3>Questão 12 <span class="nivel nivel-dificil">Difícil</span> <strong>[CÓDIGO]</strong></h3>
+        <p>Escreva um comando T-SQL para criar uma tabela chamada <code>Vendas.Produtos</code> com as seguintes especificações:</p>
+        <ul>
+            <li>Coluna <code>ProdutoID</code>: inteiro, auto-incremento começando em 1, chave primária.</li>
+            <li>Coluna <code>Nome</code>: texto Unicode de até 200 caracteres, obrigatório.</li>
+            <li>Coluna <code>Preco</code>: decimal com 10 dígitos totais e 2 decimais, obrigatório, com restrição de que deve ser maior ou igual a zero.</li>
+            <li>Coluna <code>Categoria</code>: texto de até 100 caracteres, obrigatório.</li>
+            <li>Coluna <code>DataCadastro</code>: data e hora, com valor padrão igual à data/hora atual do sistema.</li>
+        </ul>
+        <p>Após criar a tabela, escreva um comando para inserir um produto chamado 'Notebook Pro', na categoria 'Eletrônicos', com preço 8500.00.</p>
+    </div>
+
+    <!-- Q13 - CÓDIGO -->
+    <div class="questao">
+        <h3>Questão 13 <span class="nivel nivel-dificil">Difícil</span> <strong>[CÓDIGO]</strong></h3>
+        <p>Considere a tabela <code>Vendas.Pedidos</code> com as colunas <code>PedidoID</code>, <code>ClienteID</code>, <code>DataPedido</code>, <code>Status</code> e <code>ValorTotal</code>. Escreva uma consulta T-SQL que:</p>
+        <ul>
+            <li>Use uma <strong>CTE</strong> para calcular o total gasto por cliente (somente pedidos com status 'Entregue').</li>
+            <li>Use uma <strong>função de janela</strong> para classificar os clientes em ordem decrescente de total gasto.</li>
+            <li>Retorne apenas clientes cujo total gasto seja maior que 1.000,00.</li>
+        </ul>
+        <p>Comente as linhas principais do código.</p>
+    </div>
+
+    <!-- Q14 -->
+    <div class="questao">
+        <h3>Questão 14 <span class="nivel nivel-medio">Médio</span></h3>
+        <p>Descreva o papel do <strong>Database Diagram Designer</strong> no SQL Server Management Studio (SSMS). Cite pelo menos três atividades que podem ser realizadas com essa ferramenta e explique uma vantagem e uma limitação do seu uso em projetos profissionais.</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="questao">
+        <h3>Questão 15 <span class="nivel nivel-dificil">Difícil</span></h3>
+        <p>Explique o conceito de <strong>índice de cobertura (covering index)</strong> e como ele pode melhorar o desempenho de uma consulta. Em seguida, descreva o <strong>trade-off</strong> entre criar muitos índices e manter a performance de operações de escrita (INSERT, UPDATE, DELETE).</p>
+    </div>
+</section>
+
+<footer style="text-align: center; padding: 2rem 1rem; color: #666; font-size: 0.9rem;">
+    <p>Material didático — Curso Superior de Análise e Desenvolvimento de Sistemas.</p>
+    <p>&copy; 2026 — Uso educacional.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Prism.highlightAll();
+    });
+</script>
+
+</body>
+</html>
